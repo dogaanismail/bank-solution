@@ -12,6 +12,69 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/account" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/account" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/balance" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/balance" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/common" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/common" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/cqrs.core" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/cqrs.core" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/customer" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/customer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/transaction/transaction.cmd" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/transaction/transaction.cmd" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/transaction/transaction.query" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/transaction/transaction.query" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
