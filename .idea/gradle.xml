@@ -54,6 +54,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/customer" />
+            <option value="$PROJECT_DIR$/customer/common" />
           </set>
         </option>
       </GradleProjectSettings>
