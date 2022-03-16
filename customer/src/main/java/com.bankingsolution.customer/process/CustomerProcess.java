@@ -1,5 +1,6 @@
 package com.bankingsolution.customer.process;
 
+import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.customer.dto.request.CustomerCreateRequest;
 import com.bankingsolution.customer.dto.response.CustomerResponse;
 import com.bankingsolution.customer.model.Customer;
@@ -10,18 +11,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 @Transactional
 public class CustomerProcess {
-
-    private final ModelMapper modelMapper;
     private final CustomerService customerService;
     private final CustomerMessagePublisher customerMessagePublisher;
 
     public CustomerProcess(ModelMapper modelMapper,
                            CustomerService customerService,
                            CustomerMessagePublisher customerMessagePublisher) {
-        this.modelMapper = modelMapper;
         this.customerService = customerService;
         this.customerMessagePublisher = customerMessagePublisher;
     }
@@ -38,10 +38,15 @@ public class CustomerProcess {
 
     public CustomerResponse getById(long customerId){
         Customer customer = customerService.getCustomerById(customerId);
-        return modelMapper.map(customer,CustomerResponse.class );
+        return ObjectMapperUtils.map(customer,CustomerResponse.class );
+    }
+
+    public List<CustomerResponse> getAllCustomers(){
+        List<Customer> customers = customerService.getAllCustomer();
+        return ObjectMapperUtils.mapAll(customers, CustomerResponse.class);
     }
 
     private Customer convertToCustomerModel(CustomerCreateRequest customerCreateRequest) {
-        return modelMapper.map(customerCreateRequest, Customer.class);
+        return ObjectMapperUtils.map(customerCreateRequest, Customer.class);
     }
 }

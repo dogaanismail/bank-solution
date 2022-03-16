@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("customer")
 public class CustomerController {
@@ -35,6 +37,16 @@ public class CustomerController {
     public ResponseEntity getCustomerById(@RequestParam Long customerId) {
         try {
             CustomerResponse response = customerProcess.getById(customerId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping(value = "/getCustomers", produces = "application/json")
+    public ResponseEntity getCustomers() {
+        try {
+            List<CustomerResponse> response = customerProcess.getAllCustomers();
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

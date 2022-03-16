@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public interface CustomerMapper {
 
@@ -13,9 +15,11 @@ public interface CustomerMapper {
     @Options(useGeneratedKeys = true, keyProperty = "customerId", keyColumn = "customer_id")
     public void insertCustomer(Customer customer);
 
-    @Select("SELECT * FROM customer")
-    public Customer getAllCustomers();
+    @Select("SELECT customer_id as customerId, country as country FROM customer")
+    public List<Customer> getAllCustomers();
 
-    @Select("SELECT * FROM customer WHERE customer_id = #{customerId}")
+    @Select("SELECT customer_id as customerId, country as country FROM customer as cust" +
+            " WHERE customer_id = #{customerId}")
     public Customer getCustomerById(Long customerId);
+
 }

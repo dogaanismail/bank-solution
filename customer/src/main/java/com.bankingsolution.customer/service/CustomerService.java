@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CustomerService implements ICustomerService{
     final CustomerMapper customerMapper;
@@ -24,5 +26,10 @@ public class CustomerService implements ICustomerService{
     @Override
     public Customer getCustomerById(Long customerId) {
        return customerMapper.getCustomerById(customerId);
+    }
+
+    @Override
+    public List<Customer> getAllCustomer() {
+        return customerMapper.getAllCustomers();
     }
 }
