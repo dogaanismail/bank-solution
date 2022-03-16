@@ -6,7 +6,7 @@ import com.bankingsolution.customer.model.Customer;
 
 public interface ICustomerService {
 
-    void insertCustomer(CustomerCreateRequest customerCreateRequest);
+    void insertCustomer(Customer customer);
 
-    CustomerResponse getCustomerById(Long customerId);
+    Customer getCustomerById(Long customerId);
 }

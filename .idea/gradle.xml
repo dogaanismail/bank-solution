@@ -1,78 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/account" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/account" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/balance" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/balance" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/common" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/common" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/cqrs.core" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/cqrs.core" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/customer" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/customer" />
-            <option value="$PROJECT_DIR$/customer/common" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/transaction/transaction.cmd" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/transaction/transaction.cmd" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/transaction/transaction.query" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/transaction/transaction.query" />
+            <option value="$PROJECT_DIR$/transaction" />
           </set>
         </option>
       </GradleProjectSettings>
