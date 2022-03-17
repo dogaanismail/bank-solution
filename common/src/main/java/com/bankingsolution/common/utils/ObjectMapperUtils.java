@@ -57,6 +57,8 @@ public class ObjectMapperUtils {
      * @param destination object to map to
      */
     public static <S, D> D map(final S source, D destination) {
+
+        //TODO0: Check nullable condition
         modelMapper.map(source, destination);
         return destination;
     }

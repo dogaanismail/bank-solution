@@ -9,11 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/account" />
+            <option value="$PROJECT_DIR$/account.cmd" />
+            <option value="$PROJECT_DIR$/account.query" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/cqrs.core" />
             <option value="$PROJECT_DIR$/customer" />
-            <option value="$PROJECT_DIR$/transaction" />
           </set>
         </option>
       </GradleProjectSettings>
