@@ -6,6 +6,5 @@ public class CommonContants {
 
     }
 
-    public static final String CUSTOMER_KEY = "customer.created";
     public static final String TOPIC_KEY = "banking.solution.topic";
 }

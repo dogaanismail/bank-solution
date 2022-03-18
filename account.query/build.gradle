@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.bankingsolution'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "15"
 
 configurations {
 	compileOnly {
@@ -22,9 +22,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation project(':cqrs.core')
+	implementation project(':common')
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
@@ -32,3 +35,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+targetCompatibility = JavaVersion.VERSION_15
