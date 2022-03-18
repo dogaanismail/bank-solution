@@ -8,6 +8,8 @@ group = 'com.bankingsolution'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+bootJar.enabled = false
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -21,7 +23,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.modelmapper:modelmapper:3.0.0'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
 	implementation project(':cqrs.core')
 	annotationProcessor 'org.projectlombok:lombok'

@@ -3,6 +3,7 @@ package com.bankingsolution.account.query.queries;
 import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.mappers.AccountMapper;
 import com.bankingsolution.cqrs.core.domain.BaseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 public class AccountQueryHandler implements QueryHandler {
 
+    @Autowired
     private final AccountMapper accountMapper;
 
     public AccountQueryHandler(AccountMapper accountMapper) {

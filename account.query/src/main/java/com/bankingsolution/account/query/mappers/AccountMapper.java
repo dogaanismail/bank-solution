@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Mapper
 public interface AccountMapper {
 
     @Insert("INSERT INTO account(account_id, customer_id) VALUES"

@@ -3,12 +3,14 @@ package com.bankingsolution.account.query.infrastructure.consumers;
 import com.bankingsolution.account.query.infrastructure.handlers.EventHandler;
 import com.bankingsolution.common.events.AccountOpenedEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountEventConsumer implements EventConsumer {
 
-    private final EventHandler eventHandler;
+    @Autowired
+    private EventHandler eventHandler;
 
     public AccountEventConsumer(EventHandler eventHandler){
         this.eventHandler = eventHandler;

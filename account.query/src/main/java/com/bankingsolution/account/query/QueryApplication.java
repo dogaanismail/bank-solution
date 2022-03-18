@@ -4,15 +4,21 @@ import com.bankingsolution.account.query.queries.FindAccountByIdQuery;
 import com.bankingsolution.account.query.queries.FindAllAccountsQuery;
 import com.bankingsolution.account.query.queries.QueryHandler;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
+@MapperScan("com.bankingsolution.account.query.mappers")
 public class QueryApplication {
 
+	@Autowired
 	private final QueryDispatcher queryDispatcher;
+
+	@Autowired
 	private final QueryHandler queryHandler;
 
 	public QueryApplication(QueryDispatcher queryDispatcher,

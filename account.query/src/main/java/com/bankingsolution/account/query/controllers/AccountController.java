@@ -6,6 +6,7 @@ import com.bankingsolution.account.query.queries.FindAllAccountsQuery;
 import com.bankingsolution.common.exceptions.DataNotFoundException;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/account")
 @Slf4j
 public class AccountController {
+
+    @Autowired
     private final QueryDispatcher queryDispatcher;
 
     public AccountController(QueryDispatcher queryDispatcher) {

@@ -6,6 +6,7 @@ import com.bankingsolution.cqrs.core.events.BaseEvent;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
 import com.bankingsolution.cqrs.core.infrastructure.EventStore;
 import com.bankingsolution.cqrs.core.producers.EventProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -13,7 +14,10 @@ import java.util.Comparator;
 @Service
 public class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
 
+    @Autowired
     private final EventStore eventStore;
+
+    @Autowired
     private final EventProducer eventProducer;
 
     public AccountEventSourcingHandler(EventStore eventStore,
