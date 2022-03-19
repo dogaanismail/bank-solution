@@ -27,7 +27,7 @@ services:
     restart: unless-stopped    
 
   rabbitmq:
-    container_name: "rabbit_container"
+    container_name: "rabbitmq"
     image: "rabbitmq:3.8-management"
     hostname: "rabbitmq"
     environment:
@@ -110,5 +110,5 @@ services:
 
 volumes:
   customerdb:
-  mongo:
-  accounting_db:
+  cmddb:
+  querydb:
