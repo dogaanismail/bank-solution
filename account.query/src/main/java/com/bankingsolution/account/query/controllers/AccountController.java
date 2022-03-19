@@ -38,7 +38,7 @@ public class AccountController {
     public ResponseEntity<Account> getAccountById(@PathVariable(value = "id") String id) {
         List<Account> accounts = queryDispatcher.send(new FindAccountByIdQuery(id));
         if (accounts == null || accounts.size() == 0) {
-            throw new DataNotFoundException("Bank Account with 'id' %s was not found".formatted(id));
+            throw new DataNotFoundException("Bank Account with 'id' %s was not found");
         }
         return new ResponseEntity<>(accounts.get(0), HttpStatus.OK);
     }
