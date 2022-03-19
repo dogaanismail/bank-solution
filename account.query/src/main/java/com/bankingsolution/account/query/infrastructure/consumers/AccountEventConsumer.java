@@ -16,7 +16,7 @@ public class AccountEventConsumer implements EventConsumer {
         this.eventHandler = eventHandler;
     }
 
-    @RabbitListener(queues = "AccountOpenedEvent")
+    @RabbitListener(queues = "accounting:queue")
     @Override
     public void consume(AccountOpenedEvent event) {
         eventHandler.on(event);

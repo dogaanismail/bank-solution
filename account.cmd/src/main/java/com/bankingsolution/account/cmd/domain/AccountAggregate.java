@@ -32,6 +32,7 @@ public class AccountAggregate extends AggregateRoot {
     public void openAccount(OpenAccountCommand command) {
         AccountOpenedEvent accountOpenedEvent = new AccountOpenedEvent();
         accountOpenedEvent.setId(command.getId());
+        accountOpenedEvent.setAccountId(command.getId());
         accountOpenedEvent.setCustomerId(command.getCustomerId());
         accountOpenedEvent.setCountry(command.getCountry());
 

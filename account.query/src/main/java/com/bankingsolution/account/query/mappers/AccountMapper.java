@@ -10,8 +10,8 @@ import java.util.Optional;
 @Mapper
 public interface AccountMapper {
 
-    @Insert("INSERT INTO account(account_id, customer_id) VALUES"
-            + "(#{accountId}, #{customerId})")
+    @Insert("INSERT INTO account(account_id, customer_id, country) VALUES"
+            + "(#{accountId}, #{customerId}, #{country})")
     @Options(useGeneratedKeys = true, keyProperty = "accountId", keyColumn = "account_id")
     public void insertAccount(Account account);
 

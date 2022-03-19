@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class Account extends BaseEntity {
     private String accountId;
     private Long customerId;
+    private String country;
 }

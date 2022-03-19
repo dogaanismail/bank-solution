@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class AccountBalanceEvent {
+public class AccountBalanceEvent implements Serializable {
     private Long customerId;
     private Long accountBalanceId;
     private String accountId;

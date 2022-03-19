@@ -20,8 +20,9 @@ public class AccountEventHandler implements EventHandler {
     public void on(AccountOpenedEvent event) {
         var bankAccount =
                 Account.builder()
-                        .accountId(event.getId())
+                        .accountId(event.getAccountId())
                         .customerId(event.getCustomerId())
+                        .country(event.getCountry())
                         .build();
 
         accountMapper.insertAccount(bankAccount);

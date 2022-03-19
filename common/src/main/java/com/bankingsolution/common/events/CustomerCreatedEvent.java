@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CustomerCreatedEvent extends BaseEvent {
+public class CustomerCreatedEvent extends BaseEvent  implements Serializable {
     private String country;
 }

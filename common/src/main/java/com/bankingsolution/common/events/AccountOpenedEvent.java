@@ -6,15 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class AccountOpenedEvent extends BaseEvent {
+
+public class AccountOpenedEvent extends BaseEvent implements Serializable {
     private long customerId;
     private String country;
+    private String accountId;
     private List<AccountBalanceEvent> accountBalances;
 }
 
