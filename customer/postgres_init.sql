@@ -13,7 +13,7 @@ create database customerdb
 --customer table
 create table customer
 (
-    customer_id long  not null primary key,
+    customer_id bigint  not null primary key,
     country     varchar not null
 );
 alter table customer

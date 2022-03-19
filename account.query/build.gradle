@@ -6,7 +6,6 @@ plugins {
 
 group = 'com.bankingsolution'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = "15"
 
 configurations {
 	compileOnly {
@@ -36,4 +35,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-targetCompatibility = JavaVersion.VERSION_15
+
