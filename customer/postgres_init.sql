@@ -13,17 +13,12 @@ create database customerdb
 --customer table
 create table customer
 (
-    customer_id bigint  not null primary key,
+    customer_id serial not null primary key,
     country     varchar not null
 );
 alter table customer
     owner to postgres;
 
-ALTER TABLE postgres.customer ALTER COLUMN customer_id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.customer_customer_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
+create sequence if not exists customer_customer_id_seq as integer;
+alter sequence customer_customer_id_seq owner to postgres;
+alter sequence customer_customer_id_seq owned by customer.customer_id;
