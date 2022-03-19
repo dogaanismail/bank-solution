@@ -1,8 +1,11 @@
 package com.bankingsolution.account.cmd.controllers;
 
 import com.bankingsolution.account.cmd.commands.OpenAccountCommand;
+import com.bankingsolution.account.cmd.domain.AccountBalance;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
+import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
 import com.bankingsolution.common.dto.BaseResponse;
+import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,9 @@ public class AccountController {
     private CommandDispatcher commandDispatcher;
 
     @PostMapping
-    public ResponseEntity<BaseResponse> openAccount(@RequestBody OpenAccountCommand command) {
+    public ResponseEntity<BaseResponse> openAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
+
+        OpenAccountCommand command = ObjectMapperUtils.map(accountCreateRequest, OpenAccountCommand.class);
         var id = UUID.randomUUID().toString();
         command.setId(id);
 

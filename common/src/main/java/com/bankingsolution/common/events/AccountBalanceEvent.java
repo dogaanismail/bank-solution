@@ -1,0 +1,21 @@
+package com.bankingsolution.common.events;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class AccountBalanceEvent {
+    private Long customerId;
+    private Long accountBalanceId;
+    private String accountId;
+    private String currencyCode;
+    private BigDecimal balance;
+    private BigDecimal availableBalance;
+}

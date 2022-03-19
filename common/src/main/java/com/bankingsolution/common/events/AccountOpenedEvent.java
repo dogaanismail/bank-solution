@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 public class AccountOpenedEvent extends BaseEvent {
     private long customerId;
-    private int status;
-    private BigDecimal initialBalance;
     private String country;
+    private List<AccountBalanceEvent> accountBalances;
 }
+

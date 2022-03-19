@@ -6,5 +6,5 @@ public class CommonContants {
 
     }
 
-    public static final String TOPIC_KEY = "banking.solution.topic";
+    public static String[] SUPPORTED_CURRENCIES = new String[]{"EUR", "SEK", "GBP", "USD"};
 }
