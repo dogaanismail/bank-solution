@@ -1,7 +1,7 @@
-package com.bankingsolution.account.cmd.infrastructure;
+package com.bankingsolution.account.cmd.infrastructure.accounting;
 
 import com.bankingsolution.account.cmd.domain.AccountAggregate;
-import com.bankingsolution.account.cmd.domain.EventStoreRepository;
+import com.bankingsolution.account.cmd.repository.EventStoreRepository;
 import com.bankingsolution.common.exceptions.AggregateNotFoundException;
 import com.bankingsolution.common.exceptions.ConcurrencyException;
 import com.bankingsolution.cqrs.core.events.BaseEvent;
@@ -9,6 +9,7 @@ import com.bankingsolution.cqrs.core.events.EventModel;
 import com.bankingsolution.cqrs.core.infrastructure.EventStore;
 import com.bankingsolution.cqrs.core.producers.EventProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccountEventStore implements EventStore {
 
+    @Qualifier("accountEventProducer")
     @Autowired
     private final EventProducer eventProducer;
 
@@ -25,7 +27,7 @@ public class AccountEventStore implements EventStore {
     private final EventStoreRepository repository;
 
     public AccountEventStore(EventStoreRepository repository,
-                             EventProducer eventProducer) {
+                             @Qualifier("accountEventProducer") EventProducer eventProducer) {
         this.repository = repository;
         this.eventProducer = eventProducer;
     }

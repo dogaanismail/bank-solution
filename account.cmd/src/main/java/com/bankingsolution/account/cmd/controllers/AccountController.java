@@ -1,7 +1,6 @@
 package com.bankingsolution.account.cmd.controllers;
 
-import com.bankingsolution.account.cmd.commands.OpenAccountCommand;
-import com.bankingsolution.account.cmd.domain.AccountBalance;
+import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
 import com.bankingsolution.common.dto.BaseResponse;

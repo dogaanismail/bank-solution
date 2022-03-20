@@ -1,10 +1,9 @@
 package com.bankingsolution.account.cmd.domain;
 
-import com.bankingsolution.account.cmd.commands.OpenAccountCommand;
+import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.common.events.AccountBalanceEvent;
 import com.bankingsolution.common.events.AccountOpenedEvent;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

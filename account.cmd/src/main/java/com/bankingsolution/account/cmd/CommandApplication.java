@@ -1,7 +1,7 @@
 package com.bankingsolution.account.cmd;
 
-import com.bankingsolution.account.cmd.commands.CommandHandler;
-import com.bankingsolution.account.cmd.commands.OpenAccountCommand;
+import com.bankingsolution.account.cmd.commands.accounting.IAccountCommandHandler;
+import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ public class CommandApplication {
     private final CommandDispatcher commandDispatcher;
 
     @Autowired
-    private final CommandHandler commandHandler;
+    private final IAccountCommandHandler IAccountCommandHandler;
 
     public CommandApplication(CommandDispatcher commandDispatcher,
-                              CommandHandler commandHandler) {
+                              IAccountCommandHandler IAccountCommandHandler) {
         this.commandDispatcher = commandDispatcher;
-        this.commandHandler = commandHandler;
+        this.IAccountCommandHandler = IAccountCommandHandler;
     }
 
     public static void main(String[] args) {
@@ -32,6 +32,6 @@ public class CommandApplication {
 
     @PostConstruct
     public void registerHandlers() {
-        commandDispatcher.registerHandler(OpenAccountCommand.class, commandHandler::handle);
+        commandDispatcher.registerHandler(OpenAccountCommand.class, IAccountCommandHandler::handle);
     }
 }

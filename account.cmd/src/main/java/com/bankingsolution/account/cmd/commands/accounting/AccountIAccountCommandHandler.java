@@ -1,17 +1,14 @@
-package com.bankingsolution.account.cmd.commands;
+package com.bankingsolution.account.cmd.commands.accounting;
 
 import com.bankingsolution.account.cmd.domain.AccountAggregate;
-import com.bankingsolution.common.exceptions.CurrencyNotSupportedException;
-import com.bankingsolution.common.validators.ValidationHelper;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class AccountCommandHandler implements CommandHandler {
+public class AccountIAccountCommandHandler implements IAccountCommandHandler {
 
     @Autowired
     private EventSourcingHandler<AccountAggregate> eventSourcingHandlers;

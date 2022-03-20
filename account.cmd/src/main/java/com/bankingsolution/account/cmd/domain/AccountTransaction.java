@@ -15,6 +15,7 @@ public class AccountTransaction extends AggregateRoot {
     private String description;
     private int status;
     private Timestamp transactionTime;
+    private Boolean active;
 
     public Long getTransactionId() {
         return transactionId;
@@ -71,4 +72,9 @@ public class AccountTransaction extends AggregateRoot {
     public void setTransactionTime(Timestamp transactionTime) {
         this.transactionTime = transactionTime;
     }
+
+    public Boolean getActive() {
+        return active;
+    }
+
 }

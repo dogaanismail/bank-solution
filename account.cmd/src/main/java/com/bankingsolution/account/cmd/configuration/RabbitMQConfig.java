@@ -18,7 +18,12 @@ public class RabbitMQConfig implements RabbitListenerConfigurer {
 
     @Bean
     public Queue accounting() {
-        return new Queue("accounting", false);
+        return new Queue("accounting:queue", false);
+    }
+
+    @Bean
+    public Queue transaction() {
+        return new Queue("transaction:queue", false);
     }
 
     @Autowired

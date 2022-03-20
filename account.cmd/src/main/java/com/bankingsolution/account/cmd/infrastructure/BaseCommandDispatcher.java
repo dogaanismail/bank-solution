@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class AccountCommandDispatcher implements CommandDispatcher {
+public class BaseCommandDispatcher implements CommandDispatcher {
 
     private final Map<Class<? extends BaseCommand>, List<CommandHandlerMethod>> routes =
             new HashMap<>();

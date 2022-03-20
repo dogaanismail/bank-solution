@@ -1,27 +1,32 @@
-package com.bankingsolution.account.cmd.infrastructure;
+package com.bankingsolution.account.cmd.infrastructure.transaction;
+
 
 import com.bankingsolution.account.cmd.domain.AccountAggregate;
+import com.bankingsolution.account.cmd.domain.AccountTransaction;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 import com.bankingsolution.cqrs.core.events.BaseEvent;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
 import com.bankingsolution.cqrs.core.infrastructure.EventStore;
 import com.bankingsolution.cqrs.core.producers.EventProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
 @Service
-public class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
+public class TransactionEventSourcingHandler implements EventSourcingHandler<AccountTransaction> {
 
+    @Qualifier("transactionEventStore")
     @Autowired
     private final EventStore eventStore;
 
+    @Qualifier("transactionEventProducer")
     @Autowired
     private final EventProducer eventProducer;
 
-    public AccountEventSourcingHandler(EventStore eventStore,
-                                       EventProducer eventProducer) {
+    public TransactionEventSourcingHandler(@Qualifier("transactionEventStore") EventStore eventStore,
+                                           @Qualifier("transactionEventProducer") EventProducer eventProducer) {
         this.eventStore = eventStore;
         this.eventProducer = eventProducer;
     }
@@ -33,8 +38,8 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
     }
 
     @Override
-    public AccountAggregate getById(String id) {
-        var aggregate = new AccountAggregate();
+    public AccountTransaction getById(String id) {
+        var aggregate = new AccountTransaction();
         var events = eventStore.getEvents(id);
         if (events != null && !events.isEmpty()) {
             aggregate.replayEvents(events);

@@ -1,4 +1,4 @@
-package com.bankingsolution.account.cmd.commands;
+package com.bankingsolution.account.cmd.commands.accounting;
 
 import com.bankingsolution.cqrs.core.commands.BaseCommand;
 import lombok.Data;
