@@ -1,8 +1,8 @@
 package com.bankingsolution.account.query.controllers;
 
 import com.bankingsolution.account.query.domain.Account;
-import com.bankingsolution.account.query.queries.FindAccountByIdQuery;
-import com.bankingsolution.account.query.queries.FindAllAccountsQuery;
+import com.bankingsolution.account.query.queries.accounting.FindAccountByIdQuery;
+import com.bankingsolution.account.query.queries.accounting.FindAllAccountsQuery;
 import com.bankingsolution.common.exceptions.DataNotFoundException;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import lombok.extern.slf4j.Slf4j;

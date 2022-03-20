@@ -1,4 +1,4 @@
-package com.bankingsolution.account.query.queries;
+package com.bankingsolution.account.query.queries.accounting;
 
 import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.mappers.AccountMapper;
@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class AccountIAccountQueryHandler implements IAccountQueryHandler {
+public class AccountQueryHandler implements IAccountQueryHandler {
 
     @Autowired
     private final AccountMapper accountMapper;
 
-    public AccountIAccountQueryHandler(AccountMapper accountMapper) {
+    public AccountQueryHandler(AccountMapper accountMapper) {
         this.accountMapper = accountMapper;
     }
 

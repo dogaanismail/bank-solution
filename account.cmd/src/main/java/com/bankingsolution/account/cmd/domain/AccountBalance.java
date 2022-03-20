@@ -1,7 +1,9 @@
 package com.bankingsolution.account.cmd.domain;
 
+import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
@@ -10,7 +12,7 @@ public class AccountBalance {
     private String accountBalanceId;
     private String accountId;
     private String currencyCode;
-    private BigDecimal balance;
+    private @NotEmpty BigDecimal balance;
     private BigDecimal availableBalance;
 
     public AccountBalance(
@@ -26,6 +28,19 @@ public class AccountBalance {
         this.balance = balance;
         this.availableBalance = availableBalance;
         this.accountId = accountId;
+    }
+
+    public void withdraw(TransactionCommand command) {
+        if (command.getAmount().compareTo(this.getBalance()) > 0)
+            throw new IllegalStateException("Withdrawal declined, insufficient funds!");
+
+        BigDecimal balanceAfterTxn = this.balance.subtract(command.getAmount());
+        this.setBalance(balanceAfterTxn);
+    }
+
+    public void deposit(TransactionCommand command) {
+        BigDecimal balanceAfterTxn = this.balance.add(command.getAmount());
+        this.setBalance(balanceAfterTxn);
     }
 
     public Long getCustomerId() {

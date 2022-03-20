@@ -30,7 +30,7 @@ create table account_balance
 create table account_transaction
 (
     transaction_id varchar NOT NULL primary key,
-    account_balance_id varchar NOT NULL,
+    account_id varchar NOT NULL,
     direction smallint NOT NULL,
     amount bigint NOT NULL,
     status smallint NOT NULL,

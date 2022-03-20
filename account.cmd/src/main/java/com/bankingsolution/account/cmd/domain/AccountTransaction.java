@@ -16,6 +16,15 @@ public class AccountTransaction extends AggregateRoot {
     private int status;
     private Timestamp transactionTime;
     private Boolean active;
+    private AccountBalance accountBalance;
+
+    public AccountBalance getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(AccountBalance accountBalance) {
+        this.accountBalance = accountBalance;
+    }
 
     public Long getTransactionId() {
         return transactionId;

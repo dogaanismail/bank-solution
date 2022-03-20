@@ -1,13 +1,12 @@
-package com.bankingsolution.account.cmd.commands.transaction;
+package com.bankingsolution.account.cmd.dto.request;
 
-import com.bankingsolution.cqrs.core.commands.BaseCommand;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @Data
-public class TransactionCommand extends BaseCommand {
+public class AccountTransactionRequest {
 
     @NotEmpty
     private String accountId;

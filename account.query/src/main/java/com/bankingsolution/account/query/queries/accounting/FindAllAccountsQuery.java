@@ -1,4 +1,4 @@
-package com.bankingsolution.account.query.queries;
+package com.bankingsolution.account.query.queries.accounting;
 
 import com.bankingsolution.cqrs.core.queries.BaseQuery;
 

@@ -1,4 +1,4 @@
-package com.bankingsolution.account.query.infrastructure.handlers;
+package com.bankingsolution.account.query.infrastructure.handlers.accounting;
 
 import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.domain.AccountBalance;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AccountEventHandler implements EventHandler {
+public class AccountEventHandler implements IAccountEventHandler {
 
     Logger logger = LoggerFactory.getLogger(AccountEventHandler.class);
 
