@@ -12,7 +12,7 @@ public class AccountEventConsumer implements EventConsumer {
     @Autowired
     private EventHandler eventHandler;
 
-    public AccountEventConsumer(EventHandler eventHandler){
+    public AccountEventConsumer(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
     }
 

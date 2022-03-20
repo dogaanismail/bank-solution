@@ -15,7 +15,7 @@ public interface AccountMapper {
     @Options(useGeneratedKeys = true, keyProperty = "accountId", keyColumn = "account_id")
     public void insertAccount(Account account);
 
-    @Select("SELECT account_id as AccountId, customer_id as CustomerId FROM account")
+    @Select("SELECT account_id as AccountId, customer_id as CustomerId, country as Country FROM account")
     public List<Account> getAllAccounts();
 
     @Select("SELECT account_id as AccountId, customer_id as CustomerId FROM account WHERE account_id= #{accountId}")

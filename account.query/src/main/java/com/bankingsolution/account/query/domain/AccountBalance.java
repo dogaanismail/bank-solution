@@ -1,18 +1,18 @@
-package com.bankingsolution.common.events;
+package com.bankingsolution.account.query.domain;
 
+import com.bankingsolution.cqrs.core.events.BaseEvent;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public class AccountBalanceEvent implements Serializable {
+@Builder
+public class AccountBalance extends BaseEvent {
     private Long customerId;
     private String accountBalanceId;
     private String accountId;

@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class AccountQueryHandler implements QueryHandler {
+public class AccountIAccountQueryHandler implements IAccountQueryHandler {
 
     @Autowired
     private final AccountMapper accountMapper;
 
-    public AccountQueryHandler(AccountMapper accountMapper) {
+    public AccountIAccountQueryHandler(AccountMapper accountMapper) {
         this.accountMapper = accountMapper;
     }
 

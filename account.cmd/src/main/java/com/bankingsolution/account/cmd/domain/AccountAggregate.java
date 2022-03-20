@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AccountAggregate extends AggregateRoot {
     private Long customerId;
@@ -25,23 +26,33 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public void AddAccountBalance(String accountId, Long customerId, String currencyCode) {
-        AccountBalance balance = new AccountBalance(customerId, currencyCode, BigDecimal.ZERO, BigDecimal.ZERO, accountId);
+        AccountBalance balance = new AccountBalance(UUID.randomUUID().toString(), customerId, currencyCode,
+                BigDecimal.ZERO, BigDecimal.ZERO, accountId);
         accountBalances.add(balance);
     }
 
     public void openAccount(OpenAccountCommand command) {
-        AccountOpenedEvent accountOpenedEvent = new AccountOpenedEvent();
-        accountOpenedEvent.setId(command.getId());
-        accountOpenedEvent.setAccountId(command.getId());
-        accountOpenedEvent.setCustomerId(command.getCustomerId());
-        accountOpenedEvent.setCountry(command.getCountry());
+        AccountOpenedEvent accountOpenedEvent =
+                AccountOpenedEvent.builder()
+                        .id(command.getId())
+                        .accountId(command.getId())
+                        .customerId(command.getCustomerId())
+                        .country(command.getCountry())
+                        .build();
 
         List<AccountBalanceEvent> balanceEvents = new ArrayList<AccountBalanceEvent>();
 
         for (AccountBalance balance : accountBalances) {
-            AccountBalanceEvent balanceEvent = new AccountBalanceEvent(balance.getCustomerId(), balance.getAccountBalanceId(),
-                    balance.getAccountId(), balance.getCurrencyCode(),
-                    balance.getBalance(), balance.getAvailableBalance());
+            AccountBalanceEvent balanceEvent =
+                    AccountBalanceEvent.builder()
+                            .customerId(balance.getCustomerId())
+                            .accountBalanceId(balance.getAccountBalanceId())
+                            .accountId(command.getId())
+                            .currencyCode(balance.getCurrencyCode())
+                            .balance(balance.getBalance())
+                            .availableBalance(balance.getAvailableBalance())
+                            .build();
+
             balanceEvents.add(balanceEvent);
         }
 

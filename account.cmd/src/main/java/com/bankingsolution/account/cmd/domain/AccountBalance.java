@@ -7,17 +7,20 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class AccountBalance {
     private Long customerId;
-    private Long accountBalanceId;
+    private String accountBalanceId;
     private String accountId;
     private String currencyCode;
     private BigDecimal balance;
     private BigDecimal availableBalance;
 
-    public AccountBalance(Long customerId,
-                          String currencyCode,
-                          BigDecimal balance,
-                          BigDecimal availableBalance,
-                          String accountId){
+    public AccountBalance(
+            String accountBalanceId,
+            Long customerId,
+            String currencyCode,
+            BigDecimal balance,
+            BigDecimal availableBalance,
+            String accountId) {
+        this.accountBalanceId = accountBalanceId;
         this.customerId = customerId;
         this.currencyCode = currencyCode;
         this.balance = balance;
@@ -33,11 +36,11 @@ public class AccountBalance {
         this.customerId = customerId;
     }
 
-    public Long getAccountBalanceId() {
+    public String getAccountBalanceId() {
         return accountBalanceId;
     }
 
-    public void setAccountBalanceId(Long accountBalanceId) {
+    public void setAccountBalanceId(String accountBalanceId) {
         this.accountBalanceId = accountBalanceId;
     }
 

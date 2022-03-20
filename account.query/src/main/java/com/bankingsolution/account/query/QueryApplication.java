@@ -2,7 +2,7 @@ package com.bankingsolution.account.query;
 
 import com.bankingsolution.account.query.queries.FindAccountByIdQuery;
 import com.bankingsolution.account.query.queries.FindAllAccountsQuery;
-import com.bankingsolution.account.query.queries.QueryHandler;
+import com.bankingsolution.account.query.queries.IAccountQueryHandler;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ public class QueryApplication {
 	private final QueryDispatcher queryDispatcher;
 
 	@Autowired
-	private final QueryHandler queryHandler;
+	private final IAccountQueryHandler IAccountQueryHandler;
 
 	public QueryApplication(QueryDispatcher queryDispatcher,
-							QueryHandler queryHandler) {
+							IAccountQueryHandler IAccountQueryHandler) {
 		this.queryDispatcher = queryDispatcher;
-		this.queryHandler = queryHandler;
+		this.IAccountQueryHandler = IAccountQueryHandler;
 	}
 
 	public static void main(String[] args) {
@@ -33,8 +33,8 @@ public class QueryApplication {
 
 	@PostConstruct
 	public void registerHandlers() {
-		queryDispatcher.registerHandler(FindAllAccountsQuery.class, queryHandler::handle);
-		queryDispatcher.registerHandler(FindAccountByIdQuery.class, queryHandler::handle);
+		queryDispatcher.registerHandler(FindAllAccountsQuery.class, IAccountQueryHandler::handle);
+		queryDispatcher.registerHandler(FindAccountByIdQuery.class, IAccountQueryHandler::handle);
 	}
 
 }
