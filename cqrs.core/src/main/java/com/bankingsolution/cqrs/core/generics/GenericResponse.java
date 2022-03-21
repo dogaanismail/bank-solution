@@ -1,6 +1,6 @@
-package com.bankingsolution.common.generics;
+package com.bankingsolution.cqrs.core.generics;
 
-public class ServiceResponseHandler {
+public class GenericResponse {
     public static ResponseModel generateErrorResponse() {
         return generateResponse(ResponseStatus.ERROR, null, null);
     }

@@ -2,6 +2,7 @@ package com.bankingsolution.account.cmd.controllers;
 
 import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
+import com.bankingsolution.account.cmd.dto.ErrorResponse;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
 import com.bankingsolution.account.cmd.dto.request.AccountTransactionRequest;
@@ -33,7 +34,7 @@ public class AccountTransactionController {
     private CommandDispatcher commandDispatcher;
 
     @PostMapping
-    public ResponseEntity<BaseResponse> openAccount(@RequestBody AccountTransactionRequest accountTransactionRequest) {
+    public ResponseEntity transaction(@RequestBody AccountTransactionRequest accountTransactionRequest) {
 
         TransactionCommand command = ObjectMapperUtils.map(accountTransactionRequest, TransactionCommand.class);
 
@@ -41,13 +42,11 @@ public class AccountTransactionController {
         command.setId(id);
 
         try {
-            commandDispatcher.send(command);
-            return new ResponseEntity<>(new OpenAccountResponse("Transaction process has been " +
-                    "completed successfully!", id), HttpStatus.CREATED);
-        }  catch (Exception e) {
+            return ResponseEntity.ok(commandDispatcher.send(command));
+        } catch (Exception e) {
             var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
             logger.log(Level.SEVERE, safeErrorMessage, e);
-            return new ResponseEntity<>(new OpenAccountResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ErrorResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

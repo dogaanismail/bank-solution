@@ -1,4 +1,4 @@
-package com.bankingsolution.common.validators;
+package com.bankingsolution.common.validation;
 
 import java.util.List;
 

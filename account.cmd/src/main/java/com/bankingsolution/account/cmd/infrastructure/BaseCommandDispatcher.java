@@ -2,6 +2,7 @@ package com.bankingsolution.account.cmd.infrastructure;
 
 import com.bankingsolution.cqrs.core.commands.BaseCommand;
 import com.bankingsolution.cqrs.core.commands.CommandHandlerMethod;
+import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class BaseCommandDispatcher implements CommandDispatcher {
     }
 
     @Override
-    public void send(BaseCommand command) {
+    public ResponseModel send(BaseCommand command) {
         var handlers = routes.get(command.getClass());
         if (handlers == null || handlers.size() == 0) {
             throw new RuntimeException("No command handler was registered!");
@@ -32,6 +33,6 @@ public class BaseCommandDispatcher implements CommandDispatcher {
         if (handlers.size() > 1) {
             throw new RuntimeException("Cannot send command to more than one handler!");
         }
-        handlers.get(0).handle(command);
+        return handlers.get(0).handle(command);
     }
 }

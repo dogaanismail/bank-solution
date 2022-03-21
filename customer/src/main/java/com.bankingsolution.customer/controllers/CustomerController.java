@@ -1,11 +1,8 @@
 package com.bankingsolution.customer.controllers;
 
-import com.bankingsolution.common.generics.ResponseModel;
 import com.bankingsolution.customer.dto.request.CustomerCreateRequest;
 import com.bankingsolution.customer.dto.response.CustomerResponse;
 import com.bankingsolution.customer.process.CustomerProcess;
-import com.bankingsolution.customer.service.CustomerService;
-import com.bankingsolution.customer.service.ICustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,5 +1,7 @@
 package com.bankingsolution.account.cmd.commands.transaction;
 
+import com.bankingsolution.cqrs.core.generics.ResponseModel;
+
 public interface ITransactionCommandHandler {
-    void handle(TransactionCommand command);
+    ResponseModel handle(TransactionCommand command);
 }

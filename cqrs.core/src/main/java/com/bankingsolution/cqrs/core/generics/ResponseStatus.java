@@ -1,4 +1,4 @@
-package com.bankingsolution.common.generics;
+package com.bankingsolution.cqrs.core.generics;
 
 public enum ResponseStatus {
     SUCCESS,

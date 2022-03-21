@@ -1,8 +1,6 @@
 package com.bankingsolution.account.query.controllers;
 
-import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.domain.AccountTransaction;
-import com.bankingsolution.account.query.queries.accounting.FindAccountByIdQuery;
 import com.bankingsolution.account.query.queries.transaction.FindAllTransactionsByAccountIdQuery;
 import com.bankingsolution.common.exceptions.DataNotFoundException;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
