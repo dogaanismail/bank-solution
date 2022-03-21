@@ -1,16 +1,20 @@
 package com.bankingsolution.account.query.infrastructure.handlers.transaction;
 
+import com.bankingsolution.account.query.domain.AccountTransaction;
 import com.bankingsolution.account.query.infrastructure.handlers.accounting.AccountEventHandler;
 import com.bankingsolution.account.query.mappers.AccountBalanceMapper;
 import com.bankingsolution.account.query.mappers.TransactionMapper;
 import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
 import com.bankingsolution.common.events.TransactionCreatedEvent;
+import com.bankingsolution.common.events.TransactionFailedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 @Service
 public class TransactionEventHandler implements ITransactionEventHandler {
@@ -74,6 +78,49 @@ public class TransactionEventHandler implements ITransactionEventHandler {
     @Override
     @Transactional
     public void on(TransactionCreatedEvent event) {
+        try {
+            var transaction =
+                    AccountTransaction.builder()
+                            .transactionId(event.getId())
+                            .accountId(event.getAccountId())
+                            .direction(event.getDirection())
+                            .amount(event.getAmount())
+                            .status(event.getStatus())
+                            .transactionTime(event.getTransactionTime())
+                            .description(event.getDescription())
+                            .balanceAfterTxn(event.getBalanceAfterTxn())
+                            .currency(event.getCurrencyCode())
+                            .build();
 
+            transactionMapper.insertTransaction(transaction);
+
+        } catch (Exception exception) {
+            logger.error("Error while creating a transaction!", exception);
+            throw exception;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void on(TransactionFailedEvent event) {
+        try {
+            var transaction =
+                    AccountTransaction.builder()
+                            .transactionId(event.getId())
+                            .accountId(event.getAccountId())
+                            .direction(event.getDirection())
+                            .amount(event.getAmount())
+                            .status(event.getStatus())
+                            .transactionTime(event.getTransactionTime())
+                            .description(event.getDescription())
+                            .balanceAfterTxn(BigDecimal.ZERO)
+                            .currency(event.getCurrencyCode())
+                            .build();
+
+            transactionMapper.insertTransaction(transaction);
+        } catch (Exception exception) {
+            logger.error("Error while creating a transaction!", exception);
+            throw exception;
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.bankingsolution.common.events.AccountOpenedEvent;
 import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
 import com.bankingsolution.common.exceptions.AccountBalanceNotFoundException;
+import com.bankingsolution.common.exceptions.InsufficientFundsException;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 
@@ -36,14 +37,10 @@ public class AccountAggregate extends AggregateRoot {
     public void apply(FundsDepositedEvent event) {
         this.id = event.getId();
 
-        Optional<AccountBalance> accountBalance = this.getAccountBalances()
-                .stream().filter(x -> x.getAccountId().equals(event.getAccountId()) &&
-                        x.getCurrencyCode().equals(event.getCurrencyCode())).findFirst();
-
-        if (accountBalance.isEmpty())
-            throw new AccountBalanceNotFoundException("Account balance could not be found!");
+        Optional<AccountBalance> accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
 
         BigDecimal balanceAfterTxn = accountBalance.get().getBalance().add(event.getAmount());
+
         accountBalance.get().setBalance(balanceAfterTxn);
         updateAccountBalance(accountBalance.get());
     }
@@ -51,17 +48,9 @@ public class AccountAggregate extends AggregateRoot {
     public void apply(FundsWithDrawnEvent event) {
         this.id = event.getId();
 
-        Optional<AccountBalance> accountBalance = this.getAccountBalances()
-                .stream().filter(x -> x.getAccountId().equals(event.getAccountId()) &&
-                        x.getCurrencyCode().equals(event.getCurrencyCode())).findFirst();
-
-        if (accountBalance.isEmpty())
-            throw new AccountBalanceNotFoundException("Account balance could not be found!");
+        Optional<AccountBalance> accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
 
         BigDecimal balanceAfterTxn = accountBalance.get().getBalance().subtract(event.getAmount());
-
-        if(balanceAfterTxn.compareTo(BigDecimal.ZERO) < 0)
-            throw new RuntimeException("Insufficient account balance!");
 
         accountBalance.get().setBalance(balanceAfterTxn);
         updateAccountBalance(accountBalance.get());
@@ -105,7 +94,15 @@ public class AccountAggregate extends AggregateRoot {
         );
     }
 
-    public void deposit(TransactionCommand command) {
+    public BigDecimal deposit(TransactionCommand command) {
+
+        Optional<AccountBalance> accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
+
+        if (accountBalance.isEmpty())
+            throw new AccountBalanceNotFoundException("Account balance could not be found!");
+
+        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().add(command.getAmount());
+
         raiseEvent(
                 FundsDepositedEvent.builder().id(this.id)
                         .accountId(command.getAccountId())
@@ -113,9 +110,22 @@ public class AccountAggregate extends AggregateRoot {
                         .amount(command.getAmount())
                         .build()
         );
+
+        return balanceAfterTxn;
     }
 
-    public void withdraw(TransactionCommand command) {
+    public BigDecimal withdraw(TransactionCommand command) {
+
+        Optional<AccountBalance> accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
+
+        if (accountBalance.isEmpty())
+            throw new AccountBalanceNotFoundException("Account balance could not be found!");
+
+        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().subtract(command.getAmount());
+
+        if (balanceAfterTxn.compareTo(BigDecimal.ZERO) < 0)
+            throw new InsufficientFundsException("Insufficient account balance!");
+
         raiseEvent(
                 FundsWithDrawnEvent.builder().id(this.id)
                         .accountId(command.getAccountId())
@@ -123,6 +133,8 @@ public class AccountAggregate extends AggregateRoot {
                         .amount(command.getAmount())
                         .build()
         );
+
+        return balanceAfterTxn;
     }
 
     public String getCountry() {
@@ -153,12 +165,18 @@ public class AccountAggregate extends AggregateRoot {
         return this.accountBalances;
     }
 
-    public void updateAccountBalance(AccountBalance balance) {
+    private void updateAccountBalance(AccountBalance balance) {
         int index = IntStream.range(0, this.accountBalances.size())
                 .filter(i -> this.accountBalances.get(i).getAccountBalanceId().equals(balance.getAccountBalanceId()))
                 .findFirst()
                 .orElse(-1);
 
         this.accountBalances.set(index, balance);
+    }
+
+    private Optional<AccountBalance> findAccountBalance(String accountId, String currencyCode) {
+        return this.getAccountBalances()
+                .stream().filter(x -> x.getAccountId().equals(accountId) &&
+                        x.getCurrencyCode().equals(currencyCode)).findFirst();
     }
 }

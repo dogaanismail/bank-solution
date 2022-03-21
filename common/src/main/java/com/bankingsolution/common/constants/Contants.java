@@ -1,8 +1,8 @@
 package com.bankingsolution.common.constants;
 
-public class CommonContants {
+public class Contants {
 
-    private CommonContants(){
+    private Contants() {
 
     }
 
@@ -12,5 +12,6 @@ public class CommonContants {
     public static final String FundsDepositedTopic = "FundsDepositedEvent";
     public static final String FundsWithDrawnTopic = "FundsWithDrawnEvent";
     public static final String TransactionCreatedTopic = "TransactionCreatedEvent";
+    public static final String TransactionFailedTopic = "TransactionFailedEvent";
     public static final String TOPIC_KEY = "banking.solution.topic.key";
 }

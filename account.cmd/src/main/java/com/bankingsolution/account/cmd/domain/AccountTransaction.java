@@ -1,52 +1,112 @@
 package com.bankingsolution.account.cmd.domain;
 
+import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
+import com.bankingsolution.common.enums.TransactionStatus;
+import com.bankingsolution.common.events.TransactionCreatedEvent;
+import com.bankingsolution.common.events.TransactionFailedEvent;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
 public class AccountTransaction extends AggregateRoot {
 
-    private Long transactionId;
-    private Long accountBalanceId;
-    private int direction;
+    private String accountId;
+    private String direction;
     private BigDecimal amount;
-    private String description;
-    private int status;
+    private String status;
     private Timestamp transactionTime;
+    private String description;
+    private String currency;
+    private BigDecimal balanceAfterTxn;
+
+    public void createTransaction(TransactionCommand command) {
+        TransactionCreatedEvent transactionCreatedEvent =
+                TransactionCreatedEvent.builder()
+                        .id(command.getId())
+                        .accountId(command.getAccountId())
+                        .direction(command.getDirection())
+                        .amount(command.getAmount())
+                        .currencyCode(command.getCurrency())
+                        .description(command.getDescription())
+                        .transactionTime(new Timestamp(System.currentTimeMillis()))
+                        .status(TransactionStatus.SUCCESS.toString())
+                        .balanceAfterTxn(command.getBalanceAfterTxn())
+                        .build();
+
+        raiseEvent(
+                transactionCreatedEvent
+        );
+    }
+
+    public void crateTransactionFailedData(TransactionCommand command) {
+        TransactionFailedEvent transactionFailedEvent =
+                TransactionFailedEvent.builder()
+                        .id(command.getId())
+                        .accountId(command.getAccountId())
+                        .direction(command.getDirection())
+                        .amount(command.getAmount())
+                        .currencyCode(command.getCurrency())
+                        .description(command.getDescription())
+                        .transactionTime(new Timestamp(System.currentTimeMillis()))
+                        .status(TransactionStatus.ERROR.toString())
+                        .build();
+
+        raiseEvent(
+                transactionFailedEvent
+        );
+    }
+
+    public void apply(TransactionCreatedEvent event) {
+        this.id = event.getId();
+        this.active = true;
+        this.accountId = event.getAccountId();
+        this.direction = event.getDirection();
+        this.amount = event.getAmount();
+        this.status = event.getStatus();
+        this.transactionTime = event.getTransactionTime();
+        this.description = event.getDescription();
+        this.currency = event.getCurrencyCode();
+        this.balanceAfterTxn = event.getBalanceAfterTxn();
+    }
+
+    public void apply(TransactionFailedEvent event) {
+        this.id = event.getId();
+        this.active = true;
+        this.accountId = event.getAccountId();
+        this.direction = event.getDirection();
+        this.amount = event.getAmount();
+        this.status = event.getStatus();
+        this.transactionTime = event.getTransactionTime();
+        this.description = event.getDescription();
+        this.currency = event.getCurrencyCode();
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     private Boolean active;
-    private AccountBalance accountBalance;
 
-    public AccountBalance getAccountBalance() {
-        return accountBalance;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setAccountBalance(AccountBalance accountBalance) {
-        this.accountBalance = accountBalance;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
-    public Long getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(Long transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public Long getAccountBalanceId() {
-        return accountBalanceId;
-    }
-
-    public void setAccountBalanceId(Long accountBalanceId) {
-        this.accountBalanceId = accountBalanceId;
-    }
-
-    public int getDirection() {
+    public String getDirection() {
         return direction;
     }
 
-    public void setDirection(int direction) {
+    public void setDirection(String direction) {
         this.direction = direction;
     }
 
@@ -58,19 +118,11 @@ public class AccountTransaction extends AggregateRoot {
         this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -82,8 +134,27 @@ public class AccountTransaction extends AggregateRoot {
         this.transactionTime = transactionTime;
     }
 
-    public Boolean getActive() {
-        return active;
+    public String getDescription() {
+        return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public BigDecimal getBalanceAfterTxn() {
+        return balanceAfterTxn;
+    }
+
+    public void setBalanceAfterTxn(BigDecimal balanceAfterTxn) {
+        this.balanceAfterTxn = balanceAfterTxn;
+    }
 }

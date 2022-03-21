@@ -31,11 +31,11 @@ create table account_transaction
 (
     transaction_id varchar NOT NULL primary key,
     account_id varchar NOT NULL,
-    direction smallint NOT NULL,
+    direction varchar NOT NULL,
     amount bigint NOT NULL,
-    status smallint NOT NULL,
+    status varchar NOT NULL,
     transaction_time timestamp without time zone NOT NULL,
-    description varchar NOT NULL
+    description varchar NOT NULL,
     currency varchar NOT NULL,
     balance_after_txn bigint NOT NULL
 

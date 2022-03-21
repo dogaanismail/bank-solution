@@ -1,26 +1,25 @@
-package com.bankingsolution.account.query.domain;
+package com.bankingsolution.common.events;
 
-import com.bankingsolution.cqrs.core.domain.BaseEntity;
+import com.bankingsolution.cqrs.core.events.BaseEvent;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AccountTransaction extends BaseEntity {
-    private String transactionId;
+@SuperBuilder
+public class TransactionFailedEvent extends BaseEvent implements Serializable {
     private String accountId;
     private String direction;
     private BigDecimal amount;
     private String status;
-    private Timestamp transactionTime;
+    private String currencyCode;
     private String description;
-    private String currency;
-    private BigDecimal balanceAfterTxn;
+    private Timestamp transactionTime;
 }

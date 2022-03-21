@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AccountIAccountCommandHandler implements IAccountCommandHandler {
+public class AccountCommandHandler implements IAccountCommandHandler {
 
     @Autowired
     private EventSourcingHandler<AccountAggregate> eventSourcingHandlers;
@@ -19,8 +19,8 @@ public class AccountIAccountCommandHandler implements IAccountCommandHandler {
 
         var aggregate = new AccountAggregate();
 
-        for (String code : currencyList) {
-            aggregate.AddAccountBalance(command.getId(), command.getCustomerId(), code);
+        for (String currencyCode : currencyList) {
+            aggregate.AddAccountBalance(command.getId(), command.getCustomerId(), currencyCode);
         }
 
         aggregate.openAccount(command);

@@ -44,12 +44,8 @@ public class AccountTransactionController {
             commandDispatcher.send(command);
             return new ResponseEntity<>(new OpenAccountResponse("Transaction process has been " +
                     "completed successfully!", id), HttpStatus.CREATED);
-        } catch (IllegalStateException e) {
-            logger.log(Level.WARNING, MessageFormat.format("Client made a bad request - {0},", e.toString()));
-            return new ResponseEntity<>(new BaseResponse(e.toString()), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            var safeErrorMessage = MessageFormat.format("Error while processing transaction for a balance " +
-                    "account for account id - {0}.", command.getAccountId());
+        }  catch (Exception e) {
+            var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
             logger.log(Level.SEVERE, safeErrorMessage, e);
             return new ResponseEntity<>(new OpenAccountResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
         }

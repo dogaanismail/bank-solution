@@ -23,4 +23,6 @@ public class TransactionCommand extends BaseCommand {
 
     @NotEmpty
     private String description;
+
+    private BigDecimal balanceAfterTxn;
 }

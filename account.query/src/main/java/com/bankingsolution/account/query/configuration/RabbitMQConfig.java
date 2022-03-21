@@ -1,17 +1,14 @@
 package com.bankingsolution.account.query.configuration;
 
-import com.bankingsolution.common.constants.CommonContants;
+import com.bankingsolution.common.constants.Contants;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -24,36 +21,42 @@ import java.util.List;
 public class RabbitMQConfig implements RabbitListenerConfigurer {
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(CommonContants.TOPIC_KEY);
+        return new TopicExchange(Contants.TOPIC_KEY);
     }
 
     @Bean
     Queue accountOpenedQueue() {
-        return new Queue(CommonContants.AccountOpenedTopic);
+        return new Queue(Contants.AccountOpenedTopic);
     }
 
     @Bean
     Queue fundsDepositedQueue() {
-        return new Queue(CommonContants.FundsDepositedTopic);
+        return new Queue(Contants.FundsDepositedTopic);
     }
 
     @Bean
     Queue fundsWithdrawnQueue() {
-        return new Queue(CommonContants.FundsWithDrawnTopic);
+        return new Queue(Contants.FundsWithDrawnTopic);
     }
 
     @Bean
     Queue transactionCreatedQueue() {
-        return new Queue(CommonContants.TransactionCreatedTopic);
+        return new Queue(Contants.TransactionCreatedTopic);
+    }
+
+    @Bean
+    Queue transactionFailedQueue() {
+        return new Queue(Contants.TransactionFailedTopic);
     }
 
     @Bean
     public List<Binding> binding() {
         return Arrays.asList(
-                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(CommonContants.AccountOpenedTopic),
-                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(CommonContants.FundsDepositedTopic),
-                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(CommonContants.FundsWithDrawnTopic),
-                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(CommonContants.TransactionCreatedTopic));
+                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(Contants.AccountOpenedTopic),
+                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(Contants.FundsDepositedTopic),
+                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(Contants.FundsWithDrawnTopic),
+                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(Contants.TransactionCreatedTopic),
+                BindingBuilder.bind(transactionFailedQueue()).to(exchange()).with(Contants.TransactionFailedTopic));
     }
 
     @Bean

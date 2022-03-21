@@ -2,7 +2,7 @@ package com.bankingsolution.common.validators;
 
 import java.util.List;
 
-import static com.bankingsolution.common.constants.CommonContants.SUPPORTED_CURRENCIES;
+import static com.bankingsolution.common.constants.Contants.SUPPORTED_CURRENCIES;
 
 public class ValidationHelper {
     public static boolean isCurrencySupported(String currencyCode) {

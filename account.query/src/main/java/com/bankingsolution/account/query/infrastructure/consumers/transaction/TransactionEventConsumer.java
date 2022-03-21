@@ -4,6 +4,7 @@ import com.bankingsolution.account.query.infrastructure.handlers.transaction.ITr
 import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
 import com.bankingsolution.common.events.TransactionCreatedEvent;
+import com.bankingsolution.common.events.TransactionFailedEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,12 @@ public class TransactionEventConsumer implements ITransactionEventConsumer {
     @RabbitListener(queues = "TransactionCreatedEvent")
     @Override
     public void consume(TransactionCreatedEvent event) {
+        transactionEventHandler.on(event);
+    }
+
+    @RabbitListener(queues = "TransactionFailedEvent")
+    @Override
+    public void consume(TransactionFailedEvent event) {
         transactionEventHandler.on(event);
     }
 }
