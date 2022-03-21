@@ -21,6 +21,6 @@ public class AccountEventProducer implements EventProducer {
 
     @Override
     public void produce(String topic, BaseEvent event) {
-        rabbitTemplate.convertAndSend("accounting:queue", event);
+        rabbitTemplate.convertAndSend(topic, event);
     }
 }

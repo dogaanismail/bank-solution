@@ -117,7 +117,7 @@ public class AccountAggregate extends AggregateRoot {
 
     public void withdraw(TransactionCommand command) {
         raiseEvent(
-                FundsDepositedEvent.builder().id(this.id)
+                FundsWithDrawnEvent.builder().id(this.id)
                         .accountId(command.getAccountId())
                         .currencyCode(command.getCurrency())
                         .amount(command.getAmount())

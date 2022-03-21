@@ -18,6 +18,6 @@ public class TransactionEventProducer implements EventProducer {
 
     @Override
     public void produce(String topic, BaseEvent event) {
-        rabbitTemplate.convertAndSend("transaction:queue", event);
+        rabbitTemplate.convertAndSend(topic, event);
     }
 }

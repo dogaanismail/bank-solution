@@ -36,6 +36,8 @@ create table account_transaction
     status smallint NOT NULL,
     transaction_time timestamp without time zone NOT NULL,
     description varchar NOT NULL
+    currency varchar NOT NULL,
+    balance_after_txn bigint NOT NULL
 
 );
 

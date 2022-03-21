@@ -1,9 +1,7 @@
 package com.bankingsolution.account.query.configuration;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import com.bankingsolution.common.constants.CommonContants;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -24,32 +22,38 @@ import java.util.List;
 
 @Configuration
 public class RabbitMQConfig implements RabbitListenerConfigurer {
-
     @Bean
-    public FanoutExchange accountExchange() {
-        return new FanoutExchange("account:topic");
+    public TopicExchange exchange() {
+        return new TopicExchange(CommonContants.TOPIC_KEY);
     }
 
     @Bean
-    public FanoutExchange transactionExchange() {
-        return new FanoutExchange("transaction:topic");
+    Queue accountOpenedQueue() {
+        return new Queue(CommonContants.AccountOpenedTopic);
     }
 
     @Bean
-    public Queue accounting() {
-        return new Queue("accounting:queue", false);
+    Queue fundsDepositedQueue() {
+        return new Queue(CommonContants.FundsDepositedTopic);
     }
 
     @Bean
-    public Queue transaction() {
-        return new Queue("transaction:queue", false);
+    Queue fundsWithdrawnQueue() {
+        return new Queue(CommonContants.FundsWithDrawnTopic);
+    }
+
+    @Bean
+    Queue transactionCreatedQueue() {
+        return new Queue(CommonContants.TransactionCreatedTopic);
     }
 
     @Bean
     public List<Binding> binding() {
         return Arrays.asList(
-                BindingBuilder.bind(transaction()).to(transactionExchange()),
-                BindingBuilder.bind(accounting()).to(accountExchange()));
+                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(CommonContants.AccountOpenedTopic),
+                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(CommonContants.FundsDepositedTopic),
+                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(CommonContants.FundsWithDrawnTopic),
+                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(CommonContants.TransactionCreatedTopic));
     }
 
     @Bean
@@ -64,8 +68,8 @@ public class RabbitMQConfig implements RabbitListenerConfigurer {
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
-        factory.setConcurrentConsumers(3);
-        factory.setMaxConcurrentConsumers(10);
+        factory.setConcurrentConsumers(4);
+        factory.setMaxConcurrentConsumers(20);
         return factory;
     }
 

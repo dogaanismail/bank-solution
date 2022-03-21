@@ -8,8 +8,9 @@ import java.util.List;
 @Mapper
 public interface TransactionMapper {
 
-    @Insert("INSERT INTO account_transaction (transaction_id, account_id, direction, amount, status, transaction_time, description) " +
-            "VALUES (#{transactionId}, #{accountId}, #{direction}, #{amount}, #{status}, #{transactionTime}, #{description})")
+    @Insert("INSERT INTO account_transaction (transaction_id, account_id, direction, amount, status, transaction_time, description, currency, balance_after_txn) " +
+            "VALUES (#{transactionId}, #{accountId}, #{direction}," +
+            " #{amount}, #{status}, #{transactionTime}, #{description}, #{currency}, {balanceAfterTxn})")
     @Options(useGeneratedKeys = true, keyProperty = "transactionId", keyColumn = "transaction_id")
     int insertTransaction(AccountTransaction transaction);
 

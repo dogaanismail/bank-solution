@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -15,9 +16,11 @@ import java.math.BigDecimal;
 @SuperBuilder
 public class TransactionCreatedEvent extends BaseEvent implements Serializable {
     private String accountId;
-    private BigDecimal amount;
-    private String currency;
     private String direction;
+    private BigDecimal amount;
+    private String status;
+    private String currencyCode;
     private String description;
-    private AccountBalanceEvent accountBalanceEvent;
+    private Timestamp transactionTime;
+    private BigDecimal balanceAfterTxn;
 }

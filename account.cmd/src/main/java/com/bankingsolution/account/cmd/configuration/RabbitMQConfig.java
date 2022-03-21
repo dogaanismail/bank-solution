@@ -1,11 +1,15 @@
 package com.bankingsolution.account.cmd.configuration;
 
-import org.springframework.amqp.core.Queue;
+import com.bankingsolution.common.constants.CommonContants;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,39 +18,61 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 
 @Configuration
 @EnableRabbit
-public class RabbitMQConfig implements RabbitListenerConfigurer {
-
+public class RabbitMQConfig {
     @Bean
-    public Queue accounting() {
-        return new Queue("accounting:queue", false);
+    public TopicExchange exchange() {
+        return new TopicExchange(CommonContants.TOPIC_KEY);
     }
 
     @Bean
-    public Queue transaction() {
-        return new Queue("transaction:queue", false);
-    }
-
-    @Autowired
-    public ConnectionFactory connectionFactory;
-
-    @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setConcurrentConsumers(3);
-        factory.setMaxConcurrentConsumers(10);
-        return factory;
-    }
-
-    @Override
-    public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
-        registrar.setMessageHandlerMethodFactory(myHandlerMethodFactory());
+    Queue accountOpenedQueue() {
+        return new Queue(CommonContants.AccountOpenedTopic);
     }
 
     @Bean
-    public DefaultMessageHandlerMethodFactory myHandlerMethodFactory() {
-        DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
-        factory.setMessageConverter(new MappingJackson2MessageConverter());
-        return factory;
+    Queue fundsDepositedQueue() {
+        return new Queue(CommonContants.FundsDepositedTopic);
+    }
+
+    @Bean
+    Queue fundsWithdrawnQueue() {
+        return new Queue(CommonContants.FundsWithDrawnTopic);
+    }
+
+    @Bean
+    Queue transactionCreatedQueue() {
+        return new Queue(CommonContants.TransactionCreatedTopic);
+    }
+
+    @Bean
+    Binding accountOpened(TopicExchange exchange) {
+        return BindingBuilder.bind(accountOpenedQueue()).to(exchange).with(CommonContants.AccountOpenedTopic);
+    }
+
+    @Bean
+    Binding fundsDeposited(TopicExchange exchange) {
+        return BindingBuilder.bind(fundsDepositedQueue()).to(exchange).with(CommonContants.FundsDepositedTopic);
+    }
+
+    @Bean
+    Binding fundsWithdrawn(TopicExchange exchange) {
+        return BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange).with(CommonContants.FundsDepositedTopic);
+    }
+
+    @Bean
+    Binding transactionCreated(TopicExchange exchange) {
+        return BindingBuilder.bind(transactionCreatedQueue()).to(exchange).with(CommonContants.TransactionCreatedTopic);
+    }
+
+    @Bean
+    public MessageConverter converter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public AmqpTemplate template(ConnectionFactory connectionFactory) {
+        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter());
+        return rabbitTemplate;
     }
 }

@@ -5,6 +5,7 @@ import com.bankingsolution.account.query.mappers.AccountBalanceMapper;
 import com.bankingsolution.account.query.mappers.TransactionMapper;
 import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
+import com.bankingsolution.common.events.TransactionCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,14 @@ public class TransactionEventHandler implements ITransactionEventHandler {
         try {
             var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
 
-            if (accountBalance.isEmpty())
+            if (accountBalance == null)
                 return;
 
-            var currentBalance = accountBalance.get().getBalance();
+            var currentBalance = accountBalance.getBalance();
             var latestBalance = currentBalance.add(event.getAmount());
-            accountBalance.get().setBalance(latestBalance);
+            accountBalance.setBalance(latestBalance);
 
-            accountBalanceMapper.updateAccountBalance(accountBalance.get());
+            accountBalanceMapper.updateAccountBalance(accountBalance);
         } catch (Exception exception) {
             logger.error("Error while updating account balance!", exception);
             throw exception;
@@ -56,17 +57,23 @@ public class TransactionEventHandler implements ITransactionEventHandler {
         try {
             var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
 
-            if (accountBalance.isEmpty())
+            if (accountBalance == null)
                 return;
 
-            var currentBalance = accountBalance.get().getBalance();
+            var currentBalance = accountBalance.getBalance();
             var latestBalance = currentBalance.subtract(event.getAmount());
-            accountBalance.get().setBalance(latestBalance);
+            accountBalance.setBalance(latestBalance);
 
-            accountBalanceMapper.updateAccountBalance(accountBalance.get());
+            accountBalanceMapper.updateAccountBalance(accountBalance);
         } catch (Exception exception) {
             logger.error("Error while updating account balance!", exception);
             throw exception;
         }
+    }
+
+    @Override
+    @Transactional
+    public void on(TransactionCreatedEvent event) {
+
     }
 }
