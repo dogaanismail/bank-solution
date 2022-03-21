@@ -37,6 +37,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         } catch (Exception exception) {
             var failedTransactionAggregate = new AccountTransaction();
             failedTransactionAggregate.crateTransactionFailedData(command);
+            transactionEventSourcingHandler.save(failedTransactionAggregate);
             throw exception;
         }
     }
@@ -64,6 +65,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         }
 
         accountAggregateEventSourcingHandler.save(accountAggregate);
+        
         return balanceAfterTxn;
     }
 }
