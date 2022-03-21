@@ -32,11 +32,41 @@ public class TransactionEventHandler implements ITransactionEventHandler {
     @Transactional
     public void on(FundsDepositedEvent event) {
 
+        try {
+            var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
+
+            if (accountBalance.isEmpty())
+                return;
+
+            var currentBalance = accountBalance.get().getBalance();
+            var latestBalance = currentBalance.add(event.getAmount());
+            accountBalance.get().setBalance(latestBalance);
+
+            accountBalanceMapper.updateAccountBalance(accountBalance.get());
+        } catch (Exception exception) {
+            logger.error("Error while updating account balance!", exception);
+            throw exception;
+        }
     }
 
     @Override
     @Transactional
     public void on(FundsWithDrawnEvent event) {
 
+        try {
+            var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
+
+            if (accountBalance.isEmpty())
+                return;
+
+            var currentBalance = accountBalance.get().getBalance();
+            var latestBalance = currentBalance.subtract(event.getAmount());
+            accountBalance.get().setBalance(latestBalance);
+
+            accountBalanceMapper.updateAccountBalance(accountBalance.get());
+        } catch (Exception exception) {
+            logger.error("Error while updating account balance!", exception);
+            throw exception;
+        }
     }
 }

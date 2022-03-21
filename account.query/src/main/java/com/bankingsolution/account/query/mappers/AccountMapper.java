@@ -23,9 +23,9 @@ public interface AccountMapper {
             @Result(property = "accountId", column = "account_id"),
             @Result(property = "customerId", column = "customer_id"),
     })
-    public Optional<Account> getAccountById(String accountId);
+    public Optional<Account> getAccountById(@Param("customerId") String accountId);
 
     @Select("SELECT account_id as AccountId, customer_id as CustomerId FROM account WHERE customer_id= #{customerId}")
     @ResultMap("accountResult")
-    public Long getAccountIdByCustomerId(Long customerId);
+    public Long getAccountIdByCustomerId(@Param("customerId") Long customerId);
 }
