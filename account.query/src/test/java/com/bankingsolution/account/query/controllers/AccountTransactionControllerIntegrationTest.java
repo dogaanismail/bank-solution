@@ -27,7 +27,7 @@ public class AccountTransactionControllerIntegrationTest {
 
     @Test
     public void getTransactionByAccountIdShouldSuccess() throws Exception {
-        mvc.perform(get("/api/v1/transaction/get/accountId?=EXAMPLE_ACCOUNT_1")
+        mvc.perform(get("/api/v1/transaction/getTransactions/accountId?=EXAMPLE_ACCOUNT_1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()

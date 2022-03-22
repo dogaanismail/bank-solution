@@ -2,6 +2,7 @@ package com.bankingsolution.account.query.queries.accounting;
 
 import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.mappers.AccountMapper;
+import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.domain.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ public class AccountQueryHandler implements IAccountQueryHandler {
 
     @Override
     public List<BaseEntity> handle(FindAllAccountsQuery query) {
-        Iterable<Account> bankAccounts = accountMapper.getAllAccounts();
-        List<BaseEntity> bankAccountList = new ArrayList<>();
-        bankAccounts.forEach(bankAccountList::add);
-        return bankAccountList;
+        List<Account> bankAccounts = accountMapper.getAllAccounts();
+
+        if (bankAccounts.size() == 0 && bankAccounts.isEmpty())
+            return null;
+
+        return ObjectMapperUtils.mapAll(bankAccounts, BaseEntity.class);
     }
 
     @Override

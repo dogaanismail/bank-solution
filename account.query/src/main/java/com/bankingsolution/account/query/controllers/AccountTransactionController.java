@@ -27,7 +27,7 @@ public class AccountTransactionController {
         this.queryDispatcher = queryDispatcher;
     }
 
-    @GetMapping(value = "/get/{accountId}", produces = "application/json")
+    @GetMapping(value = "/getTransactions/{accountId}", produces = "application/json")
     public ResponseEntity<AccountTransaction> getTransactionsByAccountId(@PathVariable(value = "accountId") String accountId) {
 
         List<AccountTransaction> transactions =

@@ -14,6 +14,17 @@ public interface TransactionMapper {
     @Options(useGeneratedKeys = true, keyProperty = "transactionId", keyColumn = "transaction_id")
     int insertTransaction(AccountTransaction transaction);
 
-    @Select("SELECT * FROM account_transaction WHERE account_id= #{accountId}")
+    @Select("SELECT * FROM account_transaction WHERE account_id = #{accountId}")
+    @Results(id = "transactionResult", value = {
+            @Result(property = "transactionId", column = "transaction_id"),
+            @Result(property = "accountId", column = "account_id"),
+            @Result(property = "direction", column = "direction"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "transactionTime", column = "transaction_time"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "currency", column = "currency"),
+            @Result(property = "balanceAfterTxn", column = "balance_after_txn")
+    })
     List<AccountTransaction> getTransactionsByAccountId(@Param("accountId") String accountId);
 }

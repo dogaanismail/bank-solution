@@ -2,6 +2,7 @@ package com.bankingsolution.account.query.queries.transaction;
 
 import com.bankingsolution.account.query.domain.AccountTransaction;
 import com.bankingsolution.account.query.mappers.TransactionMapper;
+import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.domain.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,11 @@ public class TransactionQueryHandler implements ITransactionQueryHandler {
 
     @Override
     public List<BaseEntity> handle(FindAllTransactionsByAccountIdQuery query) {
-        Iterable<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
+        List<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
 
-        List<BaseEntity> transactionList = new ArrayList<>();
-        transactions.forEach(transactionList::add);
-        return transactionList;
+        if (transactions.size() == 0 && transactions.isEmpty())
+            return null;
+
+        return ObjectMapperUtils.mapAll(transactions, BaseEntity.class);
     }
 }

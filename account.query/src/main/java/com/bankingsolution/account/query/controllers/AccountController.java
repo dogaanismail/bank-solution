@@ -31,6 +31,10 @@ public class AccountController {
     @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accounts = queryDispatcher.send(new FindAllAccountsQuery());
+
+        if (accounts == null || accounts.size() == 0)
+            throw new DataNotFoundException("There is no bank account!");
+
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
@@ -40,7 +44,7 @@ public class AccountController {
         List<Account> accounts = queryDispatcher.send(new FindAccountByIdQuery(accountId));
 
         if (accounts == null || accounts.size() == 0)
-            throw new DataNotFoundException("Bank Account with 'id' %s was not found");
+            throw new DataNotFoundException("Bank Account with 'id' %s was not found!");
 
         return new ResponseEntity<>(accounts.get(0), HttpStatus.OK);
     }

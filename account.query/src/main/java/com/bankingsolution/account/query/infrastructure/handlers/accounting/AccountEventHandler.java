@@ -57,7 +57,7 @@ public class AccountEventHandler implements IAccountEventHandler {
 
             }
         } catch (Exception exception) {
-            logger.error("Error while creating an account and an account balance", exception);
+            logger.error("Error while creating an account and an account balance!", exception);
             throw exception;
         }
     }
