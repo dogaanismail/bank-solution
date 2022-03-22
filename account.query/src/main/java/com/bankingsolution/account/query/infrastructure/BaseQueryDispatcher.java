@@ -1,6 +1,7 @@
 package com.bankingsolution.account.query.infrastructure;
 
 import com.bankingsolution.cqrs.core.domain.BaseEntity;
+import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import com.bankingsolution.cqrs.core.queries.BaseQuery;
 import com.bankingsolution.cqrs.core.queries.QueryHandlerMethod;
@@ -23,7 +24,7 @@ public class BaseQueryDispatcher implements QueryDispatcher {
     }
 
     @Override
-    public <U extends BaseEntity> List<U> send(BaseQuery query) {
+    public ResponseModel send(BaseQuery query) {
         var handlers = routes.get(query.getClass());
         if (handlers == null || handlers.size() <= 0) {
             throw new RuntimeException("No query handler was registered!");

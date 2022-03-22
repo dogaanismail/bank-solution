@@ -1,5 +1,6 @@
 package com.bankingsolution.account.query.controllers;
 
+import com.bankingsolution.cqrs.core.generics.ResponseStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,17 +28,15 @@ public class AccountControllerIntegrationTest {
     public void getAccountsShouldSuccess() throws Exception {
         mvc.perform(get("/api/v1/account/getAllAccounts")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(jsonPath("$.status").value(ResponseStatus.SUCCESS.toString()))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void getAccountByIdShouldSuccess() throws Exception {
         mvc.perform(get("/api/v1/account/get/accountId?=EXAMPLE_ACCOUNT_1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(jsonPath("$.status").value(ResponseStatus.SUCCESS.toString()))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 }

@@ -31,5 +31,13 @@ public interface AccountBalanceMapper {
     AccountBalance getBalance(@Param("accountId") String accountId, @Param("currencyCode") String currencyCode);
 
     @Select("SELECT * FROM account_balance where account_id = #{accountId}")
+    @Results(id = "balancesResult", value = {
+            @Result(property = "accountId", column = "account_id"),
+            @Result(property = "customerId", column = "customer_id"),
+            @Result(property = "accountBalanceId", column = "account_balance_id"),
+            @Result(property = "currencyCode", column = "currency_code"),
+            @Result(property = "balance", column = "balance"),
+            @Result(property = "availableBalance", column = "available_balance")
+    })
     List<AccountBalance> getBalancesByAccountId(@Param("accountId") String accountId);
 }

@@ -18,12 +18,12 @@ public interface AccountMapper {
     @Select("SELECT account_id as AccountId, customer_id as CustomerId, country as Country FROM account")
     public List<Account> getAllAccounts();
 
-    @Select("SELECT account_id as AccountId, customer_id as CustomerId FROM account WHERE account_id= #{accountId}")
+    @Select("SELECT * FROM account WHERE account_id= #{accountId}")
     @Results(id = "accountResult", value = {
             @Result(property = "accountId", column = "account_id"),
             @Result(property = "customerId", column = "customer_id"),
     })
-    public Optional<Account> getAccountById(@Param("customerId") String accountId);
+    public Account getAccountById(@Param("accountId") String accountId);
 
     @Select("SELECT account_id as AccountId, customer_id as CustomerId FROM account WHERE customer_id= #{customerId}")
     @ResultMap("accountResult")
