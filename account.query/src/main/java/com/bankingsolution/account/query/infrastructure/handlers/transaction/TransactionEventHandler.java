@@ -119,7 +119,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
             transactionMapper.insertTransaction(transaction);
         } catch (Exception exception) {
-            logger.error("Error while creating a transaction!", exception);
+            logger.error("Error while creating a failed transaction!", exception);
             throw exception;
         }
     }

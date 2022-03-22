@@ -37,7 +37,8 @@ public class AccountCommandHandler implements IAccountCommandHandler {
 
             validateCurrencies(command.getCurrencies());
 
-            //TODO: Could not handle sending a reuqest because of refusing
+            //TODO: Could not handle sending a request because of refusing
+            //https://stackoverflow.com/questions/71572351/feign-retryableexception-connection-refused-connection-refused-executing-get
             /*validateCustomer(command.getCustomerId());*/
 
             for (String currencyCode : currencyList) {

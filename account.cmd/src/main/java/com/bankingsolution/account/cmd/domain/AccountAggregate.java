@@ -6,6 +6,7 @@ import com.bankingsolution.common.events.AccountBalanceEvent;
 import com.bankingsolution.common.events.AccountOpenedEvent;
 import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
+import com.bankingsolution.common.exceptions.AccountAlreadyExists;
 import com.bankingsolution.common.exceptions.AccountBalanceNotFoundException;
 import com.bankingsolution.common.exceptions.InsufficientFundsException;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
@@ -57,6 +58,12 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public void AddAccountBalance(String accountId, Long customerId, String currencyCode) {
+
+        Optional<AccountBalance> accountBalance = findAccountBalance(customerId, currencyCode);
+
+        if (accountBalance.isPresent())
+            throw new AccountAlreadyExists("Account balance is already exist!");
+
         AccountBalance balance = new AccountBalance(UUID.randomUUID().toString(), customerId, currencyCode,
                 BigDecimal.ZERO, BigDecimal.ZERO, accountId);
         accountBalances.add(balance);
@@ -177,6 +184,12 @@ public class AccountAggregate extends AggregateRoot {
     private Optional<AccountBalance> findAccountBalance(String accountId, String currencyCode) {
         return this.getAccountBalances()
                 .stream().filter(x -> x.getAccountId().equals(accountId) &&
+                        x.getCurrencyCode().equals(currencyCode)).findFirst();
+    }
+
+    private Optional<AccountBalance> findAccountBalance(Long customerId, String currencyCode) {
+        return this.getAccountBalances()
+                .stream().filter(x -> x.getCustomerId().equals(customerId) &&
                         x.getCurrencyCode().equals(currencyCode)).findFirst();
     }
 }

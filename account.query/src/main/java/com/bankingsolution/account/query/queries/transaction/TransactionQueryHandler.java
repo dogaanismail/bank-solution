@@ -22,6 +22,7 @@ public class TransactionQueryHandler implements ITransactionQueryHandler {
     @Override
     public List<BaseEntity> handle(FindAllTransactionsByAccountIdQuery query) {
         Iterable<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
+
         List<BaseEntity> transactionList = new ArrayList<>();
         transactions.forEach(transactionList::add);
         return transactionList;
