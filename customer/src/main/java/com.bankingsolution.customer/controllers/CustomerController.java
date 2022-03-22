@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("/api/v1/customer")
 public class CustomerController {
 
     private final CustomerProcess customerProcess;
@@ -24,14 +24,14 @@ public class CustomerController {
     public ResponseEntity createAccount(@RequestBody CustomerCreateRequest customerCreateRequest) {
         try {
             customerProcess.create(customerCreateRequest);
-            return ResponseEntity.ok( HttpStatus.CREATED);
+            return ResponseEntity.ok(HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping(value = "/get/{customerId}", produces = "application/json")
-    public ResponseEntity getCustomerById(@RequestParam Long customerId) {
+    public ResponseEntity getCustomerById(@PathVariable Long customerId) {
         try {
             CustomerResponse response = customerProcess.getById(customerId);
             return ResponseEntity.ok(response);

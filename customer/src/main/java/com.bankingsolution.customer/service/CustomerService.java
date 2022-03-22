@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CustomerService implements ICustomerService{
+public class CustomerService implements ICustomerService {
     final CustomerMapper customerMapper;
 
-    public CustomerService(CustomerMapper customerMapper){
+    public CustomerService(CustomerMapper customerMapper) {
         this.customerMapper = customerMapper;
     }
 
@@ -25,7 +25,7 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public Customer getCustomerById(Long customerId) {
-       return customerMapper.getCustomerById(customerId);
+        return customerMapper.getCustomerById(customerId);
     }
 
     @Override

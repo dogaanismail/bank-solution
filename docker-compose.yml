@@ -12,7 +12,7 @@ services:
       - ./customer/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
     ports:
       - "5432:5432"
-    restart: unless-stopped   
+    restart: unless-stopped
 
   querydb:
     container_name: querydb
@@ -24,22 +24,19 @@ services:
       - ./account.query/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
     ports:
       - "5433:5432"
-    restart: unless-stopped    
+    restart: unless-stopped
 
   rabbitmq:
-    container_name: "rabbitmq"
+    container_name: "bank_rabbitmq"
     image: "rabbitmq:3.8-management"
     hostname: "rabbitmq"
     environment:
-      RABBITMQ_ERLANG_COOKIE: "SOMETHINGSECRET"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - "15672:15672"
       - "5672:5672"
-    labels:
-      NAME: "rabbitmq1"
 
   cmddb:
     container_name: "cmddb"
@@ -57,16 +54,11 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - rabbitmq
       - customerdb
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://customerdb:5432/customerdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=rabbitmq
-      - SPRING_RABBITMQ_PASSWORD=rabbitmq
 
   account-cmd:
     image: bank/account-cmd-service-api
@@ -77,16 +69,16 @@ services:
     ports:
       - "5002:5002"
     depends_on:
-      - rabbitmq
       - cmddb
+      - rabbitmq
     environment:
       - SPRING_DATA_MONGODB_HOST=cmddb
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=accountcmdb
       - SPRING_RABBITMQ_HOST=rabbitmq
-      - spring_RABBITMQ_PORT=5672
-      - spring_RABBITMQ_USERNAME=rabbitmq
-      - spring_RABBITMQ_PASSWORD=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   account-query:
     image: bank/account-query-service-api
@@ -97,16 +89,16 @@ services:
     ports:
       - "5003:5003"
     depends_on:
-      - rabbitmq
       - querydb
+      - rabbitmq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://querydb:5433/accountingdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=rabbitmq
-      - SPRING_RABBITMQ_PASSWORD=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
 volumes:
   customerdb:

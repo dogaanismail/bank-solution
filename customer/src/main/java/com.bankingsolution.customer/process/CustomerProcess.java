@@ -21,21 +21,25 @@ public class CustomerProcess {
         this.customerService = customerService;
     }
 
-    public void create(CustomerCreateRequest customerCreateRequest){
-        try{
+    public void create(CustomerCreateRequest customerCreateRequest) {
+        try {
             Customer customer = convertToCustomerModel(customerCreateRequest);
             customerService.insertCustomer(customer);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public CustomerResponse getById(long customerId){
+    public CustomerResponse getById(long customerId) {
         Customer customer = customerService.getCustomerById(customerId);
-        return ObjectMapperUtils.map(customer,CustomerResponse.class );
+
+        if (customer == null)
+            return null;
+
+        return ObjectMapperUtils.map(customer, CustomerResponse.class);
     }
 
-    public List<CustomerResponse> getAllCustomers(){
+    public List<CustomerResponse> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomer();
         return ObjectMapperUtils.mapAll(customers, CustomerResponse.class);
     }

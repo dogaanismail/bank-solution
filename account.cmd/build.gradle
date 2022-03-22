@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.13'
 	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation project(':cqrs.core')
 	implementation project(':common')

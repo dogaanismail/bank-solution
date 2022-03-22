@@ -1,6 +1,7 @@
 package com.bankingsolution.account.cmd.controllers;
 
 import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
+import com.bankingsolution.account.cmd.dto.ErrorResponse;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
 import com.bankingsolution.common.dto.BaseResponse;
@@ -39,7 +40,9 @@ public class AccountController {
         try {
             return ResponseEntity.ok(commandDispatcher.send(command));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
+            logger.log(Level.SEVERE, safeErrorMessage, e);
+            return new ResponseEntity<>(new ErrorResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

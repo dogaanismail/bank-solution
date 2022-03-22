@@ -1,14 +1,18 @@
 package com.bankingsolution.account.query.configuration;
 
 import com.bankingsolution.common.constants.Contants;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -19,6 +23,19 @@ import java.util.List;
 
 @Configuration
 public class RabbitMQConfig implements RabbitListenerConfigurer {
+
+    @Value("${spring.rabbitmq.host}")
+    private String hostName;
+
+    @Value("${spring.rabbitmq.username}")
+    private String userName;
+
+    @Value("${spring.rabbitmq.password}")
+    private String password;
+
+    @Value("${spring.rabbitmq.port}")
+    private int port;
+
     @Bean
     public TopicExchange exchange() {
         return new TopicExchange(Contants.TOPIC_KEY);
@@ -64,16 +81,24 @@ public class RabbitMQConfig implements RabbitListenerConfigurer {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Autowired
-    public ConnectionFactory connectionFactory;
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setConcurrentConsumers(4);
-        factory.setMaxConcurrentConsumers(20);
+
+        factory.setConnectionFactory(connectionFactory());
         return factory;
+    }
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setHost(this.hostName);
+        connectionFactory.setVirtualHost("/");
+        connectionFactory.setUsername(this.userName);
+        connectionFactory.setPassword(this.password);
+        connectionFactory.setPort(this.port);
+        return connectionFactory;
     }
 
 
