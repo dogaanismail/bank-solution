@@ -29,7 +29,7 @@ public class AccountController {
         this.queryDispatcher = queryDispatcher;
     }
 
-    @GetMapping("/getAllAccounts")
+    @GetMapping(value = "/getAccounts", produces = "application/json")
     public ResponseEntity getAllAccounts() {
         try {
             ResponseModel response = queryDispatcher.send(new FindAllAccountsQuery());
