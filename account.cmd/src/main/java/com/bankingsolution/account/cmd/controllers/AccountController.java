@@ -30,7 +30,7 @@ public class AccountController {
     @Autowired
     private CommandDispatcher commandDispatcher;
 
-    @PostMapping
+    @PostMapping("/openAccount")
     public ResponseEntity openAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
 
         OpenAccountCommand command = ObjectMapperUtils.map(accountCreateRequest, OpenAccountCommand.class);

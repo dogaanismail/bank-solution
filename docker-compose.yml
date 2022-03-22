@@ -70,6 +70,7 @@ services:
       - "5002:5002"
     depends_on:
       - cmddb
+      - rabbitmq
     environment:
       - SPRING_DATA_MONGODB_HOST=cmddb
       - SPRING_DATA_MONGODB_PORT=27017
@@ -78,6 +79,7 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_FEIGN_CUSTOMER_CLIENT=customer-service
 
   account-query:
     image: bank/account-query-service-api
@@ -89,6 +91,7 @@ services:
       - "5003:5003"
     depends_on:
       - querydb
+      - rabbitmq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://querydb:5433/accountingdb
       - SPRING_DATASOURCE_USERNAME=postgres

@@ -33,7 +33,7 @@ public class AccountTransactionController {
     @Autowired
     private CommandDispatcher commandDispatcher;
 
-    @PostMapping
+    @PostMapping("/createTransaction")
     public ResponseEntity transaction(@RequestBody AccountTransactionRequest accountTransactionRequest) {
 
         TransactionCommand command = ObjectMapperUtils.map(accountTransactionRequest, TransactionCommand.class);

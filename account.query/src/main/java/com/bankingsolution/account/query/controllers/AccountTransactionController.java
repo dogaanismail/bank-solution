@@ -27,9 +27,9 @@ public class AccountTransactionController {
         this.queryDispatcher = queryDispatcher;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountTransaction> getAccountById(@PathVariable(value = "id") String id) {
-        List<AccountTransaction> transactions = queryDispatcher.send(new FindAllTransactionsByAccountIdQuery(id));
+    @GetMapping(value = "/get/{transactionId}", produces = "application/json")
+    public ResponseEntity<AccountTransaction> getAccountById(@PathVariable(value = "transactionId") String transactionId) {
+        List<AccountTransaction> transactions = queryDispatcher.send(new FindAllTransactionsByAccountIdQuery(transactionId));
         if (transactions == null || transactions.size() == 0) {
             throw new DataNotFoundException("Transactions by account Id could not be found!");
         }

@@ -28,15 +28,15 @@ public class AccountController {
         this.queryDispatcher = queryDispatcher;
     }
 
-    @GetMapping("/")
+    @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accounts = queryDispatcher.send(new FindAllAccountsQuery());
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable(value = "id") String id) {
-        List<Account> accounts = queryDispatcher.send(new FindAccountByIdQuery(id));
+    @GetMapping(value = "/get/{accountId}", produces = "application/json")
+    public ResponseEntity<Account> getAccountById(@PathVariable(value = "accountId") String accountId) {
+        List<Account> accounts = queryDispatcher.send(new FindAccountByIdQuery(accountId));
         if (accounts == null || accounts.size() == 0) {
             throw new DataNotFoundException("Bank Account with 'id' %s was not found");
         }
