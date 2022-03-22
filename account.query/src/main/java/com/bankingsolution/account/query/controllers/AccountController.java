@@ -36,6 +36,7 @@ public class AccountController {
 
     @GetMapping(value = "/get/{accountId}", produces = "application/json")
     public ResponseEntity<Account> getAccountById(@PathVariable(value = "accountId") String accountId) {
+
         List<Account> accounts = queryDispatcher.send(new FindAccountByIdQuery(accountId));
 
         if (accounts == null || accounts.size() == 0)

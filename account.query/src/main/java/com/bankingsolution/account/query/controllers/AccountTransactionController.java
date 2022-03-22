@@ -27,11 +27,11 @@ public class AccountTransactionController {
         this.queryDispatcher = queryDispatcher;
     }
 
-    @GetMapping(value = "/get/{transactionId}", produces = "application/json")
-    public ResponseEntity<AccountTransaction> getAccountById(@PathVariable(value = "transactionId") String transactionId) {
+    @GetMapping(value = "/get/{accountId}", produces = "application/json")
+    public ResponseEntity<AccountTransaction> getTransactionsByAccountId(@PathVariable(value = "accountId") String accountId) {
 
         List<AccountTransaction> transactions =
-                queryDispatcher.send(new FindAllTransactionsByAccountIdQuery(transactionId));
+                queryDispatcher.send(new FindAllTransactionsByAccountIdQuery(accountId));
 
         if (transactions == null || transactions.size() == 0)
             throw new DataNotFoundException("Transactions by account Id could not be found!");
