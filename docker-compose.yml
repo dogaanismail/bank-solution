@@ -70,7 +70,6 @@ services:
       - "5002:5002"
     depends_on:
       - cmddb
-      - rabbitmq
     environment:
       - SPRING_DATA_MONGODB_HOST=cmddb
       - SPRING_DATA_MONGODB_PORT=27017
@@ -90,7 +89,6 @@ services:
       - "5003:5003"
     depends_on:
       - querydb
-      - rabbitmq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://querydb:5433/accountingdb
       - SPRING_DATASOURCE_USERNAME=postgres
