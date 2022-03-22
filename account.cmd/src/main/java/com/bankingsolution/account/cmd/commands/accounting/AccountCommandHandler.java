@@ -37,7 +37,8 @@ public class AccountCommandHandler implements IAccountCommandHandler {
 
             validateCurrencies(command.getCurrencies());
 
-            validateCustomer(command.getCustomerId());
+            //TODO: Could not handle sending a reuqest because of refusing
+            /*validateCustomer(command.getCustomerId());*/
 
             for (String currencyCode : currencyList) {
                 aggregate.AddAccountBalance(command.getId(), command.getCustomerId(), currencyCode);
