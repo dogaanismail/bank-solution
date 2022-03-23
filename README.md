@@ -84,6 +84,15 @@ The process will take a few minutes. 7 containers must be started.
 
 **Step 7:** If there is no problem, you must be able to access Rest API by using Swagger UI
 
+# Test Scenarios Steps #
+**Step 1:** Create a customer and get customer id that has just been created
+
+**Step 2:** Open an account by using Account Command Service with CustomerId and get account id that has just been created
+
+**Step 3:** Create a transaction on an account with account id by using Account Command Service  
+
+**Step 4:** By using Account Query Service, account and transactions can be seen by using Swagger
+
 # Swagger UI links #
 * **Customer Service: http://localhost:5000/swagger-ui.html**
 * **Account Command Service: http://localhost:5002/swagger-ui.html**
@@ -127,7 +136,9 @@ docker run --rm -i loadimpact/k6 run - <load-testing/script.js
 docker run --network="host" --rm -i loadimpact/k6 run - <load-testing/script.js
 ```
 
-![Screenshot](screenshots/1.PNG)
-![Screenshot](screenshots/2.PNG)
+![Screenshot](screenshots/1.png)
+![Screenshot](screenshots/2.png)
 
-
+## Scaling Horizontally ##
+We can increase the number of virtual machines,instances,servers and also containers with low downtime and cost.
+Service providers, such as Azure and AWS have automatic scaling.They can increase and decrease resources according to our requirements at any given time. They can scale up or out when traffic to our application is at its peak and scale down when demand is lessened. This provides organizations with more efficient and cost-effective scaling.
