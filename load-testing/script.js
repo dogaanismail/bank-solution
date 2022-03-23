@@ -14,11 +14,11 @@ export default function () {
 
     const payload = JSON.stringify({
         customerId: 1,
-        accountId: "690ee57d-bcfd-4e09-8ded-7709d4359186",
+        accountId: "47ff5d97-075d-467e-afc2-8d1bfc806130",
         amount: 500,
-        currency: "EUR",
+        currency: "USD",
         direction: "IN",
-        description: "Example"
+        description: "LOAD_TESTING_FOR_TRANSACTION"
     });
 
     const params = {
@@ -29,7 +29,7 @@ export default function () {
 
     let res = http.post(transactioUrl, payload, params);
     check(res, {
-        "is status 201": (r) => r.status === 200,
-        "body contains result accountId": (r) => r.body.includes('SUCCESS')
+        "is status 200": (r) => r.status === 200,
+        "body contains result": (r) => r.body.includes('SUCCESS')
     });
 }
