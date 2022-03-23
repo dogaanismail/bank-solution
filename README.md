@@ -1,7 +1,7 @@
 # :bank: Core Banking Solution
 A core banking solution with microservices using Domain Driven Design and Event Sourcing.
 
-According with **[Martin Folwer]**(https://martinfowler.com/bliki/CQRS.html) 
+According with **[Martin Fowler]**(https://martinfowler.com/bliki/CQRS.html) 
 > At its heart is the notion that you can use a different model to update information than the model you use to read information. 
 > For some situations, this separation can be valuable, but beware that for most systems CQRS adds risky complexity.
 
