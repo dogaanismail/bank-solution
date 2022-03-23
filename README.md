@@ -110,6 +110,48 @@ The process will take a few minutes. 7 containers must be started.
 | Customer Service| /api/v1/customer/get/{customerId}              |  GET   | Get by Id             |   
 | Customer Service| /api/v1/customer/getCustomers                  |  GET   | List of customers     |
 
+# RabbitMQ
+
+Open [http://localhost:15672/](http://localhost:15672/)
+
+and use the login credential
+
+```
+username: guest
+password: guest
+```
+
+# Customer Service Database - Postgres
+
+## Schema
+
+**postgres_init.sql** has necessary database schema in DDL
+
+## Access to postgres:
+
+* `localhost:5432`
+* **Username:** postgres (as a default)
+* **Password:** postgres (as a default)
+
+# Account Query Service Database - Postgres
+
+## Schema
+
+**postgres_init.sql** has necessary database schema in DDL
+
+## Access to postgres:
+
+* `localhost:5432`
+* **Username:** postgres (as a default)
+* **Password:** postgres (as a default)
+
+# Account Command Service Database - MongoDB EventStore
+
+## Access to mongoDB:
+
+* `localhost:27017`
+
+
 
 ## Important Choices
 
