@@ -79,9 +79,9 @@ The process will take a few minutes. 7 containers must be started.
 | Account Command | /api/v1/account/openAccount                    |  POST  | Open an account       |
 | Account Command | /api/v1/transaction/createTransaction          |  POST  | Create a transaction  |
 | Account Query   | /api/v1/account/getAccounts                    |  GET   | List of accounts      |
-| Account Query   | /api/v1/transaction/getTransactions/{accountId}|  GET   | Account by Id         |
+| Account Query   | /api/v1/transaction/getTransactions/{accountId}|  GET   | Get By AccountId      |
 | Customer Service| /api/v1/customer/createCustomer                |  POST  | Create a customer     |
-| Customer Service| /api/v1/customer/get/{customerId}              |  GET   | Get by Id             |
+| Customer Service| /api/v1/customer/get/{customerId}              |  GET   | Get by Id             |   
 | Customer Service| /api/v1/customer/getCustomers                  |  GET   | List of customers     |
 
 
