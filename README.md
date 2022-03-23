@@ -112,4 +112,22 @@ Financial sector is very serious and there must not be any mistake. Every transa
 * Implementations Event Based Messages, such as FundsDepositedEvent, FundsWithDrawnEvent, TransactionCreatedEvent etc.
 * Using MyBatis for Query side to improve performance
 
+## Transaction per second (TPS)
+
+A load testing script has been written in **load-testing** folder. Run below command in the project directory to perform a load test from terminal <br />
+*For windows host machine and docker K6 container*
+
+```
+docker run --rm -i loadimpact/k6 run - <load-testing/script.js
+```
+
+*For Linux host machine and docker K6 container*
+
+```
+docker run --network="host" --rm -i loadimpact/k6 run - <load-testing/script.js
+```
+
+![Screenshot](screenshots/1.PNG)
+![Screenshot](screenshots/2.PNG)
+
 
