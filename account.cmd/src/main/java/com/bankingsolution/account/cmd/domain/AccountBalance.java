@@ -30,19 +30,6 @@ public class AccountBalance {
         this.accountId = accountId;
     }
 
-    public void withdraw(TransactionCommand command) {
-        if (command.getAmount().compareTo(this.getBalance()) > 0)
-            throw new IllegalStateException("Withdrawal declined, insufficient funds!");
-
-        BigDecimal balanceAfterTxn = this.balance.subtract(command.getAmount());
-        this.setBalance(balanceAfterTxn);
-    }
-
-    public void deposit(TransactionCommand command) {
-        BigDecimal balanceAfterTxn = this.balance.add(command.getAmount());
-        this.setBalance(balanceAfterTxn);
-    }
-
     public Long getCustomerId() {
         return customerId;
     }
