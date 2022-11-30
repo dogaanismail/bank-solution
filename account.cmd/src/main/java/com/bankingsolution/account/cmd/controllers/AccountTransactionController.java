@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 @Slf4j
 public class AccountTransactionController {
 
-    private final Logger logger = Logger.getLogger(AccountController.class.getName());
+    private final Logger logger = Logger.getLogger(AccountTransactionController.class.getName());
 
     @Autowired
     private CommandDispatcher commandDispatcher;
