@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Service
 public class TransactionEventHandler implements ITransactionEventHandler {
 
-    Logger logger = LoggerFactory.getLogger(AccountEventHandler.class);
+    Logger logger = LoggerFactory.getLogger(TransactionEventHandler.class);
 
     @Autowired
     private final AccountBalanceMapper accountBalanceMapper;
