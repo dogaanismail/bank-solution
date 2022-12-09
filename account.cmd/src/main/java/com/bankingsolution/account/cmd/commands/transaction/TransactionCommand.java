@@ -2,10 +2,12 @@ package com.bankingsolution.account.cmd.commands.transaction;
 
 import com.bankingsolution.cqrs.core.commands.BaseCommand;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TransactionCommand extends BaseCommand {
 

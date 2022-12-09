@@ -1,8 +1,8 @@
 package com.bankingsolution.common.constants;
 
-public class Contants {
+public class Constants {
 
-    private Contants() {
+    private Constants() {
 
     }
 

@@ -10,7 +10,6 @@ import com.bankingsolution.cqrs.core.generics.GenericResponse;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.generics.ResponseStatus;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,11 +18,15 @@ import java.util.Objects;
 @Service
 public class TransactionCommandHandler implements ITransactionCommandHandler {
 
-    @Autowired
-    private EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler;
+    private final EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler;
 
-    @Autowired
-    private EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler;
+    private final EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler;
+
+    public TransactionCommandHandler(EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler,
+                                     EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler) {
+        this.transactionEventSourcingHandler = transactionEventSourcingHandler;
+        this.accountAggregateEventSourcingHandler = accountAggregateEventSourcingHandler;
+    }
 
     @Override
     public ResponseModel handle(TransactionCommand command) throws AccountBalanceNotFoundException,
@@ -63,7 +66,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
     private BigDecimal doTransaction(TransactionCommand command) {
         var accountAggregate = accountAggregateEventSourcingHandler.getById(command.getAccountId());
 
-        BigDecimal balanceAfterTxn = BigDecimal.ZERO;
+        BigDecimal balanceAfterTxn;
 
         if (accountAggregate == null)
             throw new AccountNotFoundException("Account could not be found!");
@@ -74,7 +77,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         if (command.getDescription().isEmpty())
             throw new TransactionDescriptonException("Description can not be missing!");
 
-        if(!ValidationHelper.isCurrencySupported(command.getCurrency()))
+        if(ValidationHelper.isCurrencySupported(command.getCurrency()))
             throw new CurrencyNotSupportedException("Currency is not supported!");
 
         if (Objects.equals(command.getDirection(), TransactionDirection.IN.toString())) {

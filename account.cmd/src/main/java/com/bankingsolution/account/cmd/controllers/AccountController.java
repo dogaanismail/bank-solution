@@ -2,13 +2,10 @@ package com.bankingsolution.account.cmd.controllers;
 
 import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.account.cmd.dto.ErrorResponse;
-import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
-import com.bankingsolution.common.dto.BaseResponse;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +23,11 @@ import java.util.logging.Logger;
 @Slf4j
 public class AccountController {
     private final Logger logger = Logger.getLogger(AccountController.class.getName());
+    private final CommandDispatcher commandDispatcher;
 
-    @Autowired
-    private CommandDispatcher commandDispatcher;
+    public AccountController(CommandDispatcher commandDispatcher) {
+        this.commandDispatcher = commandDispatcher;
+    }
 
     @PostMapping("/openAccount")
     public ResponseEntity openAccount(@RequestBody AccountCreateRequest accountCreateRequest) {

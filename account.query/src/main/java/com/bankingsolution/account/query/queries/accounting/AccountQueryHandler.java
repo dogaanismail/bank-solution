@@ -30,7 +30,7 @@ public class AccountQueryHandler implements IAccountQueryHandler {
     public ResponseModel handle(FindAllAccountsQuery query) {
         List<Account> bankAccounts = accountMapper.getAllAccounts();
 
-        if (bankAccounts.size() == 0 && bankAccounts.isEmpty())
+        if (bankAccounts.size() == 0)
             GenericResponse.generateResponse(ResponseStatus.ERROR, null, "There is no any account!");
 
         return GenericResponse.generateResponse(ResponseStatus.SUCCESS, bankAccounts);

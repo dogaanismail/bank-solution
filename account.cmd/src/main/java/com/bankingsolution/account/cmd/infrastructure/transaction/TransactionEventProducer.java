@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionEventProducer implements EventProducer {
-
-    @Autowired
     private final RabbitTemplate rabbitTemplate;
 
     public TransactionEventProducer(RabbitTemplate rabbitTemplate) {

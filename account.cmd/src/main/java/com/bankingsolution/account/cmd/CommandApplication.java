@@ -20,13 +20,8 @@ import javax.annotation.PostConstruct;
 @EnableDiscoveryClient
 public class CommandApplication {
 
-    @Autowired
     private final CommandDispatcher commandDispatcher;
-
-    @Autowired
     private final IAccountCommandHandler accountCommandHandler;
-
-    @Autowired
     private final ITransactionCommandHandler transactionCommandHandler;
 
     public CommandApplication(CommandDispatcher commandDispatcher,

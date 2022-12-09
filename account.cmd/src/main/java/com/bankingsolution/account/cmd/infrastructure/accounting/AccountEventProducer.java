@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountEventProducer implements EventProducer {
 
-    @Autowired
     private final RabbitTemplate rabbitTemplate;
 
     public AccountEventProducer(RabbitTemplate rabbitTemplate) {

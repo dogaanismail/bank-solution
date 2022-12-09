@@ -16,14 +16,8 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 @MapperScan("com.bankingsolution.account.query.mappers")
 public class QueryApplication {
-
-	@Autowired
 	private final QueryDispatcher queryDispatcher;
-
-	@Autowired
 	private final IAccountQueryHandler accountQueryHandler;
-
-	@Autowired
 	private final ITransactionQueryHandler transactionQueryHandler;
 
 	public QueryApplication(QueryDispatcher queryDispatcher,

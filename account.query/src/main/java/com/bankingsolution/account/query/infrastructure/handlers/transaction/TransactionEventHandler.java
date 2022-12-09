@@ -21,10 +21,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
     Logger logger = LoggerFactory.getLogger(TransactionEventHandler.class);
 
-    @Autowired
     private final AccountBalanceMapper accountBalanceMapper;
-
-    @Autowired
     private final TransactionMapper transactionMapper;
 
     public TransactionEventHandler(AccountBalanceMapper accountBalanceMapper,

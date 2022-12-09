@@ -17,10 +17,7 @@ public class AccountEventHandler implements IAccountEventHandler {
 
     Logger logger = LoggerFactory.getLogger(AccountEventHandler.class);
 
-    @Autowired
     private final AccountMapper accountMapper;
-
-    @Autowired
     private final AccountBalanceMapper accountBalanceMapper;
 
     public AccountEventHandler(AccountMapper accountMapper,

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/v1/transaction")
 @Slf4j
 public class AccountTransactionController {
-
-    @Autowired
     private final QueryDispatcher queryDispatcher;
 
     public AccountTransactionController(QueryDispatcher queryDispatcher) {

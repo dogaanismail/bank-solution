@@ -1,7 +1,6 @@
 package com.bankingsolution.account.cmd.commands.accounting;
 
 import com.bankingsolution.account.cmd.domain.AccountAggregate;
-import com.bankingsolution.account.cmd.domain.AccountTransaction;
 import com.bankingsolution.account.cmd.dto.AccountBalanceResponse;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
 import com.bankingsolution.account.cmd.port.ICustomerService;
@@ -13,7 +12,6 @@ import com.bankingsolution.cqrs.core.generics.GenericResponse;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.generics.ResponseStatus;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,49 +19,48 @@ import java.util.List;
 @Service
 public class AccountCommandHandler implements IAccountCommandHandler {
 
-    @Autowired
-    private EventSourcingHandler<AccountAggregate> eventSourcingHandlers;
+    private final EventSourcingHandler<AccountAggregate> eventSourcingHandlers;
 
-    @Autowired
-    private ICustomerService customerService;
+    private final ICustomerService customerService;
+
+    public AccountCommandHandler(EventSourcingHandler<AccountAggregate> eventSourcingHandlers, ICustomerService customerService) {
+        this.eventSourcingHandlers = eventSourcingHandlers;
+        this.customerService = customerService;
+    }
 
     @Override
     public ResponseModel handle(OpenAccountCommand command) {
 
-        try {
-            List<String> currencyList = command.getCurrencies();
+        List<String> currencyList = command.getCurrencies();
 
-            var aggregate = new AccountAggregate();
+        var aggregate = new AccountAggregate();
 
-            validateCurrencies(command.getCurrencies());
+        validateCurrencies(command.getCurrencies());
 
-            //https://stackoverflow.com/questions/71572351/feign-retryableexception-connection-refused-connection-refused-executing-get
-            validateCustomer(command.getCustomerId());
+        //https://stackoverflow.com/questions/71572351/feign-retryableexception-connection-refused-connection-refused-executing-get
+        validateCustomer(command.getCustomerId());
 
-            for (String currencyCode : currencyList) {
-                aggregate.AddAccountBalance(command.getId(), command.getCustomerId(), currencyCode);
-            }
-
-            aggregate.openAccount(command);
-
-            eventSourcingHandlers.save(aggregate);
-
-            OpenAccountResponse response =
-                    OpenAccountResponse.builder()
-                            .accountId(aggregate.getId())
-                            .customerId(aggregate.getCustomerId())
-                            .accountBalances(ObjectMapperUtils.mapAll(aggregate.getAccountBalances(), AccountBalanceResponse.class))
-                            .build();
-
-            return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Account has been successfully opened!");
-        } catch (Exception exception) {
-            throw exception;
+        for (String currencyCode : currencyList) {
+            aggregate.AddAccountBalance(command.getId(), command.getCustomerId(), currencyCode);
         }
+
+        aggregate.openAccount(command);
+
+        eventSourcingHandlers.save(aggregate);
+
+        OpenAccountResponse response =
+                OpenAccountResponse.builder()
+                        .accountId(aggregate.getId())
+                        .customerId(aggregate.getCustomerId())
+                        .accountBalances(ObjectMapperUtils.mapAll(aggregate.getAccountBalances(), AccountBalanceResponse.class))
+                        .build();
+
+        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Account has been successfully opened!");
     }
 
     private void validateCurrencies(List<String> currencies) {
         for (String currencyCode : currencies) {
-            if (!ValidationHelper.isCurrencySupported(currencyCode))
+            if (ValidationHelper.isCurrencySupported(currencyCode))
                 throw new CurrencyNotSupportedException("Invalid currency code : " + currencyCode);
         }
     }

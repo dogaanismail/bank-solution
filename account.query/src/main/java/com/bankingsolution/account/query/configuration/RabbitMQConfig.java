@@ -1,6 +1,6 @@
 package com.bankingsolution.account.query.configuration;
 
-import com.bankingsolution.common.constants.Contants;
+import com.bankingsolution.common.constants.Constants;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -38,42 +38,42 @@ public class RabbitMQConfig implements RabbitListenerConfigurer {
 
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(Contants.TOPIC_KEY);
+        return new TopicExchange(Constants.TOPIC_KEY);
     }
 
     @Bean
     Queue accountOpenedQueue() {
-        return new Queue(Contants.AccountOpenedTopic);
+        return new Queue(Constants.AccountOpenedTopic);
     }
 
     @Bean
     Queue fundsDepositedQueue() {
-        return new Queue(Contants.FundsDepositedTopic);
+        return new Queue(Constants.FundsDepositedTopic);
     }
 
     @Bean
     Queue fundsWithdrawnQueue() {
-        return new Queue(Contants.FundsWithDrawnTopic);
+        return new Queue(Constants.FundsWithDrawnTopic);
     }
 
     @Bean
     Queue transactionCreatedQueue() {
-        return new Queue(Contants.TransactionCreatedTopic);
+        return new Queue(Constants.TransactionCreatedTopic);
     }
 
     @Bean
     Queue transactionFailedQueue() {
-        return new Queue(Contants.TransactionFailedTopic);
+        return new Queue(Constants.TransactionFailedTopic);
     }
 
     @Bean
     public List<Binding> binding() {
         return Arrays.asList(
-                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(Contants.AccountOpenedTopic),
-                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(Contants.FundsDepositedTopic),
-                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(Contants.FundsWithDrawnTopic),
-                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(Contants.TransactionCreatedTopic),
-                BindingBuilder.bind(transactionFailedQueue()).to(exchange()).with(Contants.TransactionFailedTopic));
+                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(Constants.AccountOpenedTopic),
+                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(Constants.FundsDepositedTopic),
+                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(Constants.FundsWithDrawnTopic),
+                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(Constants.TransactionCreatedTopic),
+                BindingBuilder.bind(transactionFailedQueue()).to(exchange()).with(Constants.TransactionFailedTopic));
     }
 
     @Bean

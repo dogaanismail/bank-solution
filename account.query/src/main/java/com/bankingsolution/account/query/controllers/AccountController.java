@@ -21,8 +21,6 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/account")
 @Slf4j
 public class AccountController {
-
-    @Autowired
     private final QueryDispatcher queryDispatcher;
 
     public AccountController(QueryDispatcher queryDispatcher) {

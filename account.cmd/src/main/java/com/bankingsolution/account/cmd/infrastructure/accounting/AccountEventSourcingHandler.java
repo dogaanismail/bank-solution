@@ -16,11 +16,9 @@ import java.util.Comparator;
 public class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
 
     @Qualifier("accountEventStore")
-    @Autowired
     private final EventStore eventStore;
 
     @Qualifier("accountEventProducer")
-    @Autowired
     private final EventProducer eventProducer;
 
     public AccountEventSourcingHandler(@Qualifier("accountEventStore") EventStore eventStore,

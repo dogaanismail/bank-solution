@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AccountEventConsumer implements IAccountEventConsumer {
-
-    @Autowired
-    private IAccountEventHandler accountEventHandler;
+    private final IAccountEventHandler accountEventHandler;
 
     public AccountEventConsumer(IAccountEventHandler accountEventHandler) {
         this.accountEventHandler = accountEventHandler;

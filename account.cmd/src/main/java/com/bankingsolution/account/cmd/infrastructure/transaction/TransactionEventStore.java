@@ -19,11 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionEventStore implements EventStore {
 
-    @Qualifier("transactionEventProducer")
-    @Autowired
     private final EventProducer eventProducer;
 
-    @Autowired
     private final EventStoreRepository repository;
 
     public TransactionEventStore(EventStoreRepository repository,
@@ -67,13 +64,13 @@ public class TransactionEventStore implements EventStore {
             throw new AggregateNotFoundException("Incorrect account ID provided!");
         }
 
-        return eventStream.stream().map(x -> x.getEventData()).collect(Collectors.toList());
+        return eventStream.stream().map(EventModel::getEventData).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getAggregateIds() {
         var eventStream = repository.findAll();
-        if (eventStream == null || eventStream.isEmpty()) {
+        if (eventStream.isEmpty()) {
             throw new IllegalStateException();
         }
         return eventStream.stream()

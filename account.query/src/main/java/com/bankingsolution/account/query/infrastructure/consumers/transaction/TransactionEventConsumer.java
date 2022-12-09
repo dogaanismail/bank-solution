@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionEventConsumer implements ITransactionEventConsumer {
-
-    @Autowired
-    private ITransactionEventHandler transactionEventHandler;
+    private final ITransactionEventHandler transactionEventHandler;
 
     public TransactionEventConsumer(ITransactionEventHandler transactionEventHandler) {
         this.transactionEventHandler = transactionEventHandler;

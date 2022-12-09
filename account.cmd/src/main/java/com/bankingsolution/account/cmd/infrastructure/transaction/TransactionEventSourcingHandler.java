@@ -18,11 +18,9 @@ import java.util.Comparator;
 public class TransactionEventSourcingHandler implements EventSourcingHandler<AccountTransaction> {
 
     @Qualifier("transactionEventStore")
-    @Autowired
     private final EventStore eventStore;
 
     @Qualifier("transactionEventProducer")
-    @Autowired
     private final EventProducer eventProducer;
 
     public TransactionEventSourcingHandler(@Qualifier("transactionEventStore") EventStore eventStore,

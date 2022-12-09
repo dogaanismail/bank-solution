@@ -12,7 +12,7 @@ public interface TransactionMapper {
             "VALUES (#{transactionId}, #{accountId}, #{direction}," +
             " #{amount}, #{status}, #{transactionTime}, #{description}, #{currency}, #{balanceAfterTxn})")
     @Options(useGeneratedKeys = true, keyProperty = "transactionId", keyColumn = "transaction_id")
-    int insertTransaction(AccountTransaction transaction);
+    void insertTransaction(AccountTransaction transaction);
 
     @Select("SELECT * FROM account_transaction WHERE account_id = #{accountId}")
     @Results(id = "transactionResult", value = {

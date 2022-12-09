@@ -13,8 +13,6 @@ import java.util.List;
 
 @Service
 public class TransactionQueryHandler implements ITransactionQueryHandler {
-
-    @Autowired
     private final TransactionMapper transactionMapper;
 
     public TransactionQueryHandler(TransactionMapper transactionMapper) {
@@ -25,7 +23,7 @@ public class TransactionQueryHandler implements ITransactionQueryHandler {
     public ResponseModel handle(FindAllTransactionsByAccountIdQuery query) {
         List<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
 
-        if (transactions.size() == 0 && transactions.isEmpty())
+        if (transactions.size() == 0)
             return GenericResponse.generateResponse(ResponseStatus.ERROR, null, "Invalid account!");
 
         return GenericResponse.generateResponse(ResponseStatus.SUCCESS, transactions);
