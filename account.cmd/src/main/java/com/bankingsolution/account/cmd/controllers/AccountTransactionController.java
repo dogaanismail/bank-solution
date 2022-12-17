@@ -3,6 +3,7 @@ package com.bankingsolution.account.cmd.controllers;
 import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
 import com.bankingsolution.account.cmd.dto.ErrorResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountTransactionRequest;
+import com.bankingsolution.common.utils.GenerateUuidUtils;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,9 @@ public class AccountTransactionController {
 
     @PostMapping("/createTransaction")
     public ResponseEntity transaction(@RequestBody AccountTransactionRequest accountTransactionRequest) {
-
         TransactionCommand command = ObjectMapperUtils.map(accountTransactionRequest, TransactionCommand.class);
 
-        var id = UUID.randomUUID().toString();
+        var id = GenerateUuidUtils.generateUuid().toString();
         command.setId(id);
 
         try {

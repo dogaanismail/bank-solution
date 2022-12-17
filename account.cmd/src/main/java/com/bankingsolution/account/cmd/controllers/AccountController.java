@@ -3,6 +3,7 @@ package com.bankingsolution.account.cmd.controllers;
 import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.account.cmd.dto.ErrorResponse;
 import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
+import com.bankingsolution.common.utils.GenerateUuidUtils;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 @Slf4j
 public class AccountController {
     private final Logger logger = Logger.getLogger(AccountController.class.getName());
+
     private final CommandDispatcher commandDispatcher;
 
     public AccountController(CommandDispatcher commandDispatcher) {
@@ -31,9 +32,8 @@ public class AccountController {
 
     @PostMapping("/openAccount")
     public ResponseEntity openAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
-
         OpenAccountCommand command = ObjectMapperUtils.map(accountCreateRequest, OpenAccountCommand.class);
-        var id = UUID.randomUUID().toString();
+        var id = GenerateUuidUtils.generateUuid().toString();
         command.setId(id);
 
         try {

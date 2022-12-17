@@ -4,7 +4,6 @@ import com.bankingsolution.account.query.queries.transaction.FindAllTransactions
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,7 @@ public class AccountTransactionController {
     }
 
     @GetMapping(value = "/getTransactions/{accountId}", produces = "application/json")
-    public ResponseEntity getTransactionsByAccountId(@PathVariable(value = "accountId") String accountId) {
+    public ResponseEntity<ResponseModel> getTransactionsByAccountId(@PathVariable(value = "accountId") String accountId) {
         try {
             ResponseModel response = queryDispatcher.send(new FindAllTransactionsByAccountIdQuery(accountId));
             return ResponseEntity.ok(response);
