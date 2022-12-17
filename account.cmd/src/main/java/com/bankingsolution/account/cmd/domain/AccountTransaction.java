@@ -59,31 +59,6 @@ public class AccountTransaction extends AggregateRoot {
         );
     }
 
-    public void apply(TransactionCreatedEvent event) {
-        this.id = event.getId();
-        this.active = true;
-        this.accountId = event.getAccountId();
-        this.direction = event.getDirection();
-        this.amount = event.getAmount();
-        this.status = event.getStatus();
-        this.transactionTime = event.getTransactionTime();
-        this.description = event.getDescription();
-        this.currency = event.getCurrencyCode();
-        this.balanceAfterTxn = event.getBalanceAfterTxn();
-    }
-
-    public void apply(TransactionFailedEvent event) {
-        this.id = event.getId();
-        this.active = true;
-        this.accountId = event.getAccountId();
-        this.direction = event.getDirection();
-        this.amount = event.getAmount();
-        this.status = event.getStatus();
-        this.transactionTime = event.getTransactionTime();
-        this.description = event.getDescription();
-        this.currency = event.getCurrencyCode();
-    }
-
     public Boolean getActive() {
         return active;
     }

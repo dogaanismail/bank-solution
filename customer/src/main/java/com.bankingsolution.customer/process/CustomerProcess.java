@@ -5,7 +5,6 @@ import com.bankingsolution.customer.dto.request.CustomerCreateRequest;
 import com.bankingsolution.customer.dto.response.CustomerResponse;
 import com.bankingsolution.customer.model.Customer;
 import com.bankingsolution.customer.service.CustomerService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +15,7 @@ import java.util.List;
 public class CustomerProcess {
     private final CustomerService customerService;
 
-    public CustomerProcess(ModelMapper modelMapper,
-                           CustomerService customerService) {
+    public CustomerProcess(CustomerService customerService) {
         this.customerService = customerService;
     }
 

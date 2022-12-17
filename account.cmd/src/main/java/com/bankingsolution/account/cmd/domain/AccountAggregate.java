@@ -78,7 +78,7 @@ public class AccountAggregate extends AggregateRoot {
                         .country(command.getCountry())
                         .build();
 
-        List<AccountBalanceEvent> balanceEvents = new ArrayList<AccountBalanceEvent>();
+        List<AccountBalanceEvent> balanceEvents = new ArrayList<>();
 
         for (AccountBalance balance : accountBalances) {
             AccountBalanceEvent balanceEvent =

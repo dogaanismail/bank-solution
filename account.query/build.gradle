@@ -6,7 +6,8 @@ plugins {
 
 group = 'com.bankingsolution'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 configurations {
 	compileOnly {
@@ -21,9 +22,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.13'
-    implementation 'junit:junit:4.13.1'
+    implementation 'junit:junit:4.13.2'
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation project(':cqrs.core')
@@ -33,6 +34,6 @@ dependencies {
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
 }

@@ -15,9 +15,6 @@ public interface AccountBalanceMapper {
     @Update("UPDATE account_balance SET balance = #{balance} WHERE account_balance_id = #{accountBalanceId}")
     void updateAccountBalance(AccountBalance balance);
 
-    @Select("SELECT * FROM account_balance where customer_id = #{customerId}")
-    List<AccountBalance> getBalanceByCustomerId(@Param("customerId") Long customerId);
-
     @Select("SELECT * FROM account_balance WHERE account_id = #{accountId} AND currency_code = #{currencyCode}")
     @Results(id = "accountBalanceResult", value = {
             @Result(property = "accountId", column = "account_id"),

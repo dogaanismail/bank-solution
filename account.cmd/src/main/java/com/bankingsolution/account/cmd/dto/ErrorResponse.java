@@ -3,8 +3,10 @@ package com.bankingsolution.account.cmd.dto;
 import com.bankingsolution.common.dto.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

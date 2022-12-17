@@ -8,8 +8,7 @@ public class CustomerCreateRequest {
         return country;
     }
 
-    public CustomerCreateRequest setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
-        return this;
     }
 }

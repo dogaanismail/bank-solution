@@ -30,7 +30,7 @@ public class AccountTransactionControllerIntegrationTest {
     ObjectMapper objectMapper;
 
     @Test
-    public void shouldBeCompletedTransactionSuccesfully() throws Exception {
+    public void shouldBeCompletedTransactionSuccessfully() throws Exception {
         AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
 
         accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
@@ -125,7 +125,7 @@ public class AccountTransactionControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnErrorIfThereIsInsufficentFunds() throws Exception {
+    public void shouldReturnErrorIfThereIsInsufficientFunds() throws Exception {
         AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
 
         accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");

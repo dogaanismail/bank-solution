@@ -7,7 +7,6 @@ import com.bankingsolution.account.query.queries.transaction.FindAllTransactions
 import com.bankingsolution.account.query.queries.transaction.ITransactionQueryHandler;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

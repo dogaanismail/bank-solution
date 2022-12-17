@@ -1,13 +1,11 @@
 package com.bankingsolution.account.query.domain;
 
 import com.bankingsolution.cqrs.core.events.BaseEvent;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

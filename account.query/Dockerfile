@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11.0.4_11-jre-hotspot
+FROM openjdk:17-jdk-slim
 EXPOSE 5003
 
 RUN mkdir -p /usr/app

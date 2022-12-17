@@ -1,6 +1,5 @@
 package com.bankingsolution.account.query.infrastructure;
 
-import com.bankingsolution.cqrs.core.domain.BaseEntity;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
 import com.bankingsolution.cqrs.core.queries.BaseQuery;

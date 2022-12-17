@@ -8,7 +8,6 @@ import com.bankingsolution.cqrs.core.events.BaseEvent;
 import com.bankingsolution.cqrs.core.events.EventModel;
 import com.bankingsolution.cqrs.core.infrastructure.EventStore;
 import com.bankingsolution.cqrs.core.producers.EventProducer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

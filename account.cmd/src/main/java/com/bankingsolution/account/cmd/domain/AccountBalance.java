@@ -1,6 +1,5 @@
 package com.bankingsolution.account.cmd.domain;
 
-import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;

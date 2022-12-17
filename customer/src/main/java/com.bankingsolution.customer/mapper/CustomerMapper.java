@@ -13,13 +13,13 @@ public interface CustomerMapper {
 
     @Insert("INSERT INTO customer(country) VALUES" + "(#{country})")
     @Options(useGeneratedKeys = true, keyProperty = "customerId", keyColumn = "customer_id")
-    public void insertCustomer(Customer customer);
+    void insertCustomer(Customer customer);
 
     @Select("SELECT customer_id as customerId, country as country FROM customer")
-    public List<Customer> getAllCustomers();
+    List<Customer> getAllCustomers();
 
     @Select("SELECT customer_id as customerId, country as country FROM customer as cust" +
             " WHERE customer_id = #{customerId}")
-    public Customer getCustomerById(Long customerId);
+    Customer getCustomerById(Long customerId);
 
 }

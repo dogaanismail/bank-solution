@@ -3,7 +3,6 @@ package com.bankingsolution.account.query.infrastructure.consumers.accounting;
 import com.bankingsolution.account.query.infrastructure.handlers.accounting.IAccountEventHandler;
 import com.bankingsolution.common.events.AccountOpenedEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

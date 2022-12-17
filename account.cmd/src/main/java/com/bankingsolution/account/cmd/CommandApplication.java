@@ -6,7 +6,6 @@ import com.bankingsolution.account.cmd.commands.transaction.ITransactionCommandH
 import com.bankingsolution.account.cmd.commands.transaction.TransactionCommand;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

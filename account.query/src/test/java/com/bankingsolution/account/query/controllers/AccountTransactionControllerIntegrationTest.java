@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountTransactionControllerIntegrationTest {
 
     @Autowired
-    private MockMvc mvc;
+    MockMvc mvc;
 
     @Autowired
     ObjectMapper objectMapper;
