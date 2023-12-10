@@ -32,14 +32,12 @@ public class AccountTransactionController {
     }
 
     @PostMapping("/createTransaction")
-    public ResponseEntity transaction(@RequestBody AccountTransactionRequest accountTransactionRequest) {
-        TransactionCommand command = ObjectMapperUtils.map(accountTransactionRequest, TransactionCommand.class);
-
+    public ResponseEntity transaction(@RequestBody TransactionCommand transactionCommand) {
         var id = GenerateUuidUtils.generateUuid().toString();
-        command.setId(id);
+        transactionCommand.setId(id);
 
         try {
-            return ResponseEntity.ok(commandDispatcher.send(command));
+            return ResponseEntity.ok(commandDispatcher.send(transactionCommand));
         } catch (Exception e) {
             var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
             logger.log(Level.SEVERE, safeErrorMessage, e);

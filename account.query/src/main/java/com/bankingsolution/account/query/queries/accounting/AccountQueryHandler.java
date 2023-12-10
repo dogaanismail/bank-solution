@@ -1,5 +1,6 @@
 package com.bankingsolution.account.query.queries.accounting;
 
+import com.bankingsolution.account.query.domain.AccountBalance;
 import com.bankingsolution.account.query.dto.AccountResponse;
 import com.bankingsolution.account.query.dto.BalanceResponse;
 import com.bankingsolution.account.query.mappers.AccountBalanceMapper;
@@ -41,12 +42,20 @@ public class AccountQueryHandler implements IAccountQueryHandler {
             return GenericResponse.generateResponse(ResponseStatus.ERROR, null, "Invalid bank account!");
         }
 
-        final var accountBalance = accountBalanceMapper.getBalancesByAccountId(query.getId());
+        final var balances = accountBalanceMapper.getBalancesByAccountId(query.getId());
 
-        var response = ObjectMapperUtils.map(bankAccount, AccountResponse.class);
-        var balances = ObjectMapperUtils.mapAll(accountBalance, BalanceResponse.class);
-
-        response.setAccountBalances(balances);
+        final var response = new AccountResponse(
+                bankAccount.getAccountId(),
+                bankAccount.getCustomerId(),
+                balances.
+                        stream()
+                        .map(this::mapBalance)
+                        .toList()
+        );
         return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response);
+    }
+
+    private BalanceResponse mapBalance(AccountBalance balance) {
+        return new BalanceResponse(balance.getCurrencyCode(), balance.getAvailableBalance());
     }
 }

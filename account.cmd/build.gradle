@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.13'
     implementation 'junit:junit:4.13.2'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0'
     compileOnly 'org.projectlombok:lombok'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.5'
 	annotationProcessor 'org.projectlombok:lombok'

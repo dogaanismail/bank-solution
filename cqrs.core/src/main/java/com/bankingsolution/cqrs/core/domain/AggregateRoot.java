@@ -37,8 +37,8 @@ public abstract class AggregateRoot {
                     MessageFormat.format(
                             "The apply method was not found in the aggregate for {0}",
                             event.getClass().getName()));
-        } catch (Exception e) {
-            log.error("Error applying event to aggregate", e);
+        } catch (Exception exception) {
+            log.error("Error applying event to aggregate, message: {}, className: {}", exception.getMessage(), event.getClass().getName(), exception);
         } finally {
             if (isNewEvent) {
                 changes.add(event);

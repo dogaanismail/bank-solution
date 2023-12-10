@@ -3,6 +3,7 @@ version: "3.4"
 services:
 
   customerdb:
+    platform: linux/x86_64
     container_name: customerdb
     image: postgres
     environment:
@@ -17,6 +18,7 @@ services:
       - host
 
   querydb:
+    platform: linux/x86_64
     container_name: querydb
     image: postgres
     environment:
@@ -31,8 +33,9 @@ services:
       - host
 
   rabbitmq:
+    platform: linux/x86_64
     container_name: "bank_rabbitmq"
-    image: "rabbitmq:3.8-management"
+    image: "rabbitmq:3.12-management"
     hostname: "rabbitmq"
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
@@ -45,8 +48,9 @@ services:
       - host
 
   cmddb:
+    platform: linux/x86_64
     container_name: "cmddb"
-    image: mongo
+    image: mongo:4.4.18
     restart: always
     ports:
         - "27017:27017"
@@ -54,13 +58,14 @@ services:
       - host
 
   customer-service:
+    platform: linux/x86_64
     image: bank/customer-service-api
     container_name: customer-service
     build:
       context: ./customer
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5001:5001"
     depends_on:
       - customerdb
     environment:
@@ -71,6 +76,7 @@ services:
       - host
 
   account-cmd:
+    platform: linux/x86_64
     image: bank/account-cmd-service-api
     container_name: account-cmd-service
     build:
@@ -89,11 +95,12 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
-      - SPRING_FEIGN_CUSTOMER_CLIENT=http://customer-service:5000/
+      - SPRING_FEIGN_CUSTOMER_CLIENT=http://customer-service:5001/
     networks:
       - host
 
   account-query:
+    platform: linux/x86_64
     image: bank/account-query-service-api
     container_name: account-query-service
     build:
@@ -116,6 +123,7 @@ services:
       - host
 
   k6:
+    platform: linux/x86_64
     container_name: k6_container
     image: loadimpact/k6:latest
     volumes:

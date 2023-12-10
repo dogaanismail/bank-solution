@@ -30,7 +30,11 @@ public class AccountControllerIntegrationTest {
 
     @Test
     public void shouldCreateNewAccountSuccessfully() throws Exception {
-        final var accountCreateRequest = new AccountCreateRequest(1L, "ESTONIA", List.of("SEK", "USD"));
+        AccountCreateRequest accountCreateRequest = new AccountCreateRequest();
+
+        accountCreateRequest.setCustomerId(1);
+        accountCreateRequest.setCountry("ESTONIA");
+        accountCreateRequest.setCurrencies(List.of(new String[]{"SEK", "USD"}));
 
         this.mvc.perform(post("/api/v1/account/openAccount")
                         .accept(MediaType.APPLICATION_JSON)
@@ -43,7 +47,11 @@ public class AccountControllerIntegrationTest {
 
     @Test
     public void shouldNotCreateAccountIfCurrencyInvalid() throws Exception {
-        final var accountCreateRequest = new AccountCreateRequest(1L, "ESTONIA", List.of("TRY"));
+        AccountCreateRequest accountCreateRequest = new AccountCreateRequest();
+
+        accountCreateRequest.setCustomerId(1);
+        accountCreateRequest.setCountry("ESTONIA");
+        accountCreateRequest.setCurrencies(List.of(new String[]{"TRY"}));
 
         this.mvc.perform(post("/api/v1/account/openAccount")
                         .accept(MediaType.APPLICATION_JSON)
@@ -56,7 +64,11 @@ public class AccountControllerIntegrationTest {
 
     @Test
     public void shouldNotCreateAccountIfAlreadyExists() throws Exception {
-        final var accountCreateRequest = new AccountCreateRequest(1L, "ESTONIA", List.of("SEK", "USD"));
+        AccountCreateRequest accountCreateRequest = new AccountCreateRequest();
+
+        accountCreateRequest.setCustomerId(1);
+        accountCreateRequest.setCountry("ESTONIA");
+        accountCreateRequest.setCurrencies(List.of(new String[]{"SEK", "USD"}));
 
         this.mvc.perform(post("/api/v1/account/openAccount")
                         .accept(MediaType.APPLICATION_JSON)
@@ -66,7 +78,11 @@ public class AccountControllerIntegrationTest {
                 .andExpect(jsonPath("$.status").value(ResponseStatus.SUCCESS.toString()))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
-        final var accountCreateRequest_2 = new AccountCreateRequest(1L, "ESTONIA", List.of("USD"));
+        AccountCreateRequest accountCreateRequest_2 = new AccountCreateRequest();
+
+        accountCreateRequest_2.setCustomerId(1);
+        accountCreateRequest_2.setCountry("ESTONIA");
+        accountCreateRequest_2.setCurrencies(List.of(new String[]{"USD"}));
 
         this.mvc.perform(post("/api/v1/account/openAccount")
                         .accept(MediaType.APPLICATION_JSON)
@@ -79,7 +95,11 @@ public class AccountControllerIntegrationTest {
 
     @Test
     public void shouldNotCreateIfCustomerDoesNotExist() throws Exception {
-        final var accountCreateRequest = new AccountCreateRequest(999999999L, "ESTONIA", List.of("TRY"));
+        AccountCreateRequest accountCreateRequest = new AccountCreateRequest();
+
+        accountCreateRequest.setCustomerId(999999999);
+        accountCreateRequest.setCountry("ESTONIA");
+        accountCreateRequest.setCurrencies(List.of(new String[]{"TRY"}));
 
         this.mvc.perform(post("/api/v1/account/openAccount")
                         .accept(MediaType.APPLICATION_JSON)

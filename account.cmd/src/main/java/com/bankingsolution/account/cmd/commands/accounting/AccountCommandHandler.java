@@ -1,12 +1,12 @@
 package com.bankingsolution.account.cmd.commands.accounting;
 
+import com.bankingsolution.account.cmd.client.CustomerServiceClient;
 import com.bankingsolution.account.cmd.domain.AccountAggregate;
+import com.bankingsolution.account.cmd.domain.AccountBalance;
 import com.bankingsolution.account.cmd.dto.AccountBalanceResponse;
 import com.bankingsolution.account.cmd.dto.OpenAccountResponse;
-import com.bankingsolution.account.cmd.client.CustomerServiceClient;
 import com.bankingsolution.common.exceptions.CurrencyNotSupportedException;
 import com.bankingsolution.common.exceptions.CustomerNotFoundException;
-import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.common.validation.ValidationHelper;
 import com.bankingsolution.cqrs.core.generics.GenericResponse;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
@@ -58,7 +58,10 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         return new OpenAccountResponse(
                 aggregate.getId(),
                 aggregate.getCustomerId(),
-                ObjectMapperUtils.mapAll(aggregate.getAccountBalances(), AccountBalanceResponse.class));
+                aggregate.getAccountBalances()
+                        .stream()
+                        .map(this::mapBalance)
+                        .toList());
     }
 
     private void validateCurrencies(List<String> currencies) {
@@ -75,5 +78,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         if (customer == null) {
             throw new CustomerNotFoundException("Customer could not be found!");
         }
+    }
+
+    private AccountBalanceResponse mapBalance(AccountBalance balance) {
+        return new AccountBalanceResponse(balance.getCurrencyCode(), balance.getAvailableBalance());
     }
 }

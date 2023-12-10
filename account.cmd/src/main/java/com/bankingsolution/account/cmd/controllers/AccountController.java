@@ -2,9 +2,7 @@ package com.bankingsolution.account.cmd.controllers;
 
 import com.bankingsolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.bankingsolution.account.cmd.dto.ErrorResponse;
-import com.bankingsolution.account.cmd.dto.request.AccountCreateRequest;
 import com.bankingsolution.common.utils.GenerateUuidUtils;
-import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,13 +29,11 @@ public class AccountController {
     }
 
     @PostMapping("/openAccount")
-    public ResponseEntity openAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
-        OpenAccountCommand command = ObjectMapperUtils.map(accountCreateRequest, OpenAccountCommand.class);
-        var id = GenerateUuidUtils.generateUuid().toString();
-        command.setId(id);
-
+    public ResponseEntity openAccount(@RequestBody OpenAccountCommand openAccountCommand) {
+        final var id = GenerateUuidUtils.generateUuid().toString();
         try {
-            return ResponseEntity.ok(commandDispatcher.send(command));
+            openAccountCommand.setId(id);
+            return ResponseEntity.ok(commandDispatcher.send(openAccountCommand));
         } catch (Exception e) {
             var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
             logger.log(Level.SEVERE, safeErrorMessage, e);

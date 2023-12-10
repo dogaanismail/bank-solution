@@ -34,11 +34,10 @@ create table account_transaction
     direction varchar NOT NULL,
     amount bigint NOT NULL,
     status varchar NOT NULL,
-    transaction_time timestamp without time zone NOT NULL,
+    created_at varchar NOT NULL,
     description varchar NOT NULL,
     currency varchar NOT NULL,
     balance_after_txn bigint NOT NULL
-
 );
 
 

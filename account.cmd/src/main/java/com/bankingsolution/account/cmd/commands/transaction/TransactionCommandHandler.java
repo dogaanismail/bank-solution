@@ -43,7 +43,6 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
             final var balanceAfterTxn = doTransaction(command);
             command.setBalanceAfterTxn(balanceAfterTxn);
 
-            sendTransactionEvent(command);
             return createTransaction(command);
         } catch (Exception exception) {
             markTransactionAsFailed(command);
@@ -73,6 +72,12 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         }
     }
 
+    private void sendTransactionEvent(TransactionCommand command) {
+        var transactionAggregate = new AccountTransaction();
+        transactionAggregate.createTransaction(command);
+        transactionEventSourcingHandler.save(transactionAggregate);
+    }
+
     private BigDecimal doTransaction(TransactionCommand command) {
         final var accountAggregate = accountAggregateEventSourcingHandler.getById(command.getAccountId());
 
@@ -88,21 +93,17 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         return balanceAfterTxn;
     }
 
-    private void sendTransactionEvent(TransactionCommand command) {
-        var transactionAggregate = new AccountTransaction();
-        transactionAggregate.createTransaction(command);
-        transactionEventSourcingHandler.save(transactionAggregate);
-    }
 
     private ResponseModel createTransaction(TransactionCommand command) {
         var transactionAggregate = new AccountTransaction();
 
         transactionAggregate.createTransaction(command);
+        transactionEventSourcingHandler.save(transactionAggregate);
 
         final var response = new TransactionCreateResponse(
                 transactionAggregate.getAccountId(),
                 transactionAggregate.getId(),
-                TransactionDirection.valueOf(transactionAggregate.getDirection()),
+                transactionAggregate.getDirection(),
                 transactionAggregate.getAmount(),
                 transactionAggregate.getCurrency(),
                 transactionAggregate.getDescription(),

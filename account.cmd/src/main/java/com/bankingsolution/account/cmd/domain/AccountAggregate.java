@@ -14,6 +14,7 @@ import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class AccountAggregate extends AggregateRoot {
     private Long customerId;
     private Boolean active;
     private String country;
+    private Instant createdAt;
 
     protected List<AccountBalance> accountBalances = new ArrayList<>();
 
@@ -34,7 +36,11 @@ public class AccountAggregate extends AggregateRoot {
         this.active = true;
         this.country = event.getCountry();
         this.customerId = event.getCustomerId();
-        this.accountBalances = ObjectMapperUtils.mapAll(event.getAccountBalances(), AccountBalance.class);
+        this.createdAt = Instant.now();
+        this.accountBalances = event.getAccountBalances()
+                .stream()
+                .map(this::mapBalance)
+                .toList();
     }
 
     public void apply(FundsDepositedEvent event) {
@@ -66,7 +72,8 @@ public class AccountAggregate extends AggregateRoot {
             throw new AccountAlreadyExists("Account balance is already exist!");
         }
 
-        final var balance = new AccountBalance(UUID.randomUUID().toString(),
+        final var balance = new AccountBalance(
+                UUID.randomUUID().toString(),
                 customerId,
                 currencyCode,
                 BigDecimal.ZERO,
@@ -169,5 +176,15 @@ public class AccountAggregate extends AggregateRoot {
                         x.getCustomerId().equals(customerId) &&
                                 x.getCurrencyCode().equals(currencyCode))
                 .findFirst();
+    }
+
+    private AccountBalance mapBalance(AccountBalanceEvent balanceEvent) {
+        return new AccountBalance(
+                balanceEvent.getCustomerId(),
+                balanceEvent.getAccountBalanceId(),
+                balanceEvent.getAccountId(),
+                balanceEvent.getCurrencyCode(),
+                balanceEvent.getBalance(),
+                balanceEvent.getAvailableBalance());
     }
 }

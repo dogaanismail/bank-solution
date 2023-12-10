@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping(path = "/api/v1/customer")
 public class CustomerController {
 
     private final CustomerProcess customerProcess;
@@ -19,7 +19,7 @@ public class CustomerController {
         this.customerProcess = customerProcess;
     }
 
-    @PostMapping("/createCustomer")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<HttpStatus> createAccount(@RequestBody CustomerCreateRequest customerCreateRequest) {
         try {
