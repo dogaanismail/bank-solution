@@ -62,8 +62,9 @@ public class AccountAggregate extends AggregateRoot {
     public void addAccountBalance(String accountId, Long customerId, String currencyCode) {
         final var accountBalance = findAccountBalance(customerId, currencyCode);
 
-        if (accountBalance.isPresent())
+        if (accountBalance.isPresent()) {
             throw new AccountAlreadyExists("Account balance is already exist!");
+        }
 
         final var balance = new AccountBalance(UUID.randomUUID().toString(),
                 customerId,
@@ -76,13 +77,12 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public void openAccount(OpenAccountCommand command) {
-        var accountOpenedEvent =
-                AccountOpenedEvent.builder()
-                        .id(command.getId())
-                        .accountId(command.getId())
-                        .customerId(command.getCustomerId())
-                        .country(command.getCountry())
-                        .build();
+        var accountOpenedEvent = AccountOpenedEvent.builder()
+                .id(command.getId())
+                .accountId(command.getId())
+                .customerId(command.getCustomerId())
+                .country(command.getCountry())
+                .build();
 
         List<AccountBalanceEvent> balanceEvents = new ArrayList<>();
 
@@ -128,8 +128,9 @@ public class AccountAggregate extends AggregateRoot {
 
         final var balanceAfterTxn = accountBalance.getBalance().subtract(command.getAmount());
 
-        if (balanceAfterTxn.compareTo(BigDecimal.ZERO) < 0)
+        if (balanceAfterTxn.compareTo(BigDecimal.ZERO) < 0) {
             throw new InsufficientFundsException("Insufficient account balance!");
+        }
 
         raiseEvent(
                 FundsWithDrawnEvent.builder().id(this.id)
@@ -143,7 +144,7 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     private void updateAccountBalance(AccountBalance balance) {
-        int index = IntStream.range(0, this.accountBalances.size())
+        final var index = IntStream.range(0, this.accountBalances.size())
                 .filter(i -> this.accountBalances.get(i).getAccountBalanceId().equals(balance.getAccountBalanceId()))
                 .findFirst()
                 .orElse(-1);

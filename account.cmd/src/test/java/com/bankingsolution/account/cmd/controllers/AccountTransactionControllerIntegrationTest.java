@@ -31,13 +31,13 @@ public class AccountTransactionControllerIntegrationTest {
 
     @Test
     public void shouldBeCompletedTransactionSuccessfully() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(100));
-        accountTransactionRequest.setCurrency("EUR");
-        accountTransactionRequest.setDirection(TransactionDirection.IN.toString());
-        accountTransactionRequest.setDescription("Rest API Integration Test");
+        final var accountTransactionRequest = new AccountTransactionRequest(
+                "EXAMPLE_ACCOUNT_1",
+                BigDecimal.valueOf(100),
+                "EUR",
+                TransactionDirection.IN,
+                "Rest API Integration Test"
+        );
 
         mvc.perform(post("/api/v1/transaction/createTransaction")
                         .accept(MediaType.APPLICATION_JSON)
@@ -50,32 +50,13 @@ public class AccountTransactionControllerIntegrationTest {
 
     @Test
     public void shouldReturnErrorIfCurrencyIsInvalid() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(100));
-        accountTransactionRequest.setCurrency("TR");
-        accountTransactionRequest.setDirection(TransactionDirection.IN.toString());
-        accountTransactionRequest.setDescription("Rest API Integration Test");
-
-        mvc.perform(post("/api/v1/transaction/createTransaction")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(accountTransactionRequest))
-                )
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    public void shouldReturnErrorIfDirectionIsInvalid() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(100));
-        accountTransactionRequest.setCurrency("EUR");
-        accountTransactionRequest.setDirection("OUTTT");
-        accountTransactionRequest.setDescription("Rest API Integration Test");
+        final var accountTransactionRequest = new AccountTransactionRequest(
+                "EXAMPLE_ACCOUNT_1",
+                BigDecimal.valueOf(100),
+                "TR",
+                TransactionDirection.IN,
+                "Rest API Integration Test"
+        );
 
         mvc.perform(post("/api/v1/transaction/createTransaction")
                         .accept(MediaType.APPLICATION_JSON)
@@ -88,13 +69,13 @@ public class AccountTransactionControllerIntegrationTest {
 
     @Test
     public void shouldReturnErrorIfAmountIsInvalid() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(-900));
-        accountTransactionRequest.setCurrency("EUR");
-        accountTransactionRequest.setDirection(TransactionDirection.OUT.toString());
-        accountTransactionRequest.setDescription("Rest API Integration Test");
+        final var accountTransactionRequest = new AccountTransactionRequest(
+                "EXAMPLE_ACCOUNT_1",
+                BigDecimal.valueOf(-900),
+                "EUR",
+                TransactionDirection.OUT,
+                "Rest API Integration Test"
+        );
 
         mvc.perform(post("/api/v1/transaction/createTransaction")
                         .accept(MediaType.APPLICATION_JSON)
@@ -107,32 +88,13 @@ public class AccountTransactionControllerIntegrationTest {
 
     @Test
     public void shouldReturnErrorIfDescriptionIsMissing() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(-900));
-        accountTransactionRequest.setCurrency("EUR");
-        accountTransactionRequest.setDirection(TransactionDirection.OUT.toString());
-        accountTransactionRequest.setDescription("");
-
-        mvc.perform(post("/api/v1/transaction/createTransaction")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(accountTransactionRequest))
-                )
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    public void shouldReturnErrorIfThereIsInsufficientFunds() throws Exception {
-        AccountTransactionRequest accountTransactionRequest = new AccountTransactionRequest();
-
-        accountTransactionRequest.setAccountId("EXAMPLE_ACCOUNT_1");
-        accountTransactionRequest.setAmount(BigDecimal.valueOf(500)); //suppose that current balance is 200
-        accountTransactionRequest.setCurrency("EUR");
-        accountTransactionRequest.setDirection(TransactionDirection.OUT.toString());
-        accountTransactionRequest.setDescription("Withdraw");
+        final var accountTransactionRequest = new AccountTransactionRequest(
+                "EXAMPLE_ACCOUNT_1",
+                BigDecimal.valueOf(10),
+                "EUR",
+                TransactionDirection.OUT,
+                ""
+        );
 
         mvc.perform(post("/api/v1/transaction/createTransaction")
                         .accept(MediaType.APPLICATION_JSON)

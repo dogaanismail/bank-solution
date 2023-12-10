@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-
 public class AccountOpenedEvent extends BaseEvent implements Serializable {
     private long customerId;
     private String country;

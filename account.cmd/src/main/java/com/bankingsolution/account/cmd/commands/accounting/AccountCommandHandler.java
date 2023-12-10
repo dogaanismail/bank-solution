@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class AccountCommandHandler implements IAccountCommandHandler {
 
+    private final static String ACCOUNT_CREATION_SUCCESS_RESPONSE = "Account has been successfully opened!";
     private final EventSourcingHandler<AccountAggregate> eventSourcingHandlers;
     private final CustomerServiceClient customerService;
 
@@ -40,7 +41,7 @@ public class AccountCommandHandler implements IAccountCommandHandler {
 
         final var response = createOpenAccountResponse(aggregate);
 
-        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Account has been successfully opened!");
+        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, ACCOUNT_CREATION_SUCCESS_RESPONSE);
     }
 
     private void validateAndAddAccountBalances(AccountAggregate aggregate, OpenAccountCommand command) {
@@ -54,11 +55,10 @@ public class AccountCommandHandler implements IAccountCommandHandler {
     }
 
     private OpenAccountResponse createOpenAccountResponse(AccountAggregate aggregate) {
-        return OpenAccountResponse.builder()
-                .accountId(aggregate.getId())
-                .customerId(aggregate.getCustomerId())
-                .accountBalances(ObjectMapperUtils.mapAll(aggregate.getAccountBalances(), AccountBalanceResponse.class))
-                .build();
+        return new OpenAccountResponse(
+                aggregate.getId(),
+                aggregate.getCustomerId(),
+                ObjectMapperUtils.mapAll(aggregate.getAccountBalances(), AccountBalanceResponse.class));
     }
 
     private void validateCurrencies(List<String> currencies) {

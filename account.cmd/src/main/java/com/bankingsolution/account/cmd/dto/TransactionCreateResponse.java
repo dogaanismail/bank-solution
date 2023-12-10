@@ -1,23 +1,14 @@
 package com.bankingsolution.account.cmd.dto;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.bankingsolution.common.enums.TransactionDirection;
 
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class TransactionCreateResponse {
-    private String accountId;
-    private String transactionId;
-    private String direction;
-    private BigDecimal amount;
-    private String currencyCode;
-    private String description;
-    private BigDecimal balanceAfterTxn;
+public record TransactionCreateResponse(String accountId,
+                                        String transactionId,
+                                        TransactionDirection direction,
+                                        BigDecimal amount,
+                                        String currencyCode,
+                                        String description,
+                                        BigDecimal balanceAfterTxn) {
 }

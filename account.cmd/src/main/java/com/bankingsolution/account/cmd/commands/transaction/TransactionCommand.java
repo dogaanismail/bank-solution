@@ -1,5 +1,6 @@
 package com.bankingsolution.account.cmd.commands.transaction;
 
+import com.bankingsolution.common.enums.TransactionDirection;
 import com.bankingsolution.cqrs.core.commands.BaseCommand;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,7 @@ public class TransactionCommand extends BaseCommand {
     private String currency;
 
     @NotEmpty
-    private String direction;
+    private TransactionDirection direction;
 
     @NotEmpty
     private String description;

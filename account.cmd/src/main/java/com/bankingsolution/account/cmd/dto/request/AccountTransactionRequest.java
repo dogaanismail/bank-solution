@@ -1,25 +1,13 @@
 package com.bankingsolution.account.cmd.dto.request;
 
-import lombok.Data;
+import com.bankingsolution.common.enums.TransactionDirection;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Data
-public class AccountTransactionRequest {
-
-    @NotEmpty
-    private String accountId;
-
-    @NotEmpty
-    private BigDecimal amount;
-
-    @NotEmpty
-    private String currency;
-
-    @NotEmpty
-    private String direction;
-
-    @NotEmpty
-    private String description;
-}
+public record AccountTransactionRequest(@NotEmpty String accountId,
+                                        @NotEmpty BigDecimal amount,
+                                        @NotEmpty String currency,
+                                        @NotNull TransactionDirection direction,
+                                        @NotEmpty String description) { }

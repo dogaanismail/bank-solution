@@ -18,7 +18,8 @@ import java.util.List;
 @Service
 public class TransactionCommandHandler implements ITransactionCommandHandler {
 
-    private final static List<String> TRANSACTION_DIRECTIONS = List.of(TransactionDirection.IN.name(), TransactionDirection.OUT.name());
+    private final static String TRANSACTION_SUCCESS_RESPONSE = "Transaction has been successfully done!";
+    private final static List<TransactionDirection> TRANSACTION_DIRECTIONS = List.of(TransactionDirection.IN, TransactionDirection.OUT);
     private final EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler;
     private final EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler;
 
@@ -43,7 +44,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
             command.setBalanceAfterTxn(balanceAfterTxn);
 
             sendTransactionEvent(command);
-            return generateTransactionSuccessResponse(command);
+            return createTransaction(command);
         } catch (Exception exception) {
             markTransactionAsFailed(command);
             throw exception;
@@ -77,7 +78,7 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
 
         BigDecimal balanceAfterTxn;
 
-        if (command.getDirection().equals(TransactionDirection.IN.toString())) {
+        if (command.getDirection() == TransactionDirection.IN) {
             balanceAfterTxn = accountAggregate.deposit(command);
         } else {
             balanceAfterTxn = accountAggregate.withdraw(command);
@@ -93,25 +94,27 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         transactionEventSourcingHandler.save(transactionAggregate);
     }
 
-    private ResponseModel generateTransactionSuccessResponse(TransactionCommand command) {
+    private ResponseModel createTransaction(TransactionCommand command) {
         var transactionAggregate = new AccountTransaction();
-        transactionAggregate.createTransaction(command);
-        final var response = TransactionCreateResponse.builder()
-                .accountId(transactionAggregate.getAccountId())
-                .transactionId(transactionAggregate.getId())
-                .amount(transactionAggregate.getAmount())
-                .currencyCode(transactionAggregate.getCurrency())
-                .direction(transactionAggregate.getDirection())
-                .description(transactionAggregate.getDescription())
-                .balanceAfterTxn(transactionAggregate.getBalanceAfterTxn())
-                .build();
 
-        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Transaction has been successfully done!");
+        transactionAggregate.createTransaction(command);
+
+        final var response = new TransactionCreateResponse(
+                transactionAggregate.getAccountId(),
+                transactionAggregate.getId(),
+                TransactionDirection.valueOf(transactionAggregate.getDirection()),
+                transactionAggregate.getAmount(),
+                transactionAggregate.getCurrency(),
+                transactionAggregate.getDescription(),
+                transactionAggregate.getBalanceAfterTxn()
+        );
+
+        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, TRANSACTION_SUCCESS_RESPONSE);
     }
 
     private void markTransactionAsFailed(TransactionCommand command) {
         var failedTransactionAggregate = new AccountTransaction();
-        failedTransactionAggregate.crateTransactionFailedData(command);
+        failedTransactionAggregate.createTransactionFailedData(command);
         transactionEventSourcingHandler.save(failedTransactionAggregate);
     }
 }
