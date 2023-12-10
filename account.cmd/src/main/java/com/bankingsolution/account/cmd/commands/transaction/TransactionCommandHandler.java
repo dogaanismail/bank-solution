@@ -13,13 +13,13 @@ import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.List;
 
 @Service
 public class TransactionCommandHandler implements ITransactionCommandHandler {
 
+    private final static List<String> TRANSACTION_DIRECTIONS = List.of(TransactionDirection.IN.name(), TransactionDirection.OUT.name());
     private final EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler;
-
     private final EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler;
 
     public TransactionCommandHandler(EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler,
@@ -32,63 +32,86 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
     public ResponseModel handle(TransactionCommand command) throws AccountBalanceNotFoundException,
             AccountNotFoundException,
             TransactionAmountException,
-            TransactionDescriptonException, InvaildDirectionException, InsufficientFundsException {
+            TransactionDescriptonException,
+            InvaildDirectionException,
+            InsufficientFundsException {
 
         try {
-            BigDecimal balanceAfterTxn = doTransaction(command);
+            validateTransactionCommand(command);
+
+            final var balanceAfterTxn = doTransaction(command);
             command.setBalanceAfterTxn(balanceAfterTxn);
-            var transactionAggregate = new AccountTransaction();
 
-            transactionAggregate.createTransaction(command);
-            transactionEventSourcingHandler.save(transactionAggregate);
-
-            TransactionCreateResponse response =
-                    TransactionCreateResponse.builder()
-                            .accountId(transactionAggregate.getAccountId())
-                            .transactionId(transactionAggregate.getId())
-                            .amount(transactionAggregate.getAmount())
-                            .currencyCode(transactionAggregate.getCurrency())
-                            .direction(transactionAggregate.getDirection())
-                            .description(transactionAggregate.getDescription())
-                            .balanceAfterTxn(transactionAggregate.getBalanceAfterTxn())
-                            .build();
-
-            return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Transaction has been successfully done!");
-
+            sendTransactionEvent(command);
+            return generateTransactionSuccessResponse(command);
         } catch (Exception exception) {
-            var failedTransactionAggregate = new AccountTransaction();
-            failedTransactionAggregate.crateTransactionFailedData(command);
-            transactionEventSourcingHandler.save(failedTransactionAggregate);
+            markTransactionAsFailed(command);
             throw exception;
         }
     }
 
+    private void validateTransactionCommand(TransactionCommand command) {
+        if (accountAggregateEventSourcingHandler.getById(command.getAccountId()) == null) {
+            throw new AccountNotFoundException("Account could not be found!");
+        }
+
+        if (command.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new TransactionAmountException("Transaction amount can not be less than zero!");
+        }
+
+        if (command.getDescription().isEmpty()) {
+            throw new TransactionDescriptonException("Description can not be missing!");
+        }
+
+        if (ValidationHelper.isCurrencySupported(command.getCurrency())) {
+            throw new CurrencyNotSupportedException("Currency is not supported!");
+        }
+
+        if (!TRANSACTION_DIRECTIONS.contains(command.getDirection())) {
+            throw new InvaildDirectionException("Invalid transaction direction!");
+        }
+    }
+
     private BigDecimal doTransaction(TransactionCommand command) {
-        var accountAggregate = accountAggregateEventSourcingHandler.getById(command.getAccountId());
+        final var accountAggregate = accountAggregateEventSourcingHandler.getById(command.getAccountId());
 
         BigDecimal balanceAfterTxn;
 
-        if (accountAggregate == null)
-            throw new AccountNotFoundException("Account could not be found!");
-
-        if (command.getAmount().compareTo(BigDecimal.ZERO) <= 0)
-            throw new TransactionAmountException("Transaction amount can not be less than zero!");
-
-        if (command.getDescription().isEmpty())
-            throw new TransactionDescriptonException("Description can not be missing!");
-
-        if(ValidationHelper.isCurrencySupported(command.getCurrency()))
-            throw new CurrencyNotSupportedException("Currency is not supported!");
-
-        if (Objects.equals(command.getDirection(), TransactionDirection.IN.toString())) {
+        if (command.getDirection().equals(TransactionDirection.IN.toString())) {
             balanceAfterTxn = accountAggregate.deposit(command);
-        } else if (Objects.equals(command.getDirection(), TransactionDirection.OUT.toString())) {
-            balanceAfterTxn = accountAggregate.withdraw(command);
         } else {
-            throw new InvaildDirectionException("Invalid direction!");
+            balanceAfterTxn = accountAggregate.withdraw(command);
         }
 
         accountAggregateEventSourcingHandler.save(accountAggregate);
         return balanceAfterTxn;
+    }
+
+    private void sendTransactionEvent(TransactionCommand command) {
+        var transactionAggregate = new AccountTransaction();
+        transactionAggregate.createTransaction(command);
+        transactionEventSourcingHandler.save(transactionAggregate);
+    }
+
+    private ResponseModel generateTransactionSuccessResponse(TransactionCommand command) {
+        var transactionAggregate = new AccountTransaction();
+        transactionAggregate.createTransaction(command);
+        final var response = TransactionCreateResponse.builder()
+                .accountId(transactionAggregate.getAccountId())
+                .transactionId(transactionAggregate.getId())
+                .amount(transactionAggregate.getAmount())
+                .currencyCode(transactionAggregate.getCurrency())
+                .direction(transactionAggregate.getDirection())
+                .description(transactionAggregate.getDescription())
+                .balanceAfterTxn(transactionAggregate.getBalanceAfterTxn())
+                .build();
+
+        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, "Transaction has been successfully done!");
+    }
+
+    private void markTransactionAsFailed(TransactionCommand command) {
+        var failedTransactionAggregate = new AccountTransaction();
+        failedTransactionAggregate.crateTransactionFailedData(command);
+        transactionEventSourcingHandler.save(failedTransactionAggregate);
     }
 }

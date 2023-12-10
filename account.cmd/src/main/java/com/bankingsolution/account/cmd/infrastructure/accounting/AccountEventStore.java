@@ -8,13 +8,11 @@ import com.bankingsolution.cqrs.core.events.BaseEvent;
 import com.bankingsolution.cqrs.core.events.EventModel;
 import com.bankingsolution.cqrs.core.infrastructure.EventStore;
 import com.bankingsolution.cqrs.core.producers.EventProducer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountEventStore implements EventStore {
@@ -32,16 +30,18 @@ public class AccountEventStore implements EventStore {
 
     @Override
     public void save(String aggregateId, Iterable<BaseEvent> events, int expectedVersion) {
-        var eventStream = repository.findByAggregateIdentifier(aggregateId);
+        final var eventStream = repository.findByAggregateIdentifier(aggregateId);
+
         if (expectedVersion != -1
                 && eventStream.get(eventStream.size() - 1).getVersion() != expectedVersion) {
             throw new ConcurrencyException();
         }
+
         var version = expectedVersion;
         for (var event : events) {
             version++;
             event.setVersion(version);
-            var eventModel =
+            final var eventModel =
                     EventModel.builder()
                             .timestamp(LocalDateTime.now())
                             .aggregateIdentifier(aggregateId)
@@ -51,7 +51,7 @@ public class AccountEventStore implements EventStore {
                             .eventData(event)
                             .build();
 
-            var persistedEvent = repository.save(eventModel);
+            final var persistedEvent = repository.save(eventModel);
             if (!persistedEvent.getId().isEmpty()) {
                 eventProducer.produce(event.getClass().getSimpleName(), event);
             }
@@ -60,23 +60,29 @@ public class AccountEventStore implements EventStore {
 
     @Override
     public List<BaseEvent> getEvents(String aggregateId) {
-        var eventStream = repository.findByAggregateIdentifier(aggregateId);
+        final var eventStream = repository.findByAggregateIdentifier(aggregateId);
+
         if (eventStream == null || eventStream.isEmpty()) {
             throw new AggregateNotFoundException("Incorrect account ID provided!");
         }
 
-        return eventStream.stream().map(EventModel::getEventData).collect(Collectors.toList());
+        return eventStream
+                .stream()
+                .map(EventModel::getEventData)
+                .toList();
     }
 
     @Override
     public List<String> getAggregateIds() {
-        var eventStream = repository.findAll();
+        final var eventStream = repository.findAll();
+
         if (eventStream.isEmpty()) {
             throw new IllegalStateException();
         }
+
         return eventStream.stream()
                 .map(EventModel::getAggregateIdentifier)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 }

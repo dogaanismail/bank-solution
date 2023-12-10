@@ -27,7 +27,7 @@ public class BaseCommandDispatcher implements CommandDispatcher {
     @Override
     public ResponseModel send(BaseCommand command) {
         var handlers = routes.get(command.getClass());
-        if (handlers == null || handlers.size() == 0) {
+        if (handlers == null || handlers.isEmpty()) {
             throw new RuntimeException("No command handler was registered!");
         }
         if (handlers.size() > 1) {

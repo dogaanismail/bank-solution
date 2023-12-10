@@ -1,6 +1,8 @@
 package com.bankingsolution.cqrs.core.domain;
 
 import com.bankingsolution.cqrs.core.events.BaseEvent;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.MessageFormat;
@@ -8,23 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Getter
 public abstract class AggregateRoot {
     protected String id;
+
+    @Setter
     private int version = -1;
 
     private final List<BaseEvent> changes = new ArrayList<>();
-
-    public String getId() {
-        return this.id;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
 
     public List<BaseEvent> getUncommittedChanges() {
         return this.changes;

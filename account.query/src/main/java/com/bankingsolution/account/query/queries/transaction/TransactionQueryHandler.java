@@ -3,11 +3,9 @@ package com.bankingsolution.account.query.queries.transaction;
 import com.bankingsolution.account.query.domain.AccountTransaction;
 import com.bankingsolution.account.query.mappers.TransactionMapper;
 import com.bankingsolution.cqrs.core.generics.GenericResponse;
-import com.bankingsolution.cqrs.core.generics.ResponseStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
-
+import com.bankingsolution.cqrs.core.generics.ResponseStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -23,8 +21,9 @@ public class TransactionQueryHandler implements ITransactionQueryHandler {
     public ResponseModel handle(FindAllTransactionsByAccountIdQuery query) {
         List<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
 
-        if (transactions.size() == 0)
+        if (transactions.isEmpty()){
             return GenericResponse.generateResponse(ResponseStatus.ERROR, null, "Invalid account!");
+        }
 
         return GenericResponse.generateResponse(ResponseStatus.SUCCESS, transactions);
     }

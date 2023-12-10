@@ -4,7 +4,6 @@ import com.bankingsolution.account.query.domain.Account;
 import com.bankingsolution.account.query.domain.AccountBalance;
 import com.bankingsolution.account.query.mappers.AccountBalanceMapper;
 import com.bankingsolution.account.query.mappers.AccountMapper;
-import com.bankingsolution.common.events.AccountBalanceEvent;
 import com.bankingsolution.common.events.AccountOpenedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,25 +28,23 @@ public class AccountEventHandler implements IAccountEventHandler {
     @Transactional
     public void on(AccountOpenedEvent event) {
         try {
-            var bankAccount =
-                    Account.builder()
-                            .accountId(event.getAccountId())
-                            .customerId(event.getCustomerId())
-                            .country(event.getCountry())
-                            .build();
+            final var bankAccount = Account.builder()
+                    .accountId(event.getAccountId())
+                    .customerId(event.getCustomerId())
+                    .country(event.getCountry())
+                    .build();
 
             accountMapper.insertAccount(bankAccount);
 
-            for (AccountBalanceEvent balanceEvent : event.getAccountBalances()) {
-                AccountBalance accountBalance =
-                        AccountBalance.builder()
-                                .accountBalanceId(balanceEvent.getAccountBalanceId())
-                                .accountId(balanceEvent.getAccountId())
-                                .customerId(balanceEvent.getCustomerId())
-                                .currencyCode(balanceEvent.getCurrencyCode())
-                                .balance(balanceEvent.getBalance())
-                                .availableBalance(balanceEvent.getAvailableBalance())
-                                .build();
+            for (final var balanceEvent : event.getAccountBalances()) {
+                final var accountBalance = AccountBalance.builder()
+                        .accountBalanceId(balanceEvent.getAccountBalanceId())
+                        .accountId(balanceEvent.getAccountId())
+                        .customerId(balanceEvent.getCustomerId())
+                        .currencyCode(balanceEvent.getCurrencyCode())
+                        .balance(balanceEvent.getBalance())
+                        .availableBalance(balanceEvent.getAvailableBalance())
+                        .build();
 
                 accountBalanceMapper.insertAccountBalance(accountBalance);
 

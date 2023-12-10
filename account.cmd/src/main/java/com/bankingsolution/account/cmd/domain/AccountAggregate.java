@@ -11,6 +11,7 @@ import com.bankingsolution.common.exceptions.AccountBalanceNotFoundException;
 import com.bankingsolution.common.exceptions.InsufficientFundsException;
 import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+@Getter
 public class AccountAggregate extends AggregateRoot {
 
     private Long customerId;
@@ -38,39 +40,43 @@ public class AccountAggregate extends AggregateRoot {
     public void apply(FundsDepositedEvent event) {
         this.id = event.getId();
 
-        Optional<AccountBalance> accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
+        var accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
 
-        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().add(event.getAmount());
+        final var balanceAfterTxn = accountBalance.getBalance().add(event.getAmount());
 
-        accountBalance.get().setBalance(balanceAfterTxn);
-        updateAccountBalance(accountBalance.get());
+        accountBalance.setBalance(balanceAfterTxn);
+        updateAccountBalance(accountBalance);
     }
 
     public void apply(FundsWithDrawnEvent event) {
         this.id = event.getId();
 
-        Optional<AccountBalance> accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
+        var accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
 
-        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().subtract(event.getAmount());
+        final var balanceAfterTxn = accountBalance.getBalance().subtract(event.getAmount());
 
-        accountBalance.get().setBalance(balanceAfterTxn);
-        updateAccountBalance(accountBalance.get());
+        accountBalance.setBalance(balanceAfterTxn);
+        updateAccountBalance(accountBalance);
     }
 
-    public void AddAccountBalance(String accountId, Long customerId, String currencyCode) {
-
-        Optional<AccountBalance> accountBalance = findAccountBalance(customerId, currencyCode);
+    public void addAccountBalance(String accountId, Long customerId, String currencyCode) {
+        final var accountBalance = findAccountBalance(customerId, currencyCode);
 
         if (accountBalance.isPresent())
             throw new AccountAlreadyExists("Account balance is already exist!");
 
-        AccountBalance balance = new AccountBalance(UUID.randomUUID().toString(), customerId, currencyCode,
-                BigDecimal.ZERO, BigDecimal.ZERO, accountId);
+        final var balance = new AccountBalance(UUID.randomUUID().toString(),
+                customerId,
+                currencyCode,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                accountId);
+
         accountBalances.add(balance);
     }
 
     public void openAccount(OpenAccountCommand command) {
-        AccountOpenedEvent accountOpenedEvent =
+        var accountOpenedEvent =
                 AccountOpenedEvent.builder()
                         .id(command.getId())
                         .accountId(command.getId())
@@ -80,8 +86,8 @@ public class AccountAggregate extends AggregateRoot {
 
         List<AccountBalanceEvent> balanceEvents = new ArrayList<>();
 
-        for (AccountBalance balance : accountBalances) {
-            AccountBalanceEvent balanceEvent =
+        for (final var balance : accountBalances) {
+            final var balanceEvent =
                     AccountBalanceEvent.builder()
                             .customerId(balance.getCustomerId())
                             .accountBalanceId(balance.getAccountBalanceId())
@@ -102,13 +108,9 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public BigDecimal deposit(TransactionCommand command) {
+        var accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
 
-        Optional<AccountBalance> accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
-
-        if (accountBalance.isEmpty())
-            throw new AccountBalanceNotFoundException("Account balance could not be found!");
-
-        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().add(command.getAmount());
+        final var balanceAfterTxn = accountBalance.getBalance().add(command.getAmount());
 
         raiseEvent(
                 FundsDepositedEvent.builder().id(this.id)
@@ -122,13 +124,9 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public BigDecimal withdraw(TransactionCommand command) {
+        var accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
 
-        Optional<AccountBalance> accountBalance = findAccountBalance(command.getAccountId(), command.getCurrency());
-
-        if (accountBalance.isEmpty())
-            throw new AccountBalanceNotFoundException("Account balance could not be found!");
-
-        BigDecimal balanceAfterTxn = accountBalance.get().getBalance().subtract(command.getAmount());
+        final var balanceAfterTxn = accountBalance.getBalance().subtract(command.getAmount());
 
         if (balanceAfterTxn.compareTo(BigDecimal.ZERO) < 0)
             throw new InsufficientFundsException("Insufficient account balance!");
@@ -144,34 +142,6 @@ public class AccountAggregate extends AggregateRoot {
         return balanceAfterTxn;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setStatus(Boolean active) {
-        this.active = active;
-    }
-
-    public List<AccountBalance> getAccountBalances() {
-        return this.accountBalances;
-    }
-
     private void updateAccountBalance(AccountBalance balance) {
         int index = IntStream.range(0, this.accountBalances.size())
                 .filter(i -> this.accountBalances.get(i).getAccountBalanceId().equals(balance.getAccountBalanceId()))
@@ -181,15 +151,22 @@ public class AccountAggregate extends AggregateRoot {
         this.accountBalances.set(index, balance);
     }
 
-    private Optional<AccountBalance> findAccountBalance(String accountId, String currencyCode) {
+    private AccountBalance findAccountBalance(String accountId, String currencyCode) {
         return this.getAccountBalances()
-                .stream().filter(x -> x.getAccountId().equals(accountId) &&
-                        x.getCurrencyCode().equals(currencyCode)).findFirst();
+                .stream()
+                .filter(x ->
+                        x.getAccountId().equals(accountId) &&
+                                x.getCurrencyCode().equals(currencyCode))
+                .findFirst()
+                .orElseThrow(() -> new AccountBalanceNotFoundException("Account balance could not be found!"));
     }
 
     private Optional<AccountBalance> findAccountBalance(Long customerId, String currencyCode) {
         return this.getAccountBalances()
-                .stream().filter(x -> x.getCustomerId().equals(customerId) &&
-                        x.getCurrencyCode().equals(currencyCode)).findFirst();
+                .stream()
+                .filter(x ->
+                        x.getCustomerId().equals(customerId) &&
+                                x.getCurrencyCode().equals(currencyCode))
+                .findFirst();
     }
 }

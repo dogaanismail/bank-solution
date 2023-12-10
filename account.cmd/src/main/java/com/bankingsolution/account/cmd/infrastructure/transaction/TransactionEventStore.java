@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class TransactionEventStore implements EventStore {
 
     private final EventProducer eventProducer;
-
     private final EventStoreRepository repository;
 
     public TransactionEventStore(EventStoreRepository repository,

@@ -1,7 +1,7 @@
 package com.bankingsolution.account.cmd.infrastructure.transaction;
 
-
 import com.bankingsolution.account.cmd.domain.AccountTransaction;
+import com.bankingsolution.common.exceptions.TransactionNotFoundException;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 import com.bankingsolution.cqrs.core.events.BaseEvent;
 import com.bankingsolution.cqrs.core.handlers.EventSourcingHandler;
@@ -15,10 +15,7 @@ import java.util.Comparator;
 @Service
 public class TransactionEventSourcingHandler implements EventSourcingHandler<AccountTransaction> {
 
-    @Qualifier("transactionEventStore")
     private final EventStore eventStore;
-
-    @Qualifier("transactionEventProducer")
     private final EventProducer eventProducer;
 
     public TransactionEventSourcingHandler(@Qualifier("transactionEventStore") EventStore eventStore,
@@ -37,10 +34,17 @@ public class TransactionEventSourcingHandler implements EventSourcingHandler<Acc
     public AccountTransaction getById(String id) {
         var aggregate = new AccountTransaction();
         var events = eventStore.getEvents(id);
+
         if (events != null && !events.isEmpty()) {
             aggregate.replayEvents(events);
-            var latestVersion = events.stream().map(BaseEvent::getVersion).max(Comparator.naturalOrder());
-            aggregate.setVersion(latestVersion.get());
+
+            final var latestVersion = events.
+                    stream()
+                    .map(BaseEvent::getVersion)
+                    .max(Comparator.naturalOrder())
+                    .orElseThrow(() -> new TransactionNotFoundException("Transaction could not be found!"));
+
+            aggregate.setVersion(latestVersion);
         }
 
         return aggregate;

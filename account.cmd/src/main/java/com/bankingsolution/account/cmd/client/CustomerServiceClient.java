@@ -1,4 +1,4 @@
-package com.bankingsolution.account.cmd.port;
+package com.bankingsolution.account.cmd.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
