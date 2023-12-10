@@ -25,9 +25,11 @@ public class BaseQueryDispatcher implements QueryDispatcher {
     @Override
     public ResponseModel send(BaseQuery query) {
         var handlers = routes.get(query.getClass());
-        if (handlers == null || handlers.size() <= 0) {
+
+        if (handlers == null || handlers.isEmpty()) {
             throw new RuntimeException("No query handler was registered!");
         }
+
         if (handlers.size() > 1) {
             throw new RuntimeException("Cannot send query to more than one handler!");
         }

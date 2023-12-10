@@ -2,10 +2,8 @@ package com.bankingsolution.account.query.mappers;
 
 import com.bankingsolution.account.query.domain.Account;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public interface AccountMapper {
