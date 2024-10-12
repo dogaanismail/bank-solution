@@ -18,8 +18,9 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
     private final EventStore eventStore;
     private final EventProducer eventProducer;
 
-    public AccountEventSourcingHandler(@Qualifier("accountEventStore") EventStore eventStore,
-                                       @Qualifier("accountEventProducer") EventProducer eventProducer) {
+    public AccountEventSourcingHandler(
+            @Qualifier("accountEventStore") EventStore eventStore,
+            @Qualifier("accountEventProducer") EventProducer eventProducer) {
         this.eventStore = eventStore;
         this.eventProducer = eventProducer;
     }

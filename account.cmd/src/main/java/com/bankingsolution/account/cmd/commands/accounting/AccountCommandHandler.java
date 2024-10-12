@@ -23,8 +23,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
     private final EventSourcingHandler<AccountAggregate> eventSourcingHandlers;
     private final CustomerServiceClient customerService;
 
-    public AccountCommandHandler(EventSourcingHandler<AccountAggregate> eventSourcingHandlers,
-                                 CustomerServiceClient customerService) {
+    public AccountCommandHandler(
+            EventSourcingHandler<AccountAggregate> eventSourcingHandlers,
+            CustomerServiceClient customerService) {
         this.eventSourcingHandlers = eventSourcingHandlers;
         this.customerService = customerService;
     }
@@ -44,7 +45,10 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, ACCOUNT_CREATION_SUCCESS_RESPONSE);
     }
 
-    private void validateAndAddAccountBalances(AccountAggregate aggregate, OpenAccountCommand command) {
+    private void validateAndAddAccountBalances(
+            AccountAggregate aggregate,
+            OpenAccountCommand command) {
+
         final var currencyList = command.getCurrencies();
         validateCurrencies(currencyList);
         validateCustomer(command.getCustomerId());
@@ -54,7 +58,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         }
     }
 
-    private OpenAccountResponse createOpenAccountResponse(AccountAggregate aggregate) {
+    private OpenAccountResponse createOpenAccountResponse(
+            AccountAggregate aggregate) {
+
         return new OpenAccountResponse(
                 aggregate.getId(),
                 aggregate.getCustomerId(),
@@ -64,7 +70,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
                         .toList());
     }
 
-    private void validateCurrencies(List<String> currencies) {
+    private void validateCurrencies(
+            List<String> currencies) {
+
         for (final var currencyCode : currencies) {
             if (ValidationHelper.isCurrencySupported(currencyCode)) {
                 throw new CurrencyNotSupportedException("Invalid currency code : " + currencyCode);
@@ -72,7 +80,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         }
     }
 
-    private void validateCustomer(Long customerId) {
+    private void validateCustomer(
+            Long customerId) {
+
         final var customer = customerService.getCustomerById(customerId);
 
         if (customer == null) {
@@ -80,7 +90,9 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         }
     }
 
-    private AccountBalanceResponse mapBalance(AccountBalance balance) {
+    private AccountBalanceResponse mapBalance(
+            AccountBalance balance) {
+
         return new AccountBalanceResponse(balance.getCurrencyCode(), balance.getAvailableBalance());
     }
 }

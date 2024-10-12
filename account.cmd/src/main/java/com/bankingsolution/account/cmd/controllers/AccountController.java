@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(path = "/api/v1/account")
 @Slf4j
 public class AccountController {
-    private final Logger logger = Logger.getLogger(AccountController.class.getName());
 
     private final CommandDispatcher commandDispatcher;
 
@@ -29,14 +26,15 @@ public class AccountController {
     }
 
     @PostMapping("/openAccount")
-    public ResponseEntity openAccount(@RequestBody OpenAccountCommand openAccountCommand) {
+    public ResponseEntity<Object> openAccount(@RequestBody OpenAccountCommand openAccountCommand) {
+
         final var id = GenerateUuidUtils.generateUuid().toString();
         try {
             openAccountCommand.setId(id);
             return ResponseEntity.ok(commandDispatcher.send(openAccountCommand));
         } catch (Exception e) {
             var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
-            logger.log(Level.SEVERE, safeErrorMessage, e);
+            log.error(safeErrorMessage, e);
             return new ResponseEntity<>(new ErrorResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

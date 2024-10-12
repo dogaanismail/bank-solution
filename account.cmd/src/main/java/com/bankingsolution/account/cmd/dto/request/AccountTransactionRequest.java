@@ -6,8 +6,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public record AccountTransactionRequest(@NotEmpty String accountId,
-                                        @NotEmpty BigDecimal amount,
-                                        @NotEmpty String currency,
-                                        @NotNull TransactionDirection direction,
-                                        @NotEmpty String description) { }
+public record AccountTransactionRequest(
+        @NotEmpty String accountId,
+        @NotEmpty BigDecimal amount,
+        @NotEmpty String currency,
+        @NotNull TransactionDirection direction,
+        @NotEmpty String description) {
+}

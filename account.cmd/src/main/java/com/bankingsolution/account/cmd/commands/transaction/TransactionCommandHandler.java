@@ -19,7 +19,10 @@ import java.util.List;
 public class TransactionCommandHandler implements ITransactionCommandHandler {
 
     private final static String TRANSACTION_SUCCESS_RESPONSE = "Transaction has been successfully done!";
-    private final static List<TransactionDirection> TRANSACTION_DIRECTIONS = List.of(TransactionDirection.IN, TransactionDirection.OUT);
+    private final static List<TransactionDirection> TRANSACTION_DIRECTIONS = List.of(
+            TransactionDirection.IN,
+            TransactionDirection.OUT
+    );
     private final EventSourcingHandler<AccountTransaction> transactionEventSourcingHandler;
     private final EventSourcingHandler<AccountAggregate> accountAggregateEventSourcingHandler;
 
@@ -50,7 +53,9 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
         }
     }
 
-    private void validateTransactionCommand(TransactionCommand command) {
+    private void validateTransactionCommand(
+            TransactionCommand command) {
+
         if (accountAggregateEventSourcingHandler.getById(command.getAccountId()) == null) {
             throw new AccountNotFoundException("Account could not be found!");
         }
@@ -110,7 +115,11 @@ public class TransactionCommandHandler implements ITransactionCommandHandler {
                 transactionAggregate.getBalanceAfterTxn()
         );
 
-        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, TRANSACTION_SUCCESS_RESPONSE);
+        return GenericResponse.generateResponse(
+                ResponseStatus.SUCCESS,
+                response,
+                TRANSACTION_SUCCESS_RESPONSE
+        );
     }
 
     private void markTransactionAsFailed(TransactionCommand command) {

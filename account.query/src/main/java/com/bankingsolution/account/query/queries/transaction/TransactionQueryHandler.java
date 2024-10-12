@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class TransactionQueryHandler implements ITransactionQueryHandler {
+
     private final TransactionMapper transactionMapper;
 
     public TransactionQueryHandler(TransactionMapper transactionMapper) {
@@ -19,12 +20,21 @@ public class TransactionQueryHandler implements ITransactionQueryHandler {
 
     @Override
     public ResponseModel handle(FindAllTransactionsByAccountIdQuery query) {
-        List<AccountTransaction> transactions = transactionMapper.getTransactionsByAccountId(query.getId());
 
-        if (transactions.isEmpty()){
-            return GenericResponse.generateResponse(ResponseStatus.ERROR, null, "Invalid account!");
+        List<AccountTransaction> transactions = transactionMapper
+                .getTransactionsByAccountId(query.getId());
+
+        if (transactions.isEmpty()) {
+            return GenericResponse.generateResponse(
+                    ResponseStatus.ERROR,
+                    null,
+                    "Invalid account!"
+            );
         }
 
-        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, transactions);
+        return GenericResponse.generateResponse(
+                ResponseStatus.SUCCESS,
+                transactions
+        );
     }
 }

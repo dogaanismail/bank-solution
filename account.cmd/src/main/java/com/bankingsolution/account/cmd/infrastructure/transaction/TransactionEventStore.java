@@ -21,14 +21,18 @@ public class TransactionEventStore implements EventStore {
     private final EventProducer eventProducer;
     private final EventStoreRepository repository;
 
-    public TransactionEventStore(EventStoreRepository repository,
-                                 @Qualifier("transactionEventProducer") EventProducer eventProducer) {
+    public TransactionEventStore(
+            EventStoreRepository repository,
+            @Qualifier("transactionEventProducer") EventProducer eventProducer) {
         this.repository = repository;
         this.eventProducer = eventProducer;
     }
 
     @Override
-    public void save(String aggregateId, Iterable<BaseEvent> events, int expectedVersion) {
+    public void save(String aggregateId,
+                     Iterable<BaseEvent> events,
+                     int expectedVersion) {
+
         var eventStream = repository.findByAggregateIdentifier(aggregateId);
         if (expectedVersion != -1
                 && eventStream.get(eventStream.size() - 1).getVersion() != expectedVersion) {
@@ -57,6 +61,7 @@ public class TransactionEventStore implements EventStore {
 
     @Override
     public List<BaseEvent> getEvents(String aggregateId) {
+
         var eventStream = repository.findByAggregateIdentifier(aggregateId);
         if (eventStream == null || eventStream.isEmpty()) {
             throw new AggregateNotFoundException("Incorrect account ID provided!");
@@ -67,10 +72,12 @@ public class TransactionEventStore implements EventStore {
 
     @Override
     public List<String> getAggregateIds() {
+
         var eventStream = repository.findAll();
         if (eventStream.isEmpty()) {
             throw new IllegalStateException();
         }
+
         return eventStream.stream()
                 .map(EventModel::getAggregateIdentifier)
                 .distinct()

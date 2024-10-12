@@ -1,13 +1,11 @@
 package com.bankingsolution.common.constants;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Constants {
 
-    private Constants() {
-
-    }
-
     public static String[] SUPPORTED_CURRENCIES = new String[]{"EUR", "SEK", "GBP", "USD"};
-
     public static final String AccountOpenedTopic = "AccountOpenedEvent";
     public static final String FundsDepositedTopic = "FundsDepositedEvent";
     public static final String FundsWithDrawnTopic = "FundsWithDrawnEvent";

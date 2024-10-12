@@ -7,23 +7,22 @@ import com.bankingsolution.common.events.FundsDepositedEvent;
 import com.bankingsolution.common.events.FundsWithDrawnEvent;
 import com.bankingsolution.common.events.TransactionCreatedEvent;
 import com.bankingsolution.common.events.TransactionFailedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 @Service
+@Slf4j
 public class TransactionEventHandler implements ITransactionEventHandler {
-
-    Logger logger = LoggerFactory.getLogger(TransactionEventHandler.class);
 
     private final AccountBalanceMapper accountBalanceMapper;
     private final TransactionMapper transactionMapper;
 
-    public TransactionEventHandler(AccountBalanceMapper accountBalanceMapper,
-                                   TransactionMapper transactionMapper) {
+    public TransactionEventHandler(
+            AccountBalanceMapper accountBalanceMapper,
+            TransactionMapper transactionMapper) {
         this.accountBalanceMapper = accountBalanceMapper;
         this.transactionMapper = transactionMapper;
     }
@@ -44,7 +43,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
             accountBalanceMapper.updateAccountBalance(accountBalance);
         } catch (Exception exception) {
-            logger.error("Error while updating account balance!", exception);
+            log.error("Error while updating account balance!", exception);
             throw exception;
         }
     }
@@ -53,7 +52,10 @@ public class TransactionEventHandler implements ITransactionEventHandler {
     @Transactional
     public void on(FundsWithDrawnEvent event) {
         try {
-            var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
+            var accountBalance = accountBalanceMapper.getBalance(
+                    event.getAccountId(),
+                    event.getCurrencyCode()
+            );
 
             if (accountBalance == null)
                 return;
@@ -64,7 +66,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
             accountBalanceMapper.updateAccountBalance(accountBalance);
         } catch (Exception exception) {
-            logger.error("Error while updating account balance!", exception);
+            log.error("Error while updating account balance!", exception);
             throw exception;
         }
     }
@@ -87,7 +89,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
             transactionMapper.insertTransaction(transaction);
         } catch (Exception exception) {
-            logger.error("Error while creating a transaction!", exception);
+            log.error("Error while creating a transaction!", exception);
             throw exception;
         }
     }
@@ -110,7 +112,7 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
             transactionMapper.insertTransaction(transaction);
         } catch (Exception exception) {
-            logger.error("Error while creating a failed transaction!", exception);
+            log.error("Error while creating a failed transaction!", exception);
             throw exception;
         }
     }

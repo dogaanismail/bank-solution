@@ -3,7 +3,6 @@ package com.bankingsolution.account.query.controllers;
 import com.bankingsolution.account.query.queries.transaction.FindAllTransactionsByAccountIdQuery;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/v1/transaction")
-@Slf4j
 public class AccountTransactionController {
     private final QueryDispatcher queryDispatcher;
 

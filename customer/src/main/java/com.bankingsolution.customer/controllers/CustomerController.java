@@ -21,7 +21,9 @@ public class CustomerController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<HttpStatus> createAccount(@RequestBody CustomerCreateRequest customerCreateRequest) {
+    public ResponseEntity<HttpStatus> createAccount(
+            @RequestBody CustomerCreateRequest customerCreateRequest) {
+
         try {
             customerProcess.create(customerCreateRequest);
             return ResponseEntity.ok(HttpStatus.CREATED);
@@ -31,7 +33,9 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/get/{customerId}", produces = "application/json")
-    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long customerId) {
+    public ResponseEntity<CustomerResponse> getCustomerById(
+            @PathVariable(name = "customerId") Long customerId) {
+
         try {
             CustomerResponse response = customerProcess.getById(customerId);
             return ResponseEntity.ok(response);
@@ -42,6 +46,7 @@ public class CustomerController {
 
     @GetMapping(value = "/getCustomers", produces = "application/json")
     public ResponseEntity<List<CustomerResponse>> getCustomers() {
+        
         try {
             List<CustomerResponse> response = customerProcess.getAllCustomers();
             return ResponseEntity.ok(response);

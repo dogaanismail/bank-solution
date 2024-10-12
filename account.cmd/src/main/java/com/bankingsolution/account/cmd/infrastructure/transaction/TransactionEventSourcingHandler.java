@@ -18,8 +18,9 @@ public class TransactionEventSourcingHandler implements EventSourcingHandler<Acc
     private final EventStore eventStore;
     private final EventProducer eventProducer;
 
-    public TransactionEventSourcingHandler(@Qualifier("transactionEventStore") EventStore eventStore,
-                                           @Qualifier("transactionEventProducer") EventProducer eventProducer) {
+    public TransactionEventSourcingHandler(
+            @Qualifier("transactionEventStore") EventStore eventStore,
+            @Qualifier("transactionEventProducer") EventProducer eventProducer) {
         this.eventStore = eventStore;
         this.eventProducer = eventProducer;
     }

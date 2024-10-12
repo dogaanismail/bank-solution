@@ -9,7 +9,6 @@ import com.bankingsolution.common.events.FundsWithDrawnEvent;
 import com.bankingsolution.common.exceptions.AccountAlreadyExists;
 import com.bankingsolution.common.exceptions.AccountBalanceNotFoundException;
 import com.bankingsolution.common.exceptions.InsufficientFundsException;
-import com.bankingsolution.common.utils.ObjectMapperUtils;
 import com.bankingsolution.cqrs.core.domain.AggregateRoot;
 import lombok.Getter;
 
@@ -46,7 +45,10 @@ public class AccountAggregate extends AggregateRoot {
     public void apply(FundsDepositedEvent event) {
         this.id = event.getId();
 
-        var accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
+        var accountBalance = findAccountBalance(
+                event.getAccountId(),
+                event.getCurrencyCode()
+        );
 
         final var balanceAfterTxn = accountBalance.getBalance().add(event.getAmount());
 
@@ -55,6 +57,7 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public void apply(FundsWithDrawnEvent event) {
+
         this.id = event.getId();
 
         var accountBalance = findAccountBalance(event.getAccountId(), event.getCurrencyCode());
@@ -65,7 +68,11 @@ public class AccountAggregate extends AggregateRoot {
         updateAccountBalance(accountBalance);
     }
 
-    public void addAccountBalance(String accountId, Long customerId, String currencyCode) {
+    public void addAccountBalance(
+            String accountId,
+            Long customerId,
+            String currencyCode) {
+
         final var accountBalance = findAccountBalance(customerId, currencyCode);
 
         if (accountBalance.isPresent()) {
@@ -151,6 +158,7 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     private void updateAccountBalance(AccountBalance balance) {
+
         final var index = IntStream.range(0, this.accountBalances.size())
                 .filter(i -> this.accountBalances.get(i).getAccountBalanceId().equals(balance.getAccountBalanceId()))
                 .findFirst()
@@ -159,7 +167,10 @@ public class AccountAggregate extends AggregateRoot {
         this.accountBalances.set(index, balance);
     }
 
-    private AccountBalance findAccountBalance(String accountId, String currencyCode) {
+    private AccountBalance findAccountBalance(
+            String accountId,
+            String currencyCode) {
+
         return this.getAccountBalances()
                 .stream()
                 .filter(x ->
@@ -169,7 +180,10 @@ public class AccountAggregate extends AggregateRoot {
                 .orElseThrow(() -> new AccountBalanceNotFoundException("Account balance could not be found!"));
     }
 
-    private Optional<AccountBalance> findAccountBalance(Long customerId, String currencyCode) {
+    private Optional<AccountBalance> findAccountBalance(
+            Long customerId,
+            String currencyCode) {
+
         return this.getAccountBalances()
                 .stream()
                 .filter(x ->
@@ -178,7 +192,9 @@ public class AccountAggregate extends AggregateRoot {
                 .findFirst();
     }
 
-    private AccountBalance mapBalance(AccountBalanceEvent balanceEvent) {
+    private AccountBalance mapBalance(
+            AccountBalanceEvent balanceEvent) {
+
         return new AccountBalance(
                 balanceEvent.getCustomerId(),
                 balanceEvent.getAccountBalanceId(),

@@ -4,7 +4,6 @@ import com.bankingsolution.account.query.queries.accounting.FindAccountByIdQuery
 import com.bankingsolution.account.query.queries.accounting.FindAllAccountsQuery;
 import com.bankingsolution.cqrs.core.generics.ResponseModel;
 import com.bankingsolution.cqrs.core.infrastructure.QueryDispatcher;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/v1/account")
-@Slf4j
 public class AccountController {
     private final QueryDispatcher queryDispatcher;
 

@@ -22,14 +22,19 @@ public class AccountEventStore implements EventStore {
 
     private final EventStoreRepository repository;
 
-    public AccountEventStore(EventStoreRepository repository,
-                             @Qualifier("accountEventProducer") EventProducer eventProducer) {
+    public AccountEventStore(
+            EventStoreRepository repository,
+            @Qualifier("accountEventProducer") EventProducer eventProducer) {
         this.repository = repository;
         this.eventProducer = eventProducer;
     }
 
     @Override
-    public void save(String aggregateId, Iterable<BaseEvent> events, int expectedVersion) {
+    public void save(
+            String aggregateId,
+            Iterable<BaseEvent> events,
+            int expectedVersion) {
+
         final var eventStream = repository.findByAggregateIdentifier(aggregateId);
 
         if (expectedVersion != -1

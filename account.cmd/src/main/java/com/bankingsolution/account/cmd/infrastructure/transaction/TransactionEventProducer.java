@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionEventProducer implements EventProducer {
+
     private final RabbitTemplate rabbitTemplate;
 
     public TransactionEventProducer(RabbitTemplate rabbitTemplate) {

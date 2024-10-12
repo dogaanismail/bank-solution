@@ -5,21 +5,20 @@ import com.bankingsolution.account.query.domain.AccountBalance;
 import com.bankingsolution.account.query.mappers.AccountBalanceMapper;
 import com.bankingsolution.account.query.mappers.AccountMapper;
 import com.bankingsolution.common.events.AccountOpenedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class AccountEventHandler implements IAccountEventHandler {
-
-    Logger logger = LoggerFactory.getLogger(AccountEventHandler.class);
 
     private final AccountMapper accountMapper;
     private final AccountBalanceMapper accountBalanceMapper;
 
-    public AccountEventHandler(AccountMapper accountMapper,
-                               AccountBalanceMapper accountBalanceMapper) {
+    public AccountEventHandler(
+            AccountMapper accountMapper,
+            AccountBalanceMapper accountBalanceMapper) {
         this.accountMapper = accountMapper;
         this.accountBalanceMapper = accountBalanceMapper;
     }
@@ -27,6 +26,7 @@ public class AccountEventHandler implements IAccountEventHandler {
     @Override
     @Transactional
     public void on(AccountOpenedEvent event) {
+
         try {
             final var bankAccount = Account.builder()
                     .accountId(event.getAccountId())
@@ -50,7 +50,7 @@ public class AccountEventHandler implements IAccountEventHandler {
 
             }
         } catch (Exception exception) {
-            logger.error("Error while creating an account and an account balance!", exception);
+            log.error("Error while creating an account and an account balance!", exception);
             throw exception;
         }
     }
