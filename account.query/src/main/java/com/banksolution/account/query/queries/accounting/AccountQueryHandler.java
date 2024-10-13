@@ -1,33 +1,32 @@
 package com.banksolution.account.query.queries.accounting;
 
+import com.banksolution.account.query.domain.Account;
 import com.banksolution.account.query.domain.AccountBalance;
 import com.banksolution.account.query.dto.AccountResponse;
-import com.banksolution.account.query.dto.BalanceResponse;
+import com.banksolution.account.query.factory.account.AccountResponseFactory;
 import com.banksolution.account.query.mappers.AccountBalanceMapper;
 import com.banksolution.account.query.mappers.AccountMapper;
 import com.banksolution.cqrs.core.generics.GenericResponse;
 import com.banksolution.cqrs.core.generics.ResponseModel;
 import com.banksolution.cqrs.core.generics.ResponseStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class AccountQueryHandler implements IAccountQueryHandler {
 
     private final AccountMapper accountMapper;
     private final AccountBalanceMapper accountBalanceMapper;
 
-    public AccountQueryHandler(AccountMapper accountMapper,
-                               AccountBalanceMapper accountBalanceMapper) {
-        this.accountMapper = accountMapper;
-        this.accountBalanceMapper = accountBalanceMapper;
-    }
-
     @Override
-    public ResponseModel handle(FindAllAccountsQuery query) {
+    public ResponseModel handle(FindAllAccountsQuery findAllAccountsQuery) {
 
-        final var bankAccounts = accountMapper.getAllAccounts();
+        List<Account> accounts = accountMapper.getAllAccounts();
 
-        if (bankAccounts.isEmpty()) {
+        if (accounts.isEmpty()) {
             return GenericResponse.generateResponse(
                     ResponseStatus.ERROR,
                     null,
@@ -37,16 +36,16 @@ public class AccountQueryHandler implements IAccountQueryHandler {
 
         return GenericResponse.generateResponse(
                 ResponseStatus.SUCCESS,
-                bankAccounts
+                accounts
         );
     }
 
     @Override
-    public ResponseModel handle(FindAccountByIdQuery query) {
+    public ResponseModel handle(FindAccountByIdQuery findAccountByIdQuery) {
 
-        final var bankAccount = accountMapper.getAccountById(query.getId());
+        Account account = accountMapper.getAccountById(findAccountByIdQuery.getId());
 
-        if (bankAccount == null) {
+        if (account == null) {
             return GenericResponse.generateResponse(
                     ResponseStatus.ERROR,
                     null,
@@ -54,28 +53,18 @@ public class AccountQueryHandler implements IAccountQueryHandler {
             );
         }
 
-        final var balances = accountBalanceMapper.getBalancesByAccountId(query.getId());
+        List<AccountBalance> accountBalances = accountBalanceMapper
+                .getBalancesByAccountId(findAccountByIdQuery.getId());
 
-        final var response = new AccountResponse(
-                bankAccount.getAccountId(),
-                bankAccount.getCustomerId(),
-                balances.
-                        stream()
-                        .map(this::mapBalance)
-                        .toList()
-        );
+        AccountResponse accountResponse = AccountResponseFactory
+                .getAccountResponse(
+                        account,
+                        accountBalances
+                );
 
         return GenericResponse.generateResponse(
                 ResponseStatus.SUCCESS,
-                response
-        );
-    }
-
-    private BalanceResponse mapBalance(AccountBalance balance) {
-
-        return new BalanceResponse(
-                balance.getCurrencyCode(),
-                balance.getBalance()
+                accountResponse
         );
     }
 }

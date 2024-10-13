@@ -43,37 +43,37 @@ public class RabbitMQConfig implements RabbitListenerConfigurer {
 
     @Bean
     Queue accountOpenedQueue() {
-        return new Queue(Constants.AccountOpenedTopic);
+        return new Queue(Constants.ACCOUNT_OPENED_EVENT_TOPIC);
     }
 
     @Bean
     Queue fundsDepositedQueue() {
-        return new Queue(Constants.FundsDepositedTopic);
+        return new Queue(Constants.FUNDS_DEPOSITED_EVENT_TOPIC);
     }
 
     @Bean
     Queue fundsWithdrawnQueue() {
-        return new Queue(Constants.FundsWithDrawnTopic);
+        return new Queue(Constants.FUNDS_WITH_DRAWN_EVENT_TOPIC);
     }
 
     @Bean
     Queue transactionCreatedQueue() {
-        return new Queue(Constants.TransactionCreatedTopic);
+        return new Queue(Constants.TRANSACTION_CREATED_EVENT_TOPIC);
     }
 
     @Bean
     Queue transactionFailedQueue() {
-        return new Queue(Constants.TransactionFailedTopic);
+        return new Queue(Constants.TRANSACTION_FAILED_EVENT_TOPIC);
     }
 
     @Bean
     public List<Binding> binding() {
         return Arrays.asList(
-                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(Constants.AccountOpenedTopic),
-                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(Constants.FundsDepositedTopic),
-                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(Constants.FundsWithDrawnTopic),
-                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(Constants.TransactionCreatedTopic),
-                BindingBuilder.bind(transactionFailedQueue()).to(exchange()).with(Constants.TransactionFailedTopic));
+                BindingBuilder.bind(accountOpenedQueue()).to(exchange()).with(Constants.ACCOUNT_OPENED_EVENT_TOPIC),
+                BindingBuilder.bind(fundsDepositedQueue()).to(exchange()).with(Constants.FUNDS_DEPOSITED_EVENT_TOPIC),
+                BindingBuilder.bind(fundsWithdrawnQueue()).to(exchange()).with(Constants.FUNDS_WITH_DRAWN_EVENT_TOPIC),
+                BindingBuilder.bind(transactionCreatedQueue()).to(exchange()).with(Constants.TRANSACTION_CREATED_EVENT_TOPIC),
+                BindingBuilder.bind(transactionFailedQueue()).to(exchange()).with(Constants.TRANSACTION_FAILED_EVENT_TOPIC));
     }
 
     @Bean

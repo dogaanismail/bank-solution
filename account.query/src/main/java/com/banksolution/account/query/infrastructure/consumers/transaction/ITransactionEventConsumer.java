@@ -7,11 +7,12 @@ import com.banksolution.common.events.TransactionFailedEvent;
 import org.springframework.messaging.handler.annotation.Payload;
 
 public interface ITransactionEventConsumer {
-    void consume(@Payload FundsDepositedEvent event);
 
-    void consume(@Payload FundsWithDrawnEvent event);
+    void consume(@Payload FundsDepositedEvent fundsDepositedEvent);
 
-    void consume(@Payload TransactionCreatedEvent event);
+    void consume(@Payload FundsWithDrawnEvent fundsWithDrawnEvent);
 
-    void consume(@Payload TransactionFailedEvent event);
+    void consume(@Payload TransactionCreatedEvent transactionCreatedEvent);
+
+    void consume(@Payload TransactionFailedEvent transactionFailedEvent);
 }
