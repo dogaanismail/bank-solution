@@ -24,7 +24,9 @@ public interface AccountBalanceMapper {
             @Result(property = "balance", column = "balance"),
             @Result(property = "availableBalance", column = "available_balance")
     })
-    AccountBalance getBalance(@Param("accountId") String accountId, @Param("currencyCode") String currencyCode);
+    AccountBalance getBalance(@Param("accountId") String accountId,
+                              @Param("currencyCode") String currencyCode
+    );
 
     @Select("SELECT * FROM account_balance where account_id = #{accountId}")
     @Results(id = "balancesResult", value = {
