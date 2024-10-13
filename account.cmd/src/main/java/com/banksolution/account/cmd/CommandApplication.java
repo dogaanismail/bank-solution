@@ -7,12 +7,10 @@ import com.banksolution.account.cmd.commands.transaction.TransactionCommand;
 import com.banksolution.cqrs.core.infrastructure.CommandDispatcher;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableRabbit
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.banksolution.account.cmd.client")
 @RequiredArgsConstructor
