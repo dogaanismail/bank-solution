@@ -3,6 +3,7 @@ package com.banksolution.customer.controllers;
 import com.banksolution.customer.dto.request.CustomerCreateRequest;
 import com.banksolution.customer.dto.response.CustomerResponse;
 import com.banksolution.customer.process.CustomerProcess;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/customer")
+@RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerProcess customerProcess;
-
-    public CustomerController(CustomerProcess customerProcess) {
-        this.customerProcess = customerProcess;
-    }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
