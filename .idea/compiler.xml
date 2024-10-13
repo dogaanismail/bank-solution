@@ -10,9 +10,14 @@
         </processorPath>
         <module name="bank-solution.common.main" />
         <module name="bank-solution.customer.main" />
-        <module name="bank-solution.account.cmd.main" />
+        <module name="bank-solution.customer.test" />
         <module name="bank-solution.cqrs.core.main" />
         <module name="bank-solution.account.query.main" />
+        <module name="bank-solution.cqrs.core.test" />
+        <module name="bank-solution.account.cmd.test" />
+        <module name="bank-solution.account.query.test" />
+        <module name="bank-solution.account.cmd.main" />
+        <module name="bank-solution.common.test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />

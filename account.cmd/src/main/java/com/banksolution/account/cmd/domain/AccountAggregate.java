@@ -89,12 +89,12 @@ public class AccountAggregate extends AggregateRoot {
         }
 
         AccountBalance balance = new AccountBalance(
-                UUID.randomUUID().toString(),
                 customerId,
+                UUID.randomUUID().toString(),
+                accountId,
                 currencyCode,
                 BigDecimal.ZERO,
-                BigDecimal.ZERO,
-                accountId);
+                BigDecimal.ZERO);
 
         accountBalances.add(balance);
     }
