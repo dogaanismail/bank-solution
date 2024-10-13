@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface EventStoreRepository extends MongoRepository<EventModel, String> {
+
     List<EventModel> findByAggregateIdentifier(String aggregateIdentifier);
 }

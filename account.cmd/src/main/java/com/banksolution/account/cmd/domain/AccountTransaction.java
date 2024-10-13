@@ -1,8 +1,9 @@
 package com.banksolution.account.cmd.domain;
 
 import com.banksolution.account.cmd.commands.transaction.TransactionCommand;
+import com.banksolution.account.cmd.factory.transaction.TransactionCreatedEventFactory;
+import com.banksolution.account.cmd.factory.transaction.TransactionFailedEventFactory;
 import com.banksolution.common.enums.TransactionDirection;
-import com.banksolution.common.enums.TransactionStatus;
 import com.banksolution.common.events.TransactionCreatedEvent;
 import com.banksolution.common.events.TransactionFailedEvent;
 import com.banksolution.cqrs.core.domain.AggregateRoot;
@@ -11,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -28,60 +28,47 @@ public class AccountTransaction extends AggregateRoot {
     private BigDecimal balanceAfterTxn;
     private Boolean active;
 
-    public void apply(TransactionCreatedEvent event) {
-        this.id = event.getId();
+    public void apply(TransactionCreatedEvent transactionCreatedEvent) {
+
+        this.id = transactionCreatedEvent.getId();
         this.active = true;
-        this.accountId = event.getAccountId();
-        this.direction = event.getDirection();
-        this.amount = event.getAmount();
-        this.status = event.getStatus();
-        this.createdAt = event.getCreatedAt();
-        this.description = event.getDescription();
-        this.currency = event.getCurrencyCode();
-        this.balanceAfterTxn = event.getBalanceAfterTxn();
+        this.accountId = transactionCreatedEvent.getAccountId();
+        this.direction = transactionCreatedEvent.getDirection();
+        this.amount = transactionCreatedEvent.getAmount();
+        this.status = transactionCreatedEvent.getStatus();
+        this.createdAt = transactionCreatedEvent.getCreatedAt();
+        this.description = transactionCreatedEvent.getDescription();
+        this.currency = transactionCreatedEvent.getCurrencyCode();
+        this.balanceAfterTxn = transactionCreatedEvent.getBalanceAfterTxn();
     }
 
-    public void apply(TransactionFailedEvent event) {
-        this.id = event.getId();
+    public void apply(TransactionFailedEvent transactionFailedEvent) {
+
+        this.id = transactionFailedEvent.getId();
         this.active = true;
-        this.accountId = event.getAccountId();
-        this.direction = event.getDirection();
-        this.amount = event.getAmount();
-        this.status = event.getStatus();
-        this.createdAt = event.getCreatedAt();
-        this.description = event.getDescription();
-        this.currency = event.getCurrencyCode();
+        this.accountId = transactionFailedEvent.getAccountId();
+        this.direction = transactionFailedEvent.getDirection();
+        this.amount = transactionFailedEvent.getAmount();
+        this.status = transactionFailedEvent.getStatus();
+        this.createdAt = transactionFailedEvent.getCreatedAt();
+        this.description = transactionFailedEvent.getDescription();
+        this.currency = transactionFailedEvent.getCurrencyCode();
     }
 
-    public void createTransaction(TransactionCommand command) {
-        final var transactionCreatedEvent = TransactionCreatedEvent.builder()
-                .id(command.getId())
-                .accountId(command.getAccountId())
-                .direction(command.getDirection())
-                .amount(command.getAmount())
-                .currencyCode(command.getCurrency())
-                .description(command.getDescription())
-                .createdAt(Instant.now().toString())
-                .status(TransactionStatus.SUCCESS.toString())
-                .balanceAfterTxn(command.getBalanceAfterTxn())
-                .build();
+    public void createTransaction(TransactionCommand transactionCommand) {
+
+        TransactionCreatedEvent transactionCreatedEvent =
+                TransactionCreatedEventFactory.getTransactionCreatedEvent(transactionCommand);
 
         raiseEvent(
                 transactionCreatedEvent
         );
     }
 
-    public void createTransactionFailedData(TransactionCommand command) {
-        final var transactionFailedEvent = TransactionFailedEvent.builder()
-                .id(command.getId())
-                .accountId(command.getAccountId())
-                .direction(command.getDirection())
-                .amount(command.getAmount())
-                .currencyCode(command.getCurrency())
-                .description(command.getDescription())
-                .createdAt(Instant.now().toString())
-                .status(TransactionStatus.ERROR.toString())
-                .build();
+    public void createFailedTransaction(TransactionCommand transactionCommand) {
+
+        TransactionFailedEvent transactionFailedEvent =
+                TransactionFailedEventFactory.getTransactionFailedEvent(transactionCommand);
 
         raiseEvent(
                 transactionFailedEvent
