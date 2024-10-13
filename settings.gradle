@@ -1,7 +1,16 @@
+
+pluginManagement {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'bank-solution'
-include('customer')
-include('cqrs.core')
-include('common')
-include('account.cmd')
-include('account.query')
+include 'customer'
+include 'cqrs.core'
+include 'common'
+include 'account.cmd'
+include 'account.query'
 

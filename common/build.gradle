@@ -1,36 +1,20 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+	id 'java-library'
+	id 'io.spring.dependency-management'
 }
 
-group = 'com.bankingsolution'
+group = 'com.banksolution'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-bootJar.enabled = false
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.modelmapper:modelmapper:3.1.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0'
 	compileOnly 'org.projectlombok:lombok'
-	implementation project(':cqrs.core')
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation project(':cqrs.core')
 }
 
-test {
-	useJUnitPlatform()
-}
