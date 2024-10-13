@@ -94,7 +94,7 @@ The process will take a few minutes. 7 containers must be started.
 **Step 4:** By using Account Query Service, account and transactions can be seen by using Swagger
 
 # Swagger UI links #
-* **Customer Service: http://localhost:5000/swagger-ui.html**
+* **Customer Service: http://localhost:5001/swagger-ui.html**
 * **Account Command Service: http://localhost:5002/swagger-ui.html**
 * **Account Query Service: http://localhost:5003/swagger-ui.html**
 
