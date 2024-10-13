@@ -50,7 +50,7 @@ public abstract class AggregateRoot {
         }
     }
 
-    public void raiseEvent(BaseEvent event) {
+    protected void raiseEvent(BaseEvent event) {
         applyChange(event, true);
     }
 

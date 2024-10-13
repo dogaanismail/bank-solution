@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class TransactionEventSourcingHandler implements EventSourcingHandler<AccountTransaction> {
@@ -27,19 +28,24 @@ public class TransactionEventSourcingHandler implements EventSourcingHandler<Acc
 
     @Override
     public void save(AggregateRoot aggregate) {
-        eventStore.save(aggregate.getId(), aggregate.getUncommittedChanges(), aggregate.getVersion());
+
+        eventStore.save(aggregate.getId(),
+                aggregate.getUncommittedChanges(),
+                aggregate.getVersion()
+        );
         aggregate.markChangesAsCommitted();
     }
 
     @Override
     public AccountTransaction getById(String id) {
-        var aggregate = new AccountTransaction();
-        var events = eventStore.getEvents(id);
+
+        AccountTransaction aggregate = new AccountTransaction();
+        List<BaseEvent> events = eventStore.getEvents(id);
 
         if (events != null && !events.isEmpty()) {
             aggregate.replayEvents(events);
 
-            final var latestVersion = events.
+            Integer latestVersion = events.
                     stream()
                     .map(BaseEvent::getVersion)
                     .max(Comparator.naturalOrder())
@@ -53,13 +59,22 @@ public class TransactionEventSourcingHandler implements EventSourcingHandler<Acc
 
     @Override
     public void republishEvents() {
-        var aggregateIds = eventStore.getAggregateIds();
-        for (var aggregateId : aggregateIds) {
-            var aggregate = getById(aggregateId);
-            if (aggregate == null || !aggregate.getActive()) continue;
-            var events = eventStore.getEvents(aggregateId);
-            for (var event : events) {
-                eventProducer.produce(event.getClass().getSimpleName(), event);
+
+        List<String> aggregateIds = eventStore.getAggregateIds();
+
+        for (String aggregateId : aggregateIds) {
+            AccountTransaction accountTransaction = getById(aggregateId);
+
+            if (accountTransaction == null || !accountTransaction.getActive()) {
+                continue;
+            }
+
+            List<BaseEvent> events = eventStore.getEvents(aggregateId);
+            for (BaseEvent event : events) {
+                eventProducer.produce(
+                        event.getClass().getSimpleName(),
+                        event
+                );
             }
         }
     }

@@ -5,19 +5,17 @@ import com.banksolution.customer.dto.request.CustomerCreateRequest;
 import com.banksolution.customer.dto.response.CustomerResponse;
 import com.banksolution.customer.model.Customer;
 import com.banksolution.customer.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 @Transactional
 public class CustomerProcess {
     private final CustomerService customerService;
-
-    public CustomerProcess(CustomerService customerService) {
-        this.customerService = customerService;
-    }
 
     public void create(CustomerCreateRequest customerCreateRequest) {
         try {

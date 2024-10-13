@@ -1,12 +1,15 @@
 package com.banksolution.account.query.infrastructure.handlers.transaction;
 
+import com.banksolution.account.query.domain.AccountBalance;
 import com.banksolution.account.query.domain.AccountTransaction;
+import com.banksolution.account.query.factory.transaction.AccountTransactionFactory;
 import com.banksolution.account.query.mappers.AccountBalanceMapper;
 import com.banksolution.account.query.mappers.TransactionMapper;
 import com.banksolution.common.events.FundsDepositedEvent;
 import com.banksolution.common.events.FundsWithDrawnEvent;
 import com.banksolution.common.events.TransactionCreatedEvent;
 import com.banksolution.common.events.TransactionFailedEvent;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,31 +17,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class TransactionEventHandler implements ITransactionEventHandler {
 
     private final AccountBalanceMapper accountBalanceMapper;
     private final TransactionMapper transactionMapper;
 
-    public TransactionEventHandler(
-            AccountBalanceMapper accountBalanceMapper,
-            TransactionMapper transactionMapper) {
-        this.accountBalanceMapper = accountBalanceMapper;
-        this.transactionMapper = transactionMapper;
-    }
-
     @Override
     @Transactional
-    public void on(FundsDepositedEvent event) {
+    public void on(FundsDepositedEvent fundsDepositedEvent) {
+
         try {
-            var accountBalance = accountBalanceMapper.getBalance(event.getAccountId(), event.getCurrencyCode());
+            AccountBalance accountBalance = accountBalanceMapper.getBalance(
+                    fundsDepositedEvent.getAccountId(),
+                    fundsDepositedEvent.getCurrencyCode()
+            );
 
             if (accountBalance == null) {
                 return;
             }
 
-            var currentBalance = accountBalance.getBalance();
-            var latestBalance = currentBalance.add(event.getAmount());
+            BigDecimal currentBalance = accountBalance.getBalance();
+            BigDecimal latestBalance = currentBalance.add(fundsDepositedEvent.getAmount());
             accountBalance.setBalance(latestBalance);
 
             accountBalanceMapper.updateAccountBalance(accountBalance);
@@ -50,18 +51,19 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
     @Override
     @Transactional
-    public void on(FundsWithDrawnEvent event) {
+    public void on(FundsWithDrawnEvent fundsWithDrawnEvent) {
+
         try {
-            var accountBalance = accountBalanceMapper.getBalance(
-                    event.getAccountId(),
-                    event.getCurrencyCode()
+            AccountBalance accountBalance = accountBalanceMapper.getBalance(
+                    fundsWithDrawnEvent.getAccountId(),
+                    fundsWithDrawnEvent.getCurrencyCode()
             );
 
             if (accountBalance == null)
                 return;
 
-            var currentBalance = accountBalance.getBalance();
-            var latestBalance = currentBalance.subtract(event.getAmount());
+            BigDecimal currentBalance = accountBalance.getBalance();
+            BigDecimal latestBalance = currentBalance.subtract(fundsWithDrawnEvent.getAmount());
             accountBalance.setBalance(latestBalance);
 
             accountBalanceMapper.updateAccountBalance(accountBalance);
@@ -73,21 +75,12 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
     @Override
     @Transactional
-    public void on(TransactionCreatedEvent event) {
-        try {
-            final var transaction = AccountTransaction.builder()
-                    .transactionId(event.getId())
-                    .accountId(event.getAccountId())
-                    .direction(event.getDirection().name())
-                    .amount(event.getAmount())
-                    .status(event.getStatus())
-                    .createdAt(event.getCreatedAt())
-                    .description(event.getDescription())
-                    .balanceAfterTxn(event.getBalanceAfterTxn())
-                    .currency(event.getCurrencyCode())
-                    .build();
+    public void on(TransactionCreatedEvent transactionCreatedEvent) {
 
-            transactionMapper.insertTransaction(transaction);
+        try {
+            AccountTransaction accountTransaction = AccountTransactionFactory
+                    .getAccountTransaction(transactionCreatedEvent);
+            transactionMapper.insertTransaction(accountTransaction);
         } catch (Exception exception) {
             log.error("Error while creating a transaction!", exception);
             throw exception;
@@ -96,21 +89,12 @@ public class TransactionEventHandler implements ITransactionEventHandler {
 
     @Override
     @Transactional
-    public void on(TransactionFailedEvent event) {
-        try {
-            final var transaction = AccountTransaction.builder()
-                    .transactionId(event.getId())
-                    .accountId(event.getAccountId())
-                    .direction(event.getDirection().name())
-                    .amount(event.getAmount())
-                    .status(event.getStatus())
-                    .createdAt(event.getCreatedAt())
-                    .description(event.getDescription())
-                    .balanceAfterTxn(BigDecimal.ZERO)
-                    .currency(event.getCurrencyCode())
-                    .build();
+    public void on(TransactionFailedEvent transactionFailedEvent) {
 
-            transactionMapper.insertTransaction(transaction);
+        try {
+            AccountTransaction accountTransaction = AccountTransactionFactory
+                    .getFailedAccountTransaction(transactionFailedEvent);
+            transactionMapper.insertTransaction(accountTransaction);
         } catch (Exception exception) {
             log.error("Error while creating a failed transaction!", exception);
             throw exception;

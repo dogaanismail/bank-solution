@@ -23,17 +23,18 @@ public class BaseQueryDispatcher implements QueryDispatcher {
     }
 
     @Override
-    public ResponseModel send(BaseQuery query) {
-        var handlers = routes.get(query.getClass());
+    public ResponseModel send(BaseQuery baseQuery) {
+
+        var handlers = routes.get(baseQuery.getClass());
 
         if (handlers == null || handlers.isEmpty()) {
-            throw new RuntimeException("No query handler was registered!");
+            throw new RuntimeException("No baseQuery handler was registered!");
         }
 
         if (handlers.size() > 1) {
-            throw new RuntimeException("Cannot send query to more than one handler!");
+            throw new RuntimeException("Cannot send baseQuery to more than one handler!");
         }
 
-        return handlers.getFirst().handle(query);
+        return handlers.getFirst().handle(baseQuery);
     }
 }

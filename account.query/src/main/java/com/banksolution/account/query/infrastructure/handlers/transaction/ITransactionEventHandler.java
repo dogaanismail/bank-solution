@@ -6,11 +6,11 @@ import com.banksolution.common.events.TransactionCreatedEvent;
 import com.banksolution.common.events.TransactionFailedEvent;
 
 public interface ITransactionEventHandler {
-    void on(FundsDepositedEvent event);
+    void on(FundsDepositedEvent fundsDepositedEvent);
 
-    void on(FundsWithDrawnEvent event);
+    void on(FundsWithDrawnEvent fundsWithDrawnEvent);
 
-    void on(TransactionCreatedEvent event);
+    void on(TransactionCreatedEvent transactionCreatedEvent);
 
-    void on(TransactionFailedEvent event);
+    void on(TransactionFailedEvent transactionFailedEvent);
 }

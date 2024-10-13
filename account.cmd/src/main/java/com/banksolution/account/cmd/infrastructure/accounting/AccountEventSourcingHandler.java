@@ -26,28 +26,35 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
     }
 
     @Override
-    public void save(AggregateRoot aggregate) {
-        eventStore.save(aggregate.getId(), aggregate.getUncommittedChanges(), aggregate.getVersion());
-        aggregate.markChangesAsCommitted();
+    public void save(AggregateRoot aggregateRoot) {
+
+        eventStore.save(
+                aggregateRoot.getId(),
+                aggregateRoot.getUncommittedChanges(),
+                aggregateRoot.getVersion()
+        );
+        aggregateRoot.markChangesAsCommitted();
     }
 
     @Override
     public AccountAggregate getById(String id) {
-        var aggregate = new AccountAggregate();
+
+        var accountAggregate = new AccountAggregate();
         var events = Optional.ofNullable(eventStore.getEvents(id));
 
         events.ifPresent(e -> {
             if (!e.isEmpty()) {
-                aggregate.replayEvents(e);
+                accountAggregate.replayEvents(e);
                 var latestVersion = e.stream().max(Comparator.comparing(BaseEvent::getVersion));
-                latestVersion.ifPresent(event -> aggregate.setVersion(event.getVersion()));
+                latestVersion.ifPresent(event -> accountAggregate.setVersion(event.getVersion()));
             }
         });
-        return aggregate;
+        return accountAggregate;
     }
 
     @Override
     public void republishEvents() {
+
         eventStore.getAggregateIds().stream()
                 .map(this::getById)
                 .filter(aggregate -> aggregate != null && aggregate.getActive())

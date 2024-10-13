@@ -14,8 +14,7 @@ import java.util.Map;
 @Service
 public class BaseCommandDispatcher implements CommandDispatcher {
 
-    private final Map<Class<? extends BaseCommand>, List<CommandHandlerMethod>> routes =
-            new HashMap<>();
+    private final Map<Class<? extends BaseCommand>, List<CommandHandlerMethod>> routes = new HashMap<>();
 
     @Override
     public <T extends BaseCommand> void registerHandler(

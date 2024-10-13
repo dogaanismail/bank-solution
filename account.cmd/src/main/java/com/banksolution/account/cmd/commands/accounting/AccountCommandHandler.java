@@ -2,9 +2,8 @@ package com.banksolution.account.cmd.commands.accounting;
 
 import com.banksolution.account.cmd.client.CustomerServiceClient;
 import com.banksolution.account.cmd.domain.AccountAggregate;
-import com.banksolution.account.cmd.domain.AccountBalance;
-import com.banksolution.account.cmd.dto.AccountBalanceResponse;
 import com.banksolution.account.cmd.dto.OpenAccountResponse;
+import com.banksolution.account.cmd.factory.account.OpenAccountResponseFactory;
 import com.banksolution.common.exceptions.CurrencyNotSupportedException;
 import com.banksolution.common.exceptions.CustomerNotFoundException;
 import com.banksolution.common.validation.ValidationHelper;
@@ -26,51 +25,53 @@ public class AccountCommandHandler implements IAccountCommandHandler {
     private final CustomerServiceClient customerService;
 
     @Override
-    public ResponseModel handle(OpenAccountCommand command) {
-        var aggregate = new AccountAggregate();
+    public ResponseModel handle(OpenAccountCommand openAccountCommand) {
+        AccountAggregate accountAggregate = new AccountAggregate();
 
-        validateAndAddAccountBalances(aggregate, command);
+        validateAndAddAccountBalances(
+                accountAggregate,
+                openAccountCommand
+        );
 
-        aggregate.openAccount(command);
+        accountAggregate.openAccount(openAccountCommand);
 
-        eventSourcingHandlers.save(aggregate);
+        eventSourcingHandlers.save(accountAggregate);
 
-        final var response = createOpenAccountResponse(aggregate);
+        OpenAccountResponse response = OpenAccountResponseFactory
+                .getOpenAccountResponse(accountAggregate);
 
-        return GenericResponse.generateResponse(ResponseStatus.SUCCESS, response, ACCOUNT_CREATION_SUCCESS_RESPONSE);
+        return GenericResponse.generateResponse(
+                ResponseStatus.SUCCESS,
+                response,
+                ACCOUNT_CREATION_SUCCESS_RESPONSE
+        );
     }
 
     private void validateAndAddAccountBalances(
-            AccountAggregate aggregate,
-            OpenAccountCommand command) {
+            AccountAggregate accountAggregate,
+            OpenAccountCommand openAccountCommand) {
 
-        final var currencyList = command.getCurrencies();
-        validateCurrencies(currencyList);
-        validateCustomer(command.getCustomerId());
+        List<String> currencies = openAccountCommand.getCurrencies();
+        validateCurrencies(currencies);
+        validateCustomer(openAccountCommand.getCustomerId());
 
-        for (final var currencyCode : currencyList) {
-            aggregate.addAccountBalance(command.getId(), command.getCustomerId(), currencyCode);
+        for (String currency : currencies) {
+
+            accountAggregate.addAccountBalance(
+                    openAccountCommand.getId(),
+                    openAccountCommand.getCustomerId(),
+                    currency
+            );
         }
-    }
-
-    private OpenAccountResponse createOpenAccountResponse(
-            AccountAggregate aggregate) {
-
-        return new OpenAccountResponse(
-                aggregate.getId(),
-                aggregate.getCustomerId(),
-                aggregate.getAccountBalances()
-                        .stream()
-                        .map(this::mapBalance)
-                        .toList());
     }
 
     private void validateCurrencies(
             List<String> currencies) {
 
-        for (final var currencyCode : currencies) {
-            if (ValidationHelper.isCurrencySupported(currencyCode)) {
-                throw new CurrencyNotSupportedException("Invalid currency code : " + currencyCode);
+        for (String currency : currencies) {
+
+            if (ValidationHelper.isCurrencySupported(currency)) {
+                throw new CurrencyNotSupportedException("Invalid currency code : " + currency);
             }
         }
     }
@@ -83,11 +84,5 @@ public class AccountCommandHandler implements IAccountCommandHandler {
         if (customer == null) {
             throw new CustomerNotFoundException("Customer could not be found!");
         }
-    }
-
-    private AccountBalanceResponse mapBalance(
-            AccountBalance balance) {
-
-        return new AccountBalanceResponse(balance.getCurrencyCode(), balance.getAvailableBalance());
     }
 }

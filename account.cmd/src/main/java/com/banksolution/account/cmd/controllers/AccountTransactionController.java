@@ -4,6 +4,7 @@ import com.banksolution.account.cmd.commands.transaction.TransactionCommand;
 import com.banksolution.account.cmd.dto.ErrorResponse;
 import com.banksolution.common.utils.GenerateUuidUtils;
 import com.banksolution.cqrs.core.infrastructure.CommandDispatcher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +17,22 @@ import java.text.MessageFormat;
 
 @RestController
 @RequestMapping(path = "/api/v1/transaction")
+@RequiredArgsConstructor
 @Slf4j
 public class AccountTransactionController {
 
     private final CommandDispatcher commandDispatcher;
 
-    public AccountTransactionController(CommandDispatcher commandDispatcher) {
-        this.commandDispatcher = commandDispatcher;
-    }
-
     @PostMapping("/createTransaction")
     public ResponseEntity<Object> transaction(@RequestBody TransactionCommand transactionCommand) {
 
-        var id = GenerateUuidUtils.generateUuid().toString();
+        String id = GenerateUuidUtils.generateUuid().toString();
         transactionCommand.setId(id);
 
         try {
             return ResponseEntity.ok(commandDispatcher.send(transactionCommand));
         } catch (Exception e) {
-            var safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
+            String safeErrorMessage = MessageFormat.format("Error while processing - {0}.", e.toString());
             log.error(safeErrorMessage, e);
             return new ResponseEntity<>(new ErrorResponse(safeErrorMessage, id), HttpStatus.INTERNAL_SERVER_ERROR);
         }
