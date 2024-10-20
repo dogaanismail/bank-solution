@@ -3,6 +3,7 @@ package com.banksolution.account.cmd.commands.transaction;
 import com.banksolution.common.enums.TransactionDirection;
 import com.banksolution.cqrs.core.commands.BaseCommand;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Builder
 public class TransactionCommand extends BaseCommand {
 
     @NotEmpty
