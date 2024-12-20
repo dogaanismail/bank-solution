@@ -45,13 +45,14 @@ subprojects {
         //vulnerabilities
         implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+        //tests
+        testImplementation 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
     }
 
     test {
-        useJUnitPlatform {
-            includeEngines 'junit-jupiter'
-        }
+        useJUnitPlatform()
     }
 }

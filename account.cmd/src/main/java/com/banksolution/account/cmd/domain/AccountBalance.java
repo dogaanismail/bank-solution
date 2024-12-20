@@ -19,20 +19,4 @@ public class AccountBalance {
     private String currencyCode;
     private @NotEmpty BigDecimal balance;
     private BigDecimal availableBalance;
-
-    public AccountBalance(
-            String accountBalanceId,
-            Long customerId,
-            String currencyCode,
-            BigDecimal balance,
-            BigDecimal availableBalance,
-            String accountId) {
-        this.accountBalanceId = accountBalanceId;
-        this.customerId = customerId;
-        this.currencyCode = currencyCode;
-        this.balance = balance;
-        this.availableBalance = availableBalance;
-        this.accountId = accountId;
-    }
-
 }
