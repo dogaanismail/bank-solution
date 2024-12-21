@@ -107,11 +107,9 @@ public class AccountAggregate extends AggregateRoot {
         List<AccountBalanceEvent> balanceEvents = new ArrayList<>();
 
         for (AccountBalance accountBalance : accountBalances) {
-            AccountBalanceEvent balanceEvent =
-                    AccountBalanceEventFactory.getAccountBalanceEvent(
-                            accountBalance,
-                            openAccountCommand
-                    );
+
+            AccountBalanceEvent balanceEvent = AccountBalanceEventFactory
+                    .getAccountBalanceEvent(accountBalance);
 
             balanceEvents.add(balanceEvent);
         }

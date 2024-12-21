@@ -4,6 +4,8 @@ import com.banksolution.account.cmd.commands.accounting.OpenAccountCommand;
 import com.banksolution.common.events.AccountOpenedEvent;
 import lombok.experimental.UtilityClass;
 
+import java.util.UUID;
+
 @UtilityClass
 public class AccountOpenedEventFactory {
 
@@ -12,7 +14,7 @@ public class AccountOpenedEventFactory {
 
         return AccountOpenedEvent.builder()
                 .id(openAccountCommand.getId())
-                .accountId(openAccountCommand.getId())
+                .accountId(UUID.randomUUID().toString())
                 .customerId(openAccountCommand.getCustomerId())
                 .country(openAccountCommand.getCountry())
                 .build();
