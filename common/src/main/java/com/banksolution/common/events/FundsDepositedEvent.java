@@ -16,8 +16,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @SuperBuilder
 public class FundsDepositedEvent extends BaseEvent implements Serializable {
-    private Long customerId;
-    private String accountBalanceId;
     private String accountId;
     private String currencyCode;
     private BigDecimal amount;
